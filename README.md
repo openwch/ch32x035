@@ -1,0 +1,2 @@
+# ch32x035
+32-bit RISC-V MCU CH32X035 built-in USB PD PHY
