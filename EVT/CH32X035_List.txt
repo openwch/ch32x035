@@ -1,0 +1,108 @@
+
+南京沁恒微电子股份有限公司 2023.05
+最新资料请到我们的网站上查询
+http://wch.cn
+
+
+文件目录
+  |
+  |-- CH32x035：RISC-V内核微控制器
+  |      |-- EVT: CH32x035评估板和CH32x035相关例程
+  |      |      |-- PUB: 
+  |      |      |      |-- CH32x035评估板说明书.pdf：CH32x035评估板说明及工程创建说明
+  |      |      |      |-- CH32x035 Evaluation Board Reference-EN.pdf：英文版CH32x035评估板说明及工程创建说明
+  |      |      |      |-- CH32x035SCH.pdf：CH32x035评估板原理图
+  |      |      |      |-- SCHPCB: CH32x035评估板原理图和PCB原文件
+  |      |      |-- EXAM: 
+  |      |      |      |-- SRC  
+  |      |      |      |      |-- Core：内核系统头文件
+  |      |      |      |      |-- Debug：延时函数、串口调试源文件及头文件
+  |      |      |      |      |-- Ld：ld文件  
+  |      |      |      |      |-- Peripheral：基本外设驱动源文件及头文件
+  |      |      |      |      |-- Startup：启动文件
+  |      |      |      |      |      |-- startup_ch32x035.S
+  |      |      |      |-- ADC
+  |      |      |      |      |-- ADC_DMA：ADC使用DMA采样例程
+  |      |      |      |      |-- AnalogWatchdog：模拟看门狗例程
+  |      |      |      |      |-- Auto_Injection：自动注入模式例程
+  |      |      |      |      |-- Discontinuous_mode：间断模式例程
+  |      |      |      |      |-- ExtLines_Trigger：外部触发ADC转换例程
+  |      |      |      |-- DMA
+  |      |      |      |      |-- DMA_MEM2MEM：储存器到储存器模式例程
+  |      |      |      |      |-- DMA_MEM2PERIP：储存器到外设模式、外设到储存器模式例程见各外设子例程
+  |      |      |      |-- EXTI：外部中断线例程
+  |      |      |      |-- FLASH：FLASH的擦/读/写
+  |      |      |      |-- FreeRTOS：FreeRTOS移植例程  
+  |      |      |      |-- GPIO：GPIO例程
+  |      |      |      |-- HarmonyOS：HarmonyOS移植例程  
+  |      |      |      |-- I2C
+  |      |      |      |      |-- I2C_7bit_Mode：7位地址模式，Master/Slave 模式收发例程
+  |      |      |      |      |-- I2C_10bit_Mode：10位地址模式，Master/Slave 模式收发例程
+  |      |      |      |      |-- I2C_DMA：I2C使用DMA，Master/Slave 模式收发例程
+  |      |      |      |      |-- I2C_EEPROM：I2C接口操作EEPROM外设例程
+  |      |      |      |      |-- I2C_PEC：使用PEC错误校验，Master/Slave 模式收发例程  
+  |      |      |      |-- INT
+  |      |      |      |      |-- Interrupt_VTF：使用VTF IRQ中断例程  
+  |      |      |      |-- IAP：IAP升级例程-内置Hex转Bin工具和IAP升级工具  
+  |      |      |      |      |-- USB_UART：USB+UART IAP例程   
+  |      |      |      |-- IWDG：独立看门狗例程
+  |      |      |      |-- OPA
+  |      |      |      |      |-- CMP：比较器例程
+  |      |      |      |      |-- CMP_TIM2：定时器2捕获比较器例程
+  |      |      |      |      |-- OPA：OPA作电压跟随器输出例程
+  |      |      |      |      |-- OPA_BKIN：OPA刹车例程
+  |      |      |      |      |-- OPA_IRQ：OPA中断例程
+  |      |      |      |      |-- OPA_PGA：OPA的PGA例程
+  |      |      |      |      |-- OPA_Poll：OPA轮询例程
+  |      |      |      |      |-- OPA_Reset：OPA复位例程
+  |      |      |      |-- PWR
+  |      |      |      |      |-- Sleep_Mode：低功耗，睡眠模式例程
+  |      |      |      |      |-- Standby_Mode：低功耗，待机模式例程
+  |      |      |      |      |-- Stop_Mode：低功耗，停机模式例程
+  |      |      |      |-- RCC
+  |      |      |      |      |-- Get_CLK：获取system-HCLK-AHB1-AHB2时钟例程   
+  |      |      |      |      |-- MCO：MCO引脚时钟输出例程
+  |      |      |      |-- RT-Thread：RT-Thread移植例程 
+  |      |      |      |-- SPI
+  |      |      |      |      |-- 1Lines_half-duplex：单线半双工模式，Master/Slave 模式数据收发
+  |      |      |      |      |-- 2Lines_FullDuplex：双线全双工模式，Master/Slave 模式数据收发
+  |      |      |      |      |-- FullDuplex_HardNSS：硬件NSS模式，Master/Slave 模式数据收发
+  |      |      |      |      |-- SPI_CRC：使用CRC错误校验，Master/Slave 模式收发例程
+  |      |      |      |      |-- SPI_DMA：SPI使用DMA，Master/Slave 模式收发例程
+  |      |      |      |      |-- SPI_FLASH：SPI接口操作FLASH外设例程
+  |      |      |      |-- TencentOS：TencentOS移植例程       
+  |      |      |      |-- TIM
+  |      |      |      |      |-- Clock_Select：时钟源选择例程
+  |      |      |      |      |-- ComplementaryOutput_DeadTime：互补输出和死区插入模式例程
+  |      |      |      |      |-- ExtTrigger_Start_Two_Timer：外部触发同步启动两个定时器例程
+  |      |      |      |      |-- Input_Capture：输入捕获例程
+  |      |      |      |      |-- One_Pulse：单脉冲输出例程
+  |      |      |      |      |-- Output_Compare_Mode：输出比较模式例程
+  |      |      |      |      |-- PWM_Output：PWM输出例程
+  |      |      |      |      |-- Synchro_ExtTrigger：从模式例程，包括复位模式、门控模式、触发模式
+  |      |      |      |      |-- Synchro_Timer：定时器同步模式
+  |      |      |      |      |-- TIM_DMA：定时器使用DMA例程
+  |      |      |      |-- TOUCHKEY：TouchKey检测例程 
+  |      |      |      |-- USART
+  |      |      |      |      |-- USART_DMA：USART使用DMA，Master/Slave 模式收发例程
+  |      |      |      |      |-- USART_HalfDuplex：单线半双工模式，Master/Slave 模式收发例程
+  |      |      |      |      |-- USART_HardwareFlowControl：硬件流控制模式，Master/Slave 模式收发例程
+  |      |      |      |      |-- USART_Interrupt：USART中断例程，Master/Slave 模式收发例程
+  |      |      |      |      |-- USART_MultiProcessorCommunication：多处理器通信模式例程
+  |      |      |      |      |-- USART_Polling：轮询收发模式，Master/Slave 模式收发例程
+  |      |      |      |      |-- USART_Printf：串口打印调试例程
+  |      |      |      |      |-- USART_SynchronousMode：同步模式，Master/Slave 模式收发例程
+  |      |      |      |-- USB
+  |      |      |      |      |-- USBFS
+  |      |      |      |      |      |-- DEVICE
+  |      |      |      |      |      |      |-- CH372：模拟自定义USB设备（CH372设备），端点1，3下传，2，4上传，端点1下传的数据从端点3上传，不取反，端点2下传的数据从端点4上传，取反。
+  |      |      |      |      |      |      |-- Compatibility_HID：模拟HID设备，数据通过串口上下传。
+  |      |      |      |      |      |      |-- CompositeKM：模拟键盘和鼠标，使用IO模拟按键，同时模拟数据可以通过串口2上传。
+  |      |      |      |      |      |      |-- SimulateCDC：模拟一个CDC串口，使用串口2收发。
+  |      |      |      |      |      |      |-- SimulateCDC-HID：模拟一个CDC串口，使用串口2收发,HID中断端点下发数据取反上传。
+  |      |      |      |      |      |-- HOST_KM: 主机操作键鼠，获取键鼠上传的端点的数据并打印，支持U口下1级hub
+  |      |      |      |      |      |-- HOST_MTP_FileSystem：枚举过程的USB主机到一个支持MTP和PTP协议的设备，支持MTP和PTP协议，并读取其文件
+  |      |      |      |      |      |-- Udisk_Lib：U盘文件系统库文件
+  |      |      |      |      |      |-- Host_Udisk：USB主机操作U盘例程 
+  |      |      |      |-- USBPD：PD诱骗受电Sink例程     
+  |      |      |      |-- WWDG：窗口看门狗例程
