@@ -110,7 +110,7 @@ void PWR_EnterSTANDBYMode(void)
  *            PWR_FLAG_PVDO - PVD Output
  *            PWR_FLAG_FLASH - Flash low power flag
  *
- * @return  none
+ * @return  The new state of PWR_FLAG (SET or RESET).
  */
 FlagStatus PWR_GetFlagStatus(uint32_t PWR_FLAG)
 {
@@ -127,4 +127,30 @@ FlagStatus PWR_GetFlagStatus(uint32_t PWR_FLAG)
     return bitstatus;
 }
 
+/*********************************************************************
+ * @fn      PWR_VDD_SupplyVoltage
+ *
+ * @brief   Checks VDD Supply Voltage.
+ *
+ * @param   none
+ *
+ * @return  PWR_VDD - VDD Supply Voltage.
+ *            PWR_VDD_5V - VDD = 5V
+ *            PWR_VDD_3V3 - VDD = 3.3V
+ */
+PWR_VDD PWR_VDD_SupplyVoltage(void)
+{
 
+    PWR_VDD VDD_Voltage = PWR_VDD_3V3;
+    Delay_Init();
+    RCC_APB1PeriphClockCmd( RCC_APB1Periph_PWR, ENABLE);
+    PWR_PVDLevelConfig(PWR_PVDLevel_4V0);
+    Delay_Us(10);
+    if( PWR_GetFlagStatus(PWR_FLAG_PVDO) == (uint32_t)RESET)
+    {
+        VDD_Voltage = PWR_VDD_5V;
+    }
+    PWR_PVDLevelConfig(PWR_PVDLevel_2V1);
+
+    return VDD_Voltage;
+}

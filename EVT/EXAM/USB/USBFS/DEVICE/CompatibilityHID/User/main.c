@@ -80,7 +80,7 @@ int main(void)
     TIM3_Init();
     /* Usb Init */
     USBFS_RCC_Init( );
-    USBFS_Device_Init( ENABLE );
+    USBFS_Device_Init( ENABLE , PWR_VDD_SupplyVoltage());
     while(1)
     {
         if(USBFS_DevEnumStatus)

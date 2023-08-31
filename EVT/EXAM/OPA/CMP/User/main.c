@@ -44,7 +44,7 @@ void CMP_Init( void )
     GPIO_Init( GPIOA, &GPIO_InitStructure );
 
     CMP_InitTypeDef.CMP_NUM=CMP1;
-    CMP_InitTypeDef.Mode = OUT_IO_PA1;
+    CMP_InitTypeDef.Mode = OUT_IO0;
     CMP_InitTypeDef.NSEL = CMP_CHN0;
     CMP_InitTypeDef.PSEL=CMP_CHP2;
     CMP_InitTypeDef.HYEN=CMP_HYEN2;

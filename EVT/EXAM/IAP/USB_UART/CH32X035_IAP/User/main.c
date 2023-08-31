@@ -70,6 +70,15 @@ int main(void)
 
     /* Usb Init */
     USBFS_RCC_Init( );
+    u8 VDD_Voltage =PWR_VDD_SupplyVoltage();
+    if( VDD_Voltage == PWR_VDD_5V )
+     {
+          AFIO->CTLR = (AFIO->CTLR & ~(0x0000000C | 0x00000003 | 0x00000040)) | 0x00000008 | 0x00000080;
+     }
+     else
+     {
+          AFIO->CTLR = (AFIO->CTLR & ~(0x0000000C | 0x00000003 )) | 0x00000040 | 0x0000000C | 0x00000080;
+     }
     USBFS_Device_Init( ENABLE );
     USART2_CFG(57600);
     while(1)

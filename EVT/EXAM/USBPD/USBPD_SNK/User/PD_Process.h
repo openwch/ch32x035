@@ -101,7 +101,7 @@ typedef volatile unsigned long  *PUINT32V;
  /******************************************************************************/
 /* Related macro definitions */
 
-// Define the return value of the function
+/* Define the return value of the function */
 #ifndef  SUCCESS
 #define  SUCCESS                   0
 #endif
@@ -109,90 +109,91 @@ typedef volatile unsigned long  *PUINT32V;
 #define  FAIL                      0xFF
 #endif
 
-// Register Bit Definition
-//USBPD->CONFIG
-#define PD_ALL_CLR          (1<<1)              //PD mode clears all interrupt flags, 0: invalid, 1: clear interrupt flags
-#define CC_SEL              (1<<2)              //Select current PD communication port,0: use CC1 port to communicate,1: use CC2 port to communicate
-#define PD_DMA_EN           (1<<3)              // Enable DMA for USBPD, this bit must be set to 1 in normal transfer mode,1: Enable DMA function and DMA interrupt,0: Disable DMA.
-#define PD_RST_EN           (1<<4)              //PD mode reset command enable,0: invalid,1: reset
-#define WAKE_POLAR          (1<<5)              //PD port wake-up level, 0: active low, 1: active high
-#define IE_PD_IO            (1<<10)             //PD IO interrupt enable
-#define IE_RX_BIT           (1<<11)             //Receive bit interrupt enable
-#define IE_RX_BYTE          (1<<12)             // Receive byte interrupt enable
-#define IE_RX_ACT           (1<<13)             //Receive completion interrupt enable
-#define IE_RX_RESET         (1<<14)             //Receive reset interrupt enable
-#define IE_TX_END           (1<<15)             //End-of-send interrupt enable
+/* Register Bit Definition */
+/* USBPD->CONFIG */
+#define PD_FILT_ED           (1<<0)            /* PD pin input filter enable */
+#define PD_ALL_CLR          (1<<1)             /* Clear all interrupt flags */
+#define CC_SEL              (1<<2)             /* Select PD communication port */
+#define PD_DMA_EN           (1<<3)             /* Enable DMA for USBPD */
+#define PD_RST_EN           (1<<4)             /* PD mode reset command enable */
+#define WAKE_POLAR          (1<<5)             /* PD port wake-up level */
+#define IE_PD_IO            (1<<10)            /* PD IO interrupt enable */
+#define IE_RX_BIT           (1<<11)            /* Receive bit interrupt enable */
+#define IE_RX_BYTE          (1<<12)            /* Receive byte interrupt enable */
+#define IE_RX_ACT           (1<<13)            /* Receive completion interrupt enable */
+#define IE_RX_RESET         (1<<14)            /* Reset interrupt enable */
+#define IE_TX_END           (1<<15)            /* Transfer completion interrupt enable */
 
-//USBPD->CONTROL
-#define PD_TX_EN            (1<<0)              // USBPD transceiver mode and transmit enable,0: PD receive enable,1: PD transmit enable
-#define BMC_START           (1<<1)              //BMC sends start signal
-#define DATA_FLAG           (1<<5)              //Cache data valid flag bit
-#define TX_BIT_BACK         (1<<6)              // Indicates the current bit status of the BMC when sending the code,0: idle;,1: indicates that the BMC bytes are being sent
-#define BMC_BYTE_HI         (1<<7)              // Indicates the current half-byte status of the PD data being sent and received, 0: the lower 4 bits are being processed, 1: the upper 4 bits are being processed
+/* USBPD->CONTROL */
+#define PD_TX_EN            (1<<0)             /* USBPD transceiver mode and transmit enable */
+#define BMC_START           (1<<1)             /* BMC send start signal */
+#define RX_STATE_0          (1<<2)             /* PD received state bit 0 */
+#define RX_STATE_1          (1<<3)             /* PD received state bit 1 */
+#define RX_STATE_2          (1<<4)             /* PD received state bit 2 */
+#define DATA_FLAG           (1<<5)             /* Cache data valid flag bit */
+#define TX_BIT_BACK         (1<<6)             /* Indicates the current bit status of the BMC when sending the code */
+#define BMC_BYTE_HI         (1<<7)             /* Indicates the current half-byte status of the PD data being sent and received */
 
-//USBPD->TX_SEL
+/* USBPD->TX_SEL */
 #define TX_SEL1             (0<<0)
-    #define TX_SEL1_SYNC1           (0<<0)               //0£ºSYNC1
-    #define TX_SEL1_RST1            (1<<0)               //1£ºRST1
+#define TX_SEL1_SYNC1       (0<<0)             /* 0-SYNC1 */
+#define TX_SEL1_RST1        (1<<0)             /* 1-RST1 */
 #define TX_SEL2             (0<<2)
-    #define TX_SEL2_SYNC1           (0<<2)               //00:SYNC1
-    #define TX_SEL2_SYNC3           (1<<2)               //01:SYNC3
-    #define TX_SEL2_RST1            (2<<2)               //1x:RST1
+#define TX_SEL2_SYNC1       (0<<2)             /* 00-SYNC1 */
+#define TX_SEL2_SYNC3       (1<<2)             /* 01-SYNC3 */
+#define TX_SEL2_RST1        (2<<2)             /* 1x-RST1 */
 #define TX_SEL3             (0<<4)
-    #define TX_SEL3_SYNC1           (0<<4)               //00:SYNC1
-    #define TX_SEL3_SYNC3           (1<<4)               //01:SYNC3
-    #define TX_SEL3_RST1            (2<<4)               //1x:RST1
+#define TX_SEL3_SYNC1       (0<<4)             /* 00-SYNC1 */
+#define TX_SEL3_SYNC3       (1<<4)             /* 01-SYNC3 */
+#define TX_SEL3_RST1        (2<<4)             /* 1x-RST1 */
 #define TX_SEL4             (0<<6)
-    #define TX_SEL4_SYNC2           (0<<6)               //00:SYNC2
-    #define TX_SEL4_SYNC3           (1<<6)               //01:SYNC3
-    #define TX_SEL4_RST2            (2<<6)               //1x:RST2
+#define TX_SEL4_SYNC2       (0<<6)             /* 00-SYNC2 */
+#define TX_SEL4_SYNC3       (1<<6)             /* 01-SYNC3 */
+#define TX_SEL4_RST2        (2<<6)             /* 1x-RST2 */
 
-//USBPD->STATUS
-#define BMC_AUX            (3<<0)               //BMC auxiliary information, when doing receive SOP:,when doing send CRC: CRC byte counter
-    #define BMC_AUX_INVALID         (0<<0)               //00: not valid
-    #define BMC_AUX_SOP0            (1<<0)               //01£ºSOP0
-    #define BMC_AUX_SOP1_HRST       (2<<0)               //10£ºSOP1 hard reset
-    #define BMC_AUX_SOP2_CRST       (3<<0)               //11£ºSOP2 cable reset
-#define BUF_ERR            (1<<2)              //BUFFER or DMA error interrupt flag, write 1 to clear 0, write 0 to void
-#define IF_RX_BIT          (1<<3)              //Receive bit or 5bit interrupt flag, write 1 to clear 0, write 0 to void
-#define IF_RX_BYTE         (1<<4)              // Receive byte or SOP interrupt flag, write 1 to clear 0, write 0 to void
-#define IF_RX_ACT          (1<<5)              //Receive completion interrupt flag, write 1 to clear 0, write 0 to void
-#define IF_RX_RESET        (1<<6)              // Receive reset interrupt flag, write 1 to clear 0, write 0 to void
-#define IF_TX_END          (1<<7)              //Transfer completion interrupt flag, write 1 to clear 0, write 0 to void
+/* USBPD->STATUS */
+#define BMC_AUX            (3<<0)              /* BMC auxiliary information */
+#define BMC_AUX_INVALID    (0<<0)              /* 00-Invalid */
+#define BMC_AUX_SOP0       (1<<0)              /* 01-SOP0 */
+#define BMC_AUX_SOP1_HRST  (2<<0)              /* 10-SOP1 hard reset */
+#define BMC_AUX_SOP2_CRST  (3<<0)              /* 11-SOP2 cable reset */
+#define BUF_ERR            (1<<2)              /* BUFFER or DMA error interrupt flag */
+#define IF_RX_BIT          (1<<3)              /* Receive bit or 5bit interrupt flag */
+#define IF_RX_BYTE         (1<<4)              /* Receive byte or SOP interrupt flag */
+#define IF_RX_ACT          (1<<5)              /* Receive completion interrupt flag */
+#define IF_RX_RESET        (1<<6)              /* Receive reset interrupt flag */
+#define IF_TX_END          (1<<7)              /* Transfer completion interrupt flag */
 
-//USBPD->PORT_CC1
-//USBPD->PORT_CC2
-#define PA_CC_AI          (1<<0)               //CC1 port comparator analogue input
-#define CC_PD             (1<<1)               //CC1 port down resistor enable,0: disable pull down resistor ,1: enable 5.1K¦¸ pull down resistor
-#define CC_PU_CLR             (3<<2)               //CC1 port pull-up current selection
-    #define CC_NO_PU                (0<<2)               //00: Pull-up current forbidden
-    #define CC_PU_330               (1<<2)               //01£º330uA
-    #define CC_PU_180               (2<<2)               //10£º180uA
-    #define CC_PU_80                (3<<2)               //11:80uA
-#define CC_LV0            (1<<4)               //CC1 port output low voltage enable,0: normal voltage VDD weak drive output,1: low voltage drive output
-#define CC_CE             (7<<5)               //Enable of voltage comparator on port /CC1,001: Reserved
-    #define CC_NO_CMP               (0<<5)               //000: closed
-    #define CC_CMP_22               (2<<5)               //010£º0.22V
-    #define CC_CMP_45               (3<<5)               //011£º0.45V
-    #define CC_CMP_55               (4<<5)               //100£º0.55V
-    #define CC_CMP_66               (5<<5)               //101£º0.66V
-    #define CC_CMP_95               (6<<5)               //110£º0.95V
-    #define CC_CMP_123              (7<<5)               //111£º1.23V
+/* USBPD->PORT_CC1 */
+/* USBPD->PORT_CC2 */
+#define PA_CC_AI           (1<<0)               /* CC port comparator analogue input */
+#define CC_PD              (1<<1)               /* CC port pull-down resistor enable */
+#define CC_PU_CLR          (3<<2)               /* CC port pull-up current selection */
+#define CC_NO_PU           (0<<2)               /* 00-Prohibit pull-up current */
+#define CC_PU_330          (1<<2)               /* 01-330uA */
+#define CC_PU_180          (2<<2)               /* 10-180uA */
+#define CC_PU_80           (3<<2)               /* 11-80uA */
+#define CC_LVE             (1<<4)               /* CC port output low voltage enable */
+#define CC_CE              (7<<5)               /* Enable the voltage comparator on port CC */
+#define CC_NO_CMP          (0<<5)               /* 000-closed */
+#define CC_CMP_22          (2<<5)               /* 010-0.22V */
+#define CC_CMP_45          (3<<5)               /* 011-0.45V */
+#define CC_CMP_55          (4<<5)               /* 100-0.55V */
+#define CC_CMP_66          (5<<5)               /* 101-0.66V */
+#define CC_CMP_95          (6<<5)               /* 110-0.95V */
+#define CC_CMP_123         (7<<5)               /* 111-1.23V */
 
-#define USBPD_IN_HVT      (1<<9)
+#define USBPD_IN_HVT       (1<<9)
 /*********************************************************
  * PD pin PC14/PC15 high threshold input mode:
- * 1: High threshold input, ~2.2V typical, reduces PD pass
- * I/O power consumption during signalling;
- * 0: Normal GPIO threshold input. *
+ * 1-High threshold input (2.2V typical), to reduce the I/O power consumption during PD communication
+ * 0-Normal GPIO threshold input 
  * *******************************************************/
-#define USBPD_PHY_V33     (1<<8)
+#define USBPD_PHY_V33      (1<<8)
 /**********************************************************
 * PD transceiver PHY pull-up limit configuration bits:
-* 1: direct VDD, output voltage up to VDD, for VDD
-* for applications with 3.3V;
-* 0: LDO buck enabled, limited to approx. 3.3V, for applications with VDD
-* applications with more than 4V.
+* 1-Direct use of VDD for GPIO applications or PD applications with VDD voltage of 3.3V
+* 0-LDO buck enabled, limited to approx 3.3V, for PD applications with VDD more than 4V
 * ********************************************************/
 
 /* Control Message Types */
@@ -215,7 +216,7 @@ typedef volatile unsigned long  *PUINT32V;
 #define DEF_TYPE_NOT_SUPPORT       0x10                                         /* Send By: Source,Sink,Cable Plug */
 #define DEF_TYPE_GET_SRC_CAP_EX    0x11                                         /* Send By: Sink,DRP */
 #define DEF_TYPE_GET_STATUS        0x12                                         /* Send By: Source,Sink */
-#define DEF_TYPE_GET_STATUS_R      0X02                                         //ext=1
+#define DEF_TYPE_GET_STATUS_R      0X02                                         /* ext=1 */
 #define DEF_TYPE_FR_SWAP           0x13                                         /* Send By: Sink */
 #define DEF_TYPE_GET_PPS_STATUS    0x14                                         /* Send By: Sink */
 #define DEF_TYPE_GET_CTY_CODES     0x15                                         /* Send By: Source,Sink */
@@ -265,25 +266,32 @@ typedef volatile unsigned long  *PUINT32V;
 #define DEF_PD_TX_OK               0x00
 #define DEF_PD_TX_FAIL             0x01
 
+/* PDO INDEX */
+#define PDO_INDEX_1                1
+#define PDO_INDEX_2                2
+#define PDO_INDEX_3                3
+#define PDO_INDEX_4                4
+#define PDO_INDEX_5                5
+
 /******************************************************************************/
 
-#define UPD_TMR_TX_48M    (80-1)                                                                // timer value for USB PD BMC transmittal @Fsys=48MHz
-#define UPD_TMR_RX_48M    (120-1)                                                               // timer value for USB PD BMC receiving @Fsys=48MHz
-#define UPD_TMR_TX_24M    (40-1)                                                                // timer value for USB PD BMC transmittal @Fsys=24MHz
-#define UPD_TMR_RX_24M    (60-1)                                                                // timer value for USB PD BMC receiving @Fsys=24MHz
-#define UPD_TMR_TX_12M    (20-1)                                                                // timer value for USB PD BMC transmittal @Fsys=12MHz
-#define UPD_TMR_RX_12M    (30-1)                                                                // timer value for USB PD BMC receiving @Fsys=12MHz
+#define UPD_TMR_TX_48M    (80-1)                                             /* timer value for USB PD BMC transmittal @Fsys=48MHz */
+#define UPD_TMR_RX_48M    (120-1)                                            /* timer value for USB PD BMC receiving @Fsys=48MHz */
+#define UPD_TMR_TX_24M    (40-1)                                             /* timer value for USB PD BMC transmittal @Fsys=24MHz */
+#define UPD_TMR_RX_24M    (60-1)                                             /* timer value for USB PD BMC receiving @Fsys=24MHz */
+#define UPD_TMR_TX_12M    (20-1)                                             /* timer value for USB PD BMC transmittal @Fsys=12MHz */
+#define UPD_TMR_RX_12M    (30-1)                                             /* timer value for USB PD BMC receiving @Fsys=12MHz */
 
-#define MASK_PD_STAT      0x03                                                                  // ReadOnly: bit mask for current PD status
-#define PD_RX_SOP0        0x01                                                                  // SOP0 received for rx
-#define PD_RX_SOP1_HRST   0x02                                                                  // SOP1 or Hard Reset received for rx
-#define PD_RX_SOP2_CRST   0x03                                                                  // SOP2 or Cable Reset received for rx
+#define MASK_PD_STAT      0x03                                               /* Bit mask for current PD status */
+#define PD_RX_SOP0        0x01                                               /* SOP0 received */
+#define PD_RX_SOP1_HRST   0x02                                               /* SOP1 or Hard Reset received */
+#define PD_RX_SOP2_CRST   0x03                                               /* SOP2 or Cable Reset received */
 
-#define UPD_SOP0          ( TX_SEL1_SYNC1 | TX_SEL2_SYNC1 | TX_SEL3_SYNC1 | TX_SEL4_SYNC2 )     // Start of Packet Sequence
-#define UPD_SOP1          ( TX_SEL1_SYNC1 | TX_SEL2_SYNC1 | TX_SEL3_SYNC3 | TX_SEL4_SYNC3 )     // Start of Packet Sequence Prime
-#define UPD_SOP2          ( TX_SEL1_SYNC1 | TX_SEL2_SYNC3 | TX_SEL3_SYNC1 | TX_SEL4_SYNC3 )     // Start of Packet Sequence Double Prime
-#define UPD_HARD_RESET    ( TX_SEL1_RST1  | TX_SEL2_RST1  | TX_SEL3_RST1  | TX_SEL4_RST2  )     // Hard Reset
-#define UPD_CABLE_RESET   ( TX_SEL1_RST1  | TX_SEL2_SYNC1 | TX_SEL3_RST1  | TX_SEL4_SYNC3 )     // Cable Reset
+#define UPD_SOP0          ( TX_SEL1_SYNC1 | TX_SEL2_SYNC1 | TX_SEL3_SYNC1 | TX_SEL4_SYNC2 )     /* SOP1 */
+#define UPD_SOP1          ( TX_SEL1_SYNC1 | TX_SEL2_SYNC1 | TX_SEL3_SYNC3 | TX_SEL4_SYNC3 )     /* SOP2 */
+#define UPD_SOP2          ( TX_SEL1_SYNC1 | TX_SEL2_SYNC3 | TX_SEL3_SYNC1 | TX_SEL4_SYNC3 )     /* SOP3 */
+#define UPD_HARD_RESET    ( TX_SEL1_RST1  | TX_SEL2_RST1  | TX_SEL3_RST1  | TX_SEL4_RST2  )     /* Hard Reset*/
+#define UPD_CABLE_RESET   ( TX_SEL1_RST1  | TX_SEL2_SYNC1 | TX_SEL3_RST1  | TX_SEL4_SYNC3 )     /* Cable Reset*/
 
 
 #define bCC_CMP_22        0X01
@@ -300,7 +308,7 @@ typedef enum
 {
     STA_IDLE = 0,                                                               /* 0: No task status */
     STA_DISCONNECT,                                                             /* 1: Disconnection */
-    STA_SRC_CONNECT,                                                            /* 2: SRC access */
+    STA_SRC_CONNECT,                                                            /* 2: SRC connect */
     STA_RX_SRC_CAP_WAIT,                                                        /* 3: Waiting to receive SRC_CAP */
     STA_RX_SRC_CAP,                                                             /* 4: SRC_CAP received */
     STA_TX_REQ,                                                                 /* 5: Send REQUEST */
@@ -342,9 +350,9 @@ typedef union
     struct _Message_Header
     {
         UINT8  MsgType: 5;                                                      /* Message Type */
-        UINT8  PDRole: 1;                                                       /* 0:UFP  1:DFP */
-        UINT8  SpecRev: 2;                                                      /* 00:Rev1.0; 01:Rev2.0; 10:Rev3.0; */
-        UINT8  PRRole: 1;                                                       /* 0:Sink; 1:Source */
+        UINT8  PDRole: 1;                                                       /* 0-UFP; 1-DFP */
+        UINT8  SpecRev: 2;                                                      /* 00-Rev1.0; 01-Rev2.0; 10-Rev3.0; */
+        UINT8  PRRole: 1;                                                       /* 0-Sink; 1-Source */
         UINT8  MsgID: 3;
         UINT8  NumDO: 3;
         UINT8  Ext: 1;
@@ -360,17 +368,17 @@ typedef union
     {
         UINT8  Msg_Recvd: 1;                                                    /* Notify the main program of the receipt of a PD packet */
         UINT8  Connected: 1;                                                    /* PD Physical Layer Connected Flag */
-        UINT8  Stop_Det_Chk: 1;                                                 /* 0:Enable detection; 1:Disable disconnection detection */
-        UINT8  PD_Role: 1;                                                      /* 0£ºUFP; 1: DFP */
-        UINT8  PR_Role: 1;                                                      /* 0: Sink; 1: Source */
-        UINT8  Auto_Ack_PRRole: 1;                                              /* Role used by auto-responder 0: SINK; 1: SOURCE */
-        UINT8  PD_Version: 1;                                                   /* PD version: 0: PD2.0; 1: PD3.0 */
-        UINT8  VDM_Version: 1;                                                  /* VDM Version 0: 1.0 1: 2.0 */
+        UINT8  Stop_Det_Chk: 1;                                                 /* 0-Enable detection; 1-Disable disconnection detection */
+        UINT8  PD_Role: 1;                                                      /* 0-UFP; 1-DFP */
+        UINT8  PR_Role: 1;                                                      /* 0-Sink; 1-Source */
+        UINT8  Auto_Ack_PRRole: 1;                                              /* Role used by auto-responder 0:SINK; 1:SOURCE */
+        UINT8  PD_Version: 1;                                                   /* PD version 0-PD2.0; 1-PD3.0 */
+        UINT8  VDM_Version: 1;                                                  /* VDM Version 0-1.0 1-2.0 */
         UINT8  HPD_Connected: 1;                                                /* HPD Physical Layer Connected Flag */
-        UINT8  HPD_Det_Chk: 1;                                                  /* 0:turn off HPD connection detection; 1:turn on HPD connection detection */
-        UINT8  CC_Sel_En: 1;                                                    /* 0: CC channel selection toggle enable; 1: CC channel selection toggle disable */
-        UINT8  CC_Sel_State: 1;                                                 /* 0: CC channel selection switches to 0; 1: CC channel selection switches to 1 */
-        UINT8  PD_Comm_Succ: 1;                                                 /* 0: PD communication unsuccessful; 1: PD communication successful; */
+        UINT8  HPD_Det_Chk: 1;                                                  /* 0-turn off HPD connection detection; 1-turn on HPD connection detection */
+        UINT8  CC_Sel_En: 1;                                                    /* 0-CC channel selection toggle enable; 1-CC channel selection toggle disable */
+        UINT8  CC_Sel_State: 1;                                                 /* 0-CC channel selection switches to 0; 1-CC channel selection switches to 1 */
+        UINT8  PD_Comm_Succ: 1;                                                 /* 0-PD communication unsuccessful; 1-PD communication successful; */
         UINT8  Recv: 3;
     }Bit;
     UINT16 Bit_Flag;
@@ -402,6 +410,7 @@ extern UINT8  Tmr_Ms_Cnt_Last;
 extern UINT8  Tmr_Ms_Dlt;
 extern UINT8  Tim_Ms_Cnt;
 
+extern UINT8  PDO_Len;
 extern PD_CONTROL PD_Ctl;
 
 extern UINT8 send_data[ ];
@@ -416,14 +425,15 @@ extern __attribute__ ((aligned(4))) UINT8 PD_Tx_Buf[ 34 ];
 extern void PD_Rx_Mode( void );
 extern void PD_SRC_Init( void );
 extern void PD_SINK_Init( void );
-extern void PD_PHY_Reset( );
+extern void PD_PHY_Reset( void );
 extern void PD_Init( void );
-extern UINT8 PD_Detect(  );
-extern void PD_Det_Proc(  );
-extern void PD_Load_Header(  UINT8 ex, UINT8 msg_type );
-extern UINT8 PD_Send_Handle(  UINT8 *pbuf, UINT8 len );
+extern UINT8 PD_Detect( void );
+extern void PD_Det_Proc( void );
+extern void PD_Load_Header( UINT8 ex, UINT8 msg_type );
+extern UINT8 PD_Send_Handle( UINT8 *pbuf, UINT8 len );
 extern void PD_Phy_SendPack( UINT8 mode, UINT8 *pbuf, UINT8 len, UINT8 sop );
-extern void PD_Main_Proc( );
+extern void PD_Main_Proc( void );
+extern void PD_PDO_Analyse( UINT8 pdo_idx, UINT8 *srccap, UINT16 *current, UINT16 *voltage );
 
 
 #ifdef __cplusplus

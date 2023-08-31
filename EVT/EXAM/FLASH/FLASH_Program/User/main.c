@@ -77,6 +77,7 @@ void Flash_Test_Fast(void)
     printf("256Byte Page Program Suc\r\n");
 
     FLASH_Lock_Fast();
+    FLASH_Lock();
 
     for(i = 0; i < 64; i++){
         if(buf[i] == *(u32 *)(0x08003000 + 4 * i))

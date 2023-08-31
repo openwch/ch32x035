@@ -5,7 +5,7 @@
 * Date               : 2023/04/06
 * Description        : This file provides all the PD firmware functions.
 *********************************************************************************
-* Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
+* Copyright (c) 2023 Nanjing Qinheng Microelectronics Co., Ltd.
 * Attention: This software (modified or not) and binary are used for
 * microcontroller manufactured by Nanjing Qinheng Microelectronics.
 *******************************************************************************/
@@ -27,7 +27,9 @@ UINT8  Tmr_Ms_Dlt;                                                              
 
 PD_CONTROL PD_Ctl;                                                              /* PD Control Related Structures */
 
-UINT8  Adapter_SrcCap[ 30 ];                                                    /* Contents of the SrcCap message for the adapter */
+UINT8  Adapter_SrcCap[ 30 ];                                                    /* SrcCap message from the adapter */
+
+UINT8  PDO_Len;
 
 /* SrcCap Table */
 UINT8 SrcCap_5V3A_Tab[ 4 ]  = { 0X2C, 0X91, 0X01, 0X3E };
@@ -62,9 +64,9 @@ UINT8 Status_Ext_Tab[ 8 ] =
  */
 void USBPD_IRQHandler(void)
 {
-    if(USBPD->STATUS & IF_RX_ACT) //Receive completion interrupt flag, write 1 to clear 0, write 0 to void
+    if(USBPD->STATUS & IF_RX_ACT)
     {
-        USBPD->STATUS |= IF_RX_ACT;  /* Clear the receive interrupt flag */
+        USBPD->STATUS |= IF_RX_ACT;
         if( ( USBPD->STATUS & MASK_PD_STAT ) == PD_RX_SOP0 )
         {
             if( USBPD->BMC_BYTE_CNT >= 6 )
@@ -81,11 +83,11 @@ void USBPD_IRQHandler(void)
             }
         }
     }
-    if(USBPD->STATUS & IF_TX_END)// Transmission completion interrupt flag
+    if(USBPD->STATUS & IF_TX_END)
     {
         /* Packet send completion interrupt (GoodCRC send completion interrupt only) */
-        USBPD->PORT_CC1 &= ~CC_LV0;
-        USBPD->PORT_CC2 &= ~CC_LV0;
+        USBPD->PORT_CC1 &= ~CC_LVE;
+        USBPD->PORT_CC2 &= ~CC_LVE;
 
         /* Interrupts are turned off and can be turned on after the main function has finished processing the data */
         NVIC_DisableIRQ(USBPD_IRQn);
@@ -112,7 +114,7 @@ void PD_Rx_Mode( void )
 {
     USBPD->CONFIG |= PD_ALL_CLR;
     USBPD->CONFIG &= ~PD_ALL_CLR;
-    USBPD->CONFIG |= IE_RX_ACT | IE_RX_RESET | PD_DMA_EN ;
+    USBPD->CONFIG |= IE_RX_ACT | IE_RX_RESET|PD_DMA_EN;
     USBPD->DMA = (UINT32)(UINT8 *)PD_Rx_Buf;
     USBPD->CONTROL &= ~PD_TX_EN;
     USBPD->BMC_CLK_CNT = UPD_TMR_RX_48M;
@@ -123,7 +125,7 @@ void PD_Rx_Mode( void )
 /*********************************************************************
  * @fn      PD_SRC_Init
  *
- * @brief   This function uses to initialize src mode.
+ * @brief   This function uses to initialize SRC mode.
  *
  * @return  none
  */
@@ -138,7 +140,7 @@ void PD_SRC_Init( )
 /*********************************************************************
  * @fn      PD_SINK_Init
  *
- * @brief   This function uses to initialize snk mode.
+ * @brief   This function uses to initialize SNK mode.
  *
  * @return  none
  */
@@ -153,7 +155,7 @@ void PD_SINK_Init( )
 /*********************************************************************
  * @fn      PD_PHY_Reset
  *
- * @brief   This function uses to reset pd phy.
+ * @brief   This function uses to reset PD PHY.
  *
  * @return  none
  */
@@ -168,7 +170,7 @@ void PD_PHY_Reset( void )
 /*********************************************************************
  * @fn      PD_Init
  *
- * @brief   This function uses to initialize PD Registers.
+ * @brief   This function uses to initialize PD registers and states.
  *
  * @return  none
  */
@@ -176,7 +178,7 @@ void PD_Init( void )
 {
     GPIO_InitTypeDef GPIO_InitStructure = {0};
 
-    RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOC, ENABLE);               //On PD I/O clock, AFIO clock and PD clock
+    RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOC, ENABLE);               /* Open PD I/O clock, AFIO clock and PD clock */
     RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE);
     RCC_AHBPeriphClockCmd(RCC_AHBPeriph_USBPD, ENABLE);
     GPIO_InitStructure.GPIO_Pin = GPIO_Pin_14 | GPIO_Pin_15;
@@ -187,7 +189,7 @@ void PD_Init( void )
     AFIO->CTLR |= USBPD_IN_HVT | USBPD_PHY_V33;
 
     USBPD->CONFIG = PD_DMA_EN;
-    USBPD->STATUS = BUF_ERR | IF_RX_BIT | IF_RX_BYTE | IF_RX_ACT | IF_RX_RESET | IF_TX_END;// Clear all interrupt flags
+    USBPD->STATUS = BUF_ERR | IF_RX_BIT | IF_RX_BYTE | IF_RX_ACT | IF_RX_RESET | IF_TX_END;
 
     /* Initialize all variables */
     memset( &PD_Ctl.PD_State, 0x00, sizeof( PD_CONTROL ) );
@@ -204,7 +206,7 @@ void PD_Init( void )
 /*********************************************************************
  * @fn      PD_Detect
  *
- * @brief   This function uses to detect cc insertion or removal.
+ * @brief   This function uses to detect CC connection.
  *
  * @return  0:No connection; 1:CC1 connection; 2:CC2 connection
  */
@@ -214,107 +216,14 @@ UINT8 PD_Detect( void )
     UINT8  cmp_cc1 = 0;
     UINT8  cmp_cc2 = 0;
 
-    if(PD_Ctl.Flag.Bit.Connected)                                       //Detect disconnection
+    if(PD_Ctl.Flag.Bit.Connected)                                       /* Detect disconnection */
     {
-        USBPD->PORT_CC1 &= ~( CC_CE | PA_CC_AI );
-        USBPD->PORT_CC1 |= CC_CMP_22;
-        Delay_Us(2);
-        if( USBPD->PORT_CC1 & PA_CC_AI )
-        {
-            cmp_cc1 = bCC_CMP_22;
-        }
-
-        USBPD->PORT_CC2 &= ~( CC_CE | PA_CC_AI );
-        USBPD->PORT_CC2 |= CC_CMP_22;
-        Delay_Us(2);
-        if( USBPD->PORT_CC2 & PA_CC_AI )
-        {
-            cmp_cc2 = bCC_CMP_22;
-        }
-
-        if((GPIOC->INDR & PIN_CC1) != (uint32_t)Bit_RESET)
-        {
-            cmp_cc1 |= bCC_CMP_220;
-        }
-        if((GPIOC->INDR & PIN_CC2) != (uint32_t)Bit_RESET)
-        {
-            cmp_cc2 |= bCC_CMP_220;
-        }
-
-        if( USBPD->PORT_CC1 & CC_PD )                                   //SNK mode
-        {
-            if (USBPD->CONFIG & CC_SEL)
-            {
-                if ((cmp_cc2 & bCC_CMP_22) == bCC_CMP_22)
-                {
-                    ret = 2;
-                }
-            }
-            else
-            {
-                if ((cmp_cc1 & bCC_CMP_22) == bCC_CMP_22)
-                {
-                    ret = 1;
-                }
-            }
-        }
-        else                                                            //SCR mode
-        {
-            if (USBPD->CONFIG & CC_SEL)                                 //CC2
-            {
-                if ((cmp_cc2 & bCC_CMP_220) == bCC_CMP_220)
-                {
-                    ret = 0;
-                }
-                else
-                {
-                    USBPD->PORT_CC2 &= ~CC_PU_CLR;
-                    USBPD->PORT_CC2 = CC_PU_180;
-                    if((GPIOC->INDR & PIN_CC2) != (uint32_t)Bit_RESET)
-                    {
-                        cmp_cc2 |= bCC_CMP_220;
-                    }
-                    if ((cmp_cc2 & bCC_CMP_220) == bCC_CMP_220)
-                    {
-                        ret = 0;
-                    }
-                    else
-                    {
-                        ret = 2;
-                    }
-                    USBPD->PORT_CC2 &= ~CC_PU_CLR;
-                    USBPD->PORT_CC2 = CC_PU_330;
-                }
-            }
-            else                                                           //CC1
-            {
-                if ((cmp_cc1 & bCC_CMP_220) == bCC_CMP_220)
-                {
-                    ret = 0;
-                }
-                else
-                {
-                    USBPD->PORT_CC1 &= ~CC_PU_CLR;
-                    USBPD->PORT_CC1 = CC_PU_180;
-                    if((GPIOC->INDR & GPIO_Pin_14) != (uint32_t)Bit_RESET)
-                    {
-                        cmp_cc1 |= bCC_CMP_220;
-                    }
-                    if ((cmp_cc1 & bCC_CMP_220) == bCC_CMP_220)
-                    {
-                        ret = 0;
-                    }
-                    else
-                    {
-                        ret = 1;
-                    }
-                    USBPD->PORT_CC1 &= ~CC_PU_CLR;
-                    USBPD->PORT_CC1 = CC_PU_330;
-                }
-            }
-        }
+        /* According to the usage scenario of PD SNK, whether
+         * it is removed or not should be determined by detecting
+         * the Vbus voltage, this code only shows the detection
+         * and the subsequent communication flow. */
     }
-    else                                                                        //detect insertion
+    else                                                                /* Detect insertion */
     {
         USBPD->PORT_CC1 &= ~( CC_CE|PA_CC_AI );
         USBPD->PORT_CC1 |= CC_CMP_22;
@@ -323,19 +232,9 @@ UINT8 PD_Detect( void )
         {
             cmp_cc1 |= bCC_CMP_22;
         }
-
         USBPD->PORT_CC1 &= ~( CC_CE|PA_CC_AI );
         USBPD->PORT_CC1 |= CC_CMP_66;
-        Delay_Us(2);
-        if( USBPD->PORT_CC1 & PA_CC_AI )
-        {
-            cmp_cc1 |= bCC_CMP_66;
-        }
 
-        if((GPIOC->INDR & PIN_CC1) != (uint32_t)Bit_RESET)
-        {
-            cmp_cc1 |= bCC_CMP_220;
-        }
 
         USBPD->PORT_CC2 &= ~( CC_CE|PA_CC_AI );
         USBPD->PORT_CC2 |= CC_CMP_22;
@@ -344,18 +243,9 @@ UINT8 PD_Detect( void )
         {
             cmp_cc2 |= bCC_CMP_22;
         }
-
         USBPD->PORT_CC2 &= ~( CC_CE|PA_CC_AI );
         USBPD->PORT_CC2 |= CC_CMP_66;
-        Delay_Us(2);
-        if( USBPD->PORT_CC2 & PA_CC_AI )
-        {
-            cmp_cc2 |= bCC_CMP_66;
-        }
-        if((GPIOC->INDR & PIN_CC2) != (uint32_t)Bit_RESET)
-        {
-            cmp_cc2 |= bCC_CMP_220;
-        }
+
 
         if (USBPD->PORT_CC1 & CC_PD)
         {
@@ -367,7 +257,7 @@ UINT8 PD_Detect( void )
             {
                 if( ret )
                 {
-                    ret = 1;   /* Huawei cable is connected to CC1 by default */
+                    ret = 1;   /* Huawei A to C cable has two pull-up resistors */
                 }
                 else
                 {
@@ -377,35 +267,7 @@ UINT8 PD_Detect( void )
         }
         else
         {
-            if ((((cmp_cc1 & bCC_CMP_66) == bCC_CMP_66) & ((cmp_cc1 & bCC_CMP_220) == 0x00)) == 1)
-            {
-                if ((((cmp_cc2 & bCC_CMP_22) == bCC_CMP_22) & ((cmp_cc2 & bCC_CMP_66) == 0x00)) == 1)   // with emark
-                {
-                    ret = 1;
-                }
-                if ((cmp_cc2 & bCC_CMP_220) == bCC_CMP_220)                                             // without emark
-                {
-                    ret = 1;
-                }
-            }
-            if ((((cmp_cc2 & bCC_CMP_66) == bCC_CMP_66) & ((cmp_cc2 & bCC_CMP_220) == 0x00)) == 1)
-            {
-                if(ret)
-                {
-                    ret = 0;
-                }
-                else
-                {
-                    if ((((cmp_cc1 & bCC_CMP_22) == bCC_CMP_22) && ((cmp_cc1 & bCC_CMP_66) == 0x00)) == 1)// with emark
-                    {
-                        ret = 2;
-                    }
-                    if ((cmp_cc1 & bCC_CMP_220) == bCC_CMP_220)                                           // without emark
-                    {
-                        ret = 2;
-                    }
-                }
-            }
+            /* SRC mode insertion detection */
         }
     }
     return( ret );
@@ -422,41 +284,20 @@ void PD_Det_Proc( void )
 {
     UINT8  status;
 
-    status = PD_Detect( );
-    /* Select the corresponding PD channel */
-    if( status == 1 )
-    {
-        USBPD->CONFIG &= ~CC_SEL;
-    }
-    else
-    {
-        USBPD->CONFIG |= CC_SEL;
-    }
     if( PD_Ctl.Flag.Bit.Connected )
     {
         /* PD is connected, detect its disconnection */
-        if( status )
-        {
-            PD_Ctl.Det_Cnt = 0;
-        }
-        else
-        {
-            PD_Ctl.Det_Cnt++;
-        }
-        if( PD_Ctl.Det_Cnt >= 5 )
-        {
-            PD_Ctl.Det_Cnt = 0;
-            PD_Ctl.Flag.Bit.Connected = 0;
-            if( PD_Ctl.Flag.Bit.Stop_Det_Chk == 0 )
-            {
-                PD_Ctl.PD_State = STA_DISCONNECT;
-            }
-        }
+
+        /* According to the usage scenario of PD SNK, whether
+         * it is removed or not should be determined by detecting
+         * the Vbus voltage, this code only shows the detection
+         * and the subsequent communication flow. */
+
     }
     else
     {
-        /* PD is disconnected, check its connection */
-
+        /* PD disconnected, check connection */
+        status = PD_Detect( );
         /* Determine connection status */
         if( status == 0 )
         {
@@ -474,8 +315,17 @@ void PD_Det_Proc( void )
             {
                 if( (USBPD->PORT_CC1 & CC_PD) || (USBPD->PORT_CC2 & CC_PD) )
                 {
+                    /* Select the corresponding PD channel */
+                    if( status == 1 )
+                    {
+                        USBPD->CONFIG &= ~CC_SEL;
+                    }
+                    else
+                    {
+                        USBPD->CONFIG |= CC_SEL;
+                    }
                     PD_Ctl.PD_State = STA_SRC_CONNECT;
-                    printf("CC%d Src Connect\r\n",status);
+                    printf("CC%d SRC Connect\r\n",status);
                 }
 
                 PD_Ctl.PD_Comm_Timer = 0;
@@ -487,7 +337,7 @@ void PD_Det_Proc( void )
 /*********************************************************************
  * @fn      PD_Phy_SendPack
  *
- * @brief   This function uses to sending pd data.
+ * @brief   This function uses to send PD data.
  *
  * @return  none
  */
@@ -496,23 +346,23 @@ void PD_Phy_SendPack( UINT8 mode, UINT8 *pbuf, UINT8 len, UINT8 sop )
 
     if ((USBPD->CONFIG & CC_SEL) == CC_SEL )
     {
-        USBPD->PORT_CC2 |= CC_LV0;
+        USBPD->PORT_CC2 |= CC_LVE;
     }
     else
     {
-        USBPD->PORT_CC1 |= CC_LV0;
+        USBPD->PORT_CC1 |= CC_LVE;
     }
 
     USBPD->BMC_CLK_CNT = UPD_TMR_TX_48M;
 
-    USBPD->DMA = (UINT32)(UINT8 *)pbuf;                         //dma address
+    USBPD->DMA = (UINT32)(UINT8 *)pbuf;
 
     USBPD->TX_SEL = sop;
 
-    USBPD->BMC_TX_SZ = len;                                     //length
-    USBPD->CONTROL |= PD_TX_EN ;                                //tx mode
-    USBPD->STATUS &= BMC_AUX_INVALID;                           //BMC_AUX clear 0
-    USBPD->CONTROL |= BMC_START ;                               //BMC_START
+    USBPD->BMC_TX_SZ = len;
+    USBPD->CONTROL |= PD_TX_EN;
+    USBPD->STATUS &= BMC_AUX_INVALID;
+    USBPD->CONTROL |= BMC_START;
 
     /* Determine if you need to wait for the send to complete */
     if( mode )
@@ -522,17 +372,17 @@ void PD_Phy_SendPack( UINT8 mode, UINT8 *pbuf, UINT8 len, UINT8 sop )
         USBPD->STATUS |= IF_TX_END;
         if((USBPD->CONFIG & CC_SEL) == CC_SEL )
         {
-            USBPD->PORT_CC2 &= ~CC_LV0;
+            USBPD->PORT_CC2 &= ~CC_LVE;
         }
         else
         {
-            USBPD->PORT_CC1 &= ~CC_LV0;
+            USBPD->PORT_CC1 &= ~CC_LVE;
         }
 
         /* Switch to receive ready to receive GoodCRC */
         USBPD->CONFIG |=  PD_ALL_CLR ;
         USBPD->CONFIG &= ~( PD_ALL_CLR );
-        USBPD->CONTROL &= ~ ( PD_TX_EN );                       //rx mode
+        USBPD->CONTROL &= ~ ( PD_TX_EN );
         USBPD->DMA = (UINT32)(UINT8 *)PD_Rx_Buf;
         USBPD->BMC_CLK_CNT = UPD_TMR_RX_48M;
         USBPD->CONTROL |= BMC_START;
@@ -573,7 +423,7 @@ void PD_Load_Header( UINT8 ex, UINT8 msg_type )
         PD_Tx_Buf[ 0 ] |= 0x40;
     }
 
-    PD_Rx_Buf[ 1 ] = PD_Ctl.Msg_ID & 0x0E;
+    PD_Tx_Buf[ 1 ] = PD_Ctl.Msg_ID & 0x0E;
     if( PD_Ctl.Flag.Bit.PR_Role )
     {
         PD_Tx_Buf[ 1 ] |= 0x01;
@@ -587,7 +437,7 @@ void PD_Load_Header( UINT8 ex, UINT8 msg_type )
 /*********************************************************************
  * @fn      PD_Send_Handle
  *
- * @brief   This function uses to start sending, query to receive send completion flag.
+ * @brief   This function uses to handle sending transactions.
  *
  * @return  0:success; 1:fail
  */
@@ -617,6 +467,7 @@ UINT8 PD_Send_Handle( UINT8 *pbuf, UINT8 len )
     pd_tx_trycnt = 4;
     while( --pd_tx_trycnt )                                                     /* Maximum 3 executions */
     {
+        NVIC_DisableIRQ( USBPD_IRQn );
         PD_Phy_SendPack( 0x01, PD_Tx_Buf, ( len + 2 ), UPD_SOP0 );
 
         /* Set receive timeout 750US */
@@ -640,7 +491,7 @@ UINT8 PD_Send_Handle( UINT8 *pbuf, UINT8 len )
         }
     }
 
-    /* Switching to receive mode */
+    /* Switch to receive mode */
     PD_Rx_Mode( );
     if( pd_tx_trycnt )
     {
@@ -655,37 +506,33 @@ UINT8 PD_Send_Handle( UINT8 *pbuf, UINT8 len )
 }
 
 /*********************************************************************
- * @fn      PD_Send_Request_CMD
+ * @fn      PDO_Request
  *
- * @brief   This function uses to send request.
+ * @brief   This function uses to Send the specified PDO.
  *
- * @return  0:success; 1:fail
+ * @return  none
  */
-UINT8 PD_Send_Request_CMD( UINT8 mode )
+void PDO_Request( UINT8 pdo_index )
 {
+    UINT16 Current,Voltage;
     UINT8  status;
-    if( ( mode == 0 ) || ( mode == 2 ) )
+    if ((pdo_index > PDO_Len) || (pdo_index == 0))
     {
-        /* Analysis of the PD version */
-        if( ( PD_Rx_Buf[ 0 ] & 0xC0 ) == 0x80 )
+        while(1)
         {
-            /* PD3.0 */
-            PD_Ctl.Flag.Bit.PD_Version = 1;
+            printf("pdo_index error!\r\n");
+            Delay_Ms(500);
         }
-        else
-        {
-            PD_Ctl.Flag.Bit.PD_Version = 0;
-        }
+    }
+    else
+    {
+        memcpy( &PD_Rx_Buf[ 2 ], &Adapter_SrcCap[ 4*(pdo_index-1) + 1 ], 4 );
+        PD_PDO_Analyse( 1, &PD_Rx_Buf[ 2 ], &Current, &Voltage );
+        printf("Request:\r\nCurrent:%d mA\r\nVoltage:%d mV\r\n",Current,Voltage);
 
-        /* Loaded fixed 5V/2A REQUEST */
-        if( mode == 2 )
-        {
-            memcpy( &PD_Rx_Buf[ 2 ], &Adapter_SrcCap[ 1 ], 4 );
-        }
-
-        /* Load Request command */
         PD_Load_Header( 0x00, DEF_TYPE_REQUEST );
-        PD_Rx_Buf[ 5 ] = 0x12;
+        PD_Rx_Buf[ 5 ] = 0x03;
+        PD_Rx_Buf[ 5 ] |= pdo_index<<4;
         PD_Rx_Buf[ 3 ] = PD_Rx_Buf[ 3 ] & 0x03;
         PD_Rx_Buf[ 3 ] |= ( PD_Rx_Buf[ 2 ] << 2 );
         PD_Rx_Buf[ 4 ] = PD_Rx_Buf[ 3 ];
@@ -693,19 +540,8 @@ UINT8 PD_Send_Request_CMD( UINT8 mode )
         PD_Rx_Buf[ 4 ] = PD_Rx_Buf[ 4 ] & 0x0C;
         PD_Rx_Buf[ 4 ] |= ( PD_Rx_Buf[ 2 ] >> 6 );
     }
-    else
-    {
-        return( 0x01 );
-    }
-
-    /* Send Request command */
-//    PD_Rx_Buf[0] = 0x82;                  //Load fixed values
-//    PD_Rx_Buf[1] = 0x10;
-//    PD_Rx_Buf[ 2 ] = 0x2c;
-//    PD_Rx_Buf[ 3 ] = 0xb1;
-//    PD_Rx_Buf[ 4 ] = 0x04;
-//    PD_Rx_Buf[ 5 ] = 0x12;
     status = PD_Send_Handle( &PD_Rx_Buf[ 2 ], 4 );
+
     if( status == DEF_PD_TX_OK )
     {
         PD_Ctl.PD_State = STA_RX_ACCEPT_WAIT;
@@ -716,13 +552,12 @@ UINT8 PD_Send_Request_CMD( UINT8 mode )
     }
     PD_Ctl.PD_Comm_Timer = 0;
     PD_Ctl.Flag.Bit.PD_Comm_Succ = 1;
-    return( 0x00 );
 }
 
 /*********************************************************************
  * @fn      PD_Save_Adapter_SrcCap
  *
- * @brief   This function uses to save the adapter SrcCap information (note the removal of the PPS part).
+ * @brief   This function uses to save the adapter SrcCap information.
  *
  * @return  none
  */
@@ -741,6 +576,8 @@ void PD_Save_Adapter_SrcCap( void )
             break;
         }
     }
+
+    PDO_Len = i;
 
     /* Modify SrcCap information */
     /* BIT31-30: Fixed Supply */
@@ -763,9 +600,38 @@ void PD_Save_Adapter_SrcCap( void )
 }
 
 /*********************************************************************
+ * @fn      PD_PDO_Analyse
+ *
+ * @brief   This function uses to analyse PDO's voltage and current.
+ *
+ * @return  none
+ */
+void PD_PDO_Analyse( UINT8 pdo_idx, UINT8 *srccap, UINT16 *current, UINT16 *voltage )
+{
+    UINT32 temp32;
+
+    temp32 = srccap[ (  ( pdo_idx - 1 ) << 2 ) + 0 ] +
+                        ( (UINT32)srccap[ ( ( pdo_idx - 1 ) << 2 ) + 1 ] << 8 ) +
+                        ( (UINT32)srccap[ ( ( pdo_idx - 1 ) << 2 ) + 2 ] << 16 );
+
+    /* Calculation of current values */
+    if( current != NULL )
+    {
+        *current = ( temp32 & 0x000003FF ) * 10;
+    }
+
+    /* Calculation of voltage values */
+    if( voltage != NULL )
+    {
+        temp32 = temp32 >> 10;
+        *voltage = ( temp32 & 0x000003FF ) * 50;
+    }
+}
+
+/*********************************************************************
  * @fn      PD_Main_Proc
  *
- * @brief   This function uses to process pd status.
+ * @brief   This function uses to process PD status.
  *
  * @return  none
  */
@@ -773,6 +639,8 @@ void PD_Main_Proc( )
 {
     UINT8  status;
     UINT8  pd_header;
+    UINT8 var;
+    UINT16 Current,Voltage;
 
     /* Receive idle timer count */
     PD_Ctl.PD_BusIdle_Timer += Tmr_Ms_Dlt;
@@ -849,7 +717,7 @@ void PD_Main_Proc( )
             /* Status: Sending a hardware reset */
             /* Sending a hard reset */
             PD_Ctl.Flag.Bit.Stop_Det_Chk = 1;
-            PD_Phy_SendPack( 0x01, NULL, 0, UPD_HARD_RESET );               /* send HRST */
+            PD_Phy_SendPack( 0x01, NULL, 0, UPD_HARD_RESET );                   /* send HRST */
             PD_Rx_Mode( );                                                      /* switch to rx mode */
             PD_Ctl.PD_State = STA_IDLE;
             PD_Ctl.PD_Comm_Timer = 0;
@@ -873,8 +741,16 @@ void PD_Main_Proc( )
 
                 PD_Save_Adapter_SrcCap( );
 
-                /* Send REQUEST (requesting the first set of power in SRC_CAP) */
-                PD_Send_Request_CMD( 0 );
+                /* Analysis of the voltage and current of each PDO group */
+                for (var = 1; var <= PDO_Len; ++var)
+                {
+                    PD_PDO_Analyse( var, &PD_Rx_Buf[ 2 ], &Current, &Voltage );
+                    printf("PDO:%d\r\nCurrent:%d mA\r\nVoltage:%d mV\r\n",var,Current,Voltage);
+                }
+                printf("\r\n");
+                /* Different PDO's for different voltages and currents */
+                /* Default application for the first group of PDO, 5V */
+                PDO_Request( PDO_INDEX_1 );
                 break;
 
             case DEF_TYPE_ACCEPT:

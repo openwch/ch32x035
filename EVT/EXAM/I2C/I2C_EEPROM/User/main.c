@@ -14,7 +14,8 @@
  *@Note
  *I2C interface routine to operate EEPROM peripheral:
  *I2C1_SCL(PA10)\I2C1_SDA(PA11).
- *This example uses EEPROM for AT24Cxx series.
+ *This example uses EEPROM for AT24Cxx series.During the I2C communication process, 
+ *the pins are open drain outputs.
  *Steps:
  *READ EEPROM:Start + 0xA0 + 8bit Data Address + Start + 0xA1 + Read Data + Stop.
  *WRITE EERPOM:Start + 0xA0 + 8bit Data Address + Write Data + Stop.	 
@@ -60,12 +61,12 @@ void IIC_Init(u32 bound, u16 address)
     RCC_APB1PeriphClockCmd( RCC_APB1Periph_I2C1, ENABLE );
 
     GPIO_InitStructure.GPIO_Pin = GPIO_Pin_10;
-    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_OD;
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
     GPIO_Init( GPIOA, &GPIO_InitStructure );
 
     GPIO_InitStructure.GPIO_Pin = GPIO_Pin_11;
-    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_OD;
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
     GPIO_Init( GPIOA, &GPIO_InitStructure );
 

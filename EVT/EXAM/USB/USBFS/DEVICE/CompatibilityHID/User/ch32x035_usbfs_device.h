@@ -69,11 +69,19 @@ typedef struct __PACKED _RING_BUFF_COMM
 #define pUSBFS_SetupReqPak                 ((PUSB_SETUP_REQ)USBFS_EP0_Buf)
 
 
-#define USB_IOEN                   AFIO->CTLR |= (1<<7)
-#define USB_UDP_PUE                AFIO->CTLR |= (3<<2)
-#define USB_UDP_PUE_CLR            AFIO->CTLR &= ~(3<<2)
-#define USB_UDM_PUE                AFIO->CTLR |= (3<<0)
-#define USB_UDM_PUE_CLR            AFIO->CTLR &= ~(3<<0)
+#define USB_IOEN                    0x00000080
+#define USB_PHY_V33                 0x00000040
+#define UDP_PUE_MASK                0x0000000C
+#define UDP_PUE_DISABLE             0x00000000
+#define UDP_PUE_35UA                0x00000004
+#define UDP_PUE_10K                 0x00000008
+#define UDP_PUE_1K5                 0x0000000C
+
+#define UDM_PUE_MASK                0x00000003
+#define UDM_PUE_DISABLE             0x00000000
+#define UDM_PUE_35UA                0x00000001
+#define UDM_PUE_10K                 0x00000002
+#define UDM_PUE_1K5                 0x00000003
 
 /*******************************************************************************/
 /* Variable Definition */
@@ -107,7 +115,7 @@ extern __attribute__ ((aligned(4))) uint8_t  Data_Buffer[ ];
 
 /******************************************************************************/
 /* external functions */
-extern void USBFS_Device_Init( FunctionalState sta );
+extern void USBFS_Device_Init( FunctionalState sta , PWR_VDD VDD_Voltage);
 extern void USBFS_Device_Endp_Init(void);
 extern void USBFS_RCC_Init(void);
 extern void USBFS_Send_Resume(void);

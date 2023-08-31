@@ -17,7 +17,8 @@
  *This example demonstrates that the Master sends with PEC error checking, and the
  *Slave receives. If a transmission error occurs, an error interrupt is triggered.
  *Note: The two boards download the Master and Slave programs respectively,
- *and power on at the same time.
+ *and power on at the same time.During the I2C communication process, 
+ *the pins are open drain outputs.
  *    Hardware connection:PA10 -- PA10
  *                        PA11 -- PA11
  *
@@ -59,12 +60,12 @@ void IIC_Init(u32 bound, u16 address)
     RCC_APB1PeriphClockCmd( RCC_APB1Periph_I2C1, ENABLE );
 
     GPIO_InitStructure.GPIO_Pin = GPIO_Pin_10;
-    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_OD;
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
     GPIO_Init( GPIOA, &GPIO_InitStructure );
 
     GPIO_InitStructure.GPIO_Pin = GPIO_Pin_11;
-    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_OD;
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
     GPIO_Init( GPIOA, &GPIO_InitStructure );
 
