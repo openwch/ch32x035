@@ -1,5 +1,5 @@
 
-Nanjing Qinheng Microelectronics Co., Ltd. 2023.05
+Nanjing Qinheng Microelectronics Co., Ltd. 2023.06
 
 http://wch-ic.com
 
@@ -45,6 +45,7 @@ Directory
   |      |      |      |-- IAP: IAP upgrade routine, including the Hex to Bin tool and IAP upgrade tool  
   |      |      |      |      |-- USB_UART: USB+UART IAP routine    
   |      |      |      |-- IWDG: independent watchdog routine
+  |      |      |      |-- PIOC: 1 wire operate WS2812 and DS1820.  
   |      |      |      |-- OPA
   |      |      |      |      |-- CMP： Comparator routines
   |      |      |      |      |-- CMP_TIM2：Timer 2 Capture Comparator Routine
@@ -62,6 +63,10 @@ Directory
   |      |      |      |      |-- Get_CLK:Get system-HCLK-AHB1-AHB2 clock routine   
   |      |      |      |      |-- MCO: MCO pin clock output routine    
   |      |      |      |-- RT-Thread:RT thread migration routine 
+  |      |      |      |-- RunInRam
+  |      |      |      |      |-- RunInRAM_Select：Some programs run routines in RAM.
+  |      |      |      |-- SDI_Printf
+  |      |      |      |      |-- SDI_Printf：debug interface SDI, virtual serial port.     
   |      |      |      |-- SPI
   |      |      |      |      |-- 1Lines_half-duplex: single wire half duplex mode, master/slave mode, data transceiver
   |      |      |      |      |-- 2Lines_FullDuplex: two-wire full duplex mode, master/slave mode, data transceiver
@@ -97,12 +102,15 @@ Directory
   |      |      |      |      |      |      |-- CH372:Simulates a custom USB device (CH372 device) with endpoints 1, 3 down and 2, 4 up. Data down from endpoint 1 is uploaded from endpoint 3 and not reversed, and data down from endpoint 2 is uploaded from endpoint 4 and reversed.
   |      |      |      |      |      |      |-- Compatibility_HID:Simulates HID devices, with data transmitted up and down through the serial port.
   |      |      |      |      |      |      |-- CompositeKM:Simulate keyboard and mouse, use IO to simulate keystrokes, while simulated data can be uploaded through serial port 2.
+  |      |      |      |      |      |      |-- CompositeKM_LowSpeed:Simulate low speed keyboard and mouse, use IO to simulate keystrokes, while simulated data can be uploaded through serial port 2.
   |      |      |      |      |      |      |-- SimulateCDC:Simulate a CDC serial port and use serial port 2 to send and receive.
   |      |      |      |      |      |      |-- SimulateCDC-HID:Simulate a CDC serial port, use serial port 2 to send and receive, HID interrupt endpoints to send and receive data to reverse and upload.  
   |      |      |      |      |      |-- HOST_KM: The host operates the keypad, gets the data of the endpoints uploaded by the keypad and prints it, supports U-port under level 1 hub
   |      |      |      |      |      |-- HOST_MTP_FileSystem:Enumeration process of a USB host to a device that supports MTP and PTP protocols, supports MTP and PTP protocols, and reads its files
   |      |      |      |      |      |-- Host_Udisk:USB host operation USB disk routine 
-  |      |      |      |      |      |-- Udisk_Lib:U disk file system library file    
-  |      |      |      |-- USBPD:PD Sink routine 
+  |      |      |      |      |      |-- Udisk_Lib:U disk file system library file  
+  |      |      |      |-- USBPD
+  |      |      |      |      |-- USBPD_SNK:PD SNK routine
+  |      |      |      |      |-- USBPD_SRC:PD SRC routine    
   |      |      |      |-- WWDG: window watchdog routine
 

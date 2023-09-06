@@ -33,11 +33,15 @@ extern "C" {
 #define PWR_FLAG_PVDO             ((uint32_t)0x00000004)
 #define PWR_FLAG_FLASH            ((uint32_t)0x00000020)
 
+/* PWR_VDD_Supply_Voltage */
+typedef enum {PWR_VDD_5V = 0, PWR_VDD_3V3 = !PWR_VDD_5V} PWR_VDD;
+
 void       PWR_DeInit(void);
 void       PWR_PVDLevelConfig(uint32_t PWR_PVDLevel);
 void       PWR_EnterSTOPMode(uint8_t PWR_STOPEntry);
 void       PWR_EnterSTANDBYMode(void);
 FlagStatus PWR_GetFlagStatus(uint32_t PWR_FLAG);
+PWR_VDD    PWR_VDD_SupplyVoltage(void);
 
 #ifdef __cplusplus
 }

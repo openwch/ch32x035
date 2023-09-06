@@ -84,19 +84,17 @@ void USBFS_Device_Endp_Init( void )
 
     USBFSD->UEP1_DMA = (uint32_t)USBFS_EP1_Buf;
     USBFSD->UEP2_DMA = (uint32_t)(uint8_t *)&UART2_Tx_Buf[ 0 ];
-    USBFSD->UEP3_DMA = (uint32_t)(uint8_t *)&UART2_Rx_Buf[ 0 ];
+    USBFSD->UEP3_DMA = (uint32_t)(uint8_t *)&USBFS_EP3_Buf[ 0 ];
 
-    USBFSD->UEP0_CTRL_H = USBFS_UEP_R_RES_ACK;
+    USBFSD->UEP0_CTRL_H = USBFS_UEP_R_RES_ACK | USBFS_UEP_T_RES_NAK;
     USBFSD->UEP2_CTRL_H = USBFS_UEP_R_RES_ACK;
-    USBFSD->UEP4_CTRL_H = USBFS_UEP_R_RES_ACK;
+    USBFSD->UEP4_CTRL_H = USBFS_UEP_R_RES_ACK | USBFS_UEP_T_RES_NAK;
 
     USBFSD->UEP1_TX_LEN = 0;
     USBFSD->UEP3_TX_LEN = 0;
 
-    USBFSD->UEP0_CTRL_H = USBFS_UEP_T_RES_NAK;
     USBFSD->UEP1_CTRL_H = USBFS_UEP_T_RES_NAK;
     USBFSD->UEP3_CTRL_H = USBFS_UEP_T_RES_NAK;
-    USBFSD->UEP4_CTRL_H = USBFS_UEP_T_RES_NAK;
     /* Clear End-points Busy Status */
     for( i=0; i<DEF_UEP_NUM; i++ )
     {
@@ -116,15 +114,13 @@ void GPIO_USB_INIT(void)
     GPIO_InitTypeDef GPIO_InitStructure = {0};
 
     RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOC, ENABLE);
-    GPIO_InitStructure.GPIO_Pin =  GPIO_Pin_16 | GPIO_Pin_17;
-    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU;
+    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_16;
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;
     GPIO_Init(GPIOC, &GPIO_InitStructure);
 
-    /* Enable USB multiplexing pin and PD pull-up 1.5k */
-    USB_IOEN;
-    USB_UDP_PUE;
-    /* Prohibit PN pull-up */
-    USB_UDM_PUE_CLR;
+    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_17;
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU;
+    GPIO_Init(GPIOC, &GPIO_InitStructure);
 }
 
 /*********************************************************************
@@ -134,8 +130,17 @@ void GPIO_USB_INIT(void)
  *
  * @return  none
  */
-void USBFS_Device_Init( FunctionalState sta )
+void USBFS_Device_Init( FunctionalState sta , PWR_VDD VDD_Voltage)
 {
+    if( VDD_Voltage == PWR_VDD_5V )
+    {
+        AFIO->CTLR = (AFIO->CTLR & ~(UDP_PUE_MASK | UDM_PUE_MASK | USB_PHY_V33)) | UDP_PUE_10K | USB_IOEN;
+    }
+    else
+    {
+        AFIO->CTLR = (AFIO->CTLR & ~(UDP_PUE_MASK | UDM_PUE_MASK )) | USB_PHY_V33 | UDP_PUE_1K5 | USB_IOEN;
+    }
+
     if( sta )
     {
         GPIO_USB_INIT();
@@ -172,13 +177,12 @@ uint8_t USBFS_Endp_DataUp(uint8_t endp, uint8_t *pbuf, uint16_t len, uint8_t mod
     {
         if( USBFS_Endp_Busy[ endp ] == 0 )
         {
-            /* copy mode */
-            memcpy(UART2_Rx_Buf,pbuf,len);
-            USBFSD->UEP3_TX_LEN = len;
-            USBFSD->UEP3_CTRL_H = (USBFSD->UEP3_CTRL_H & ~USBFS_UEP_T_RES_MASK) | USBFS_UEP_T_RES_ACK;
-
             /* Set end-point busy */
             USBFS_Endp_Busy[ endp ] = 0x01;
+            /* copy mode */
+            memcpy(USBFS_EP3_Buf,pbuf,len);
+            USBFSD->UEP3_TX_LEN = len;
+            USBFSD->UEP3_CTRL_H = (USBFSD->UEP3_CTRL_H & ~USBFS_UEP_T_RES_MASK) | USBFS_UEP_T_RES_ACK;
         }
         else
         {
@@ -384,8 +388,8 @@ void USBFS_IRQHandler( void )
 
             /* Setup stage processing */
             case USBFS_UIS_TOKEN_SETUP:
-                USBFSD->UEP0_CTRL_H = USBFS_UEP_T_TOG|USBFS_UEP_T_RES_NAK;
-                USBFSD->UEP0_CTRL_H = USBFS_UEP_R_TOG|USBFS_UEP_R_RES_NAK;
+                USBFSD->UEP0_CTRL_H = USBFS_UEP_T_TOG|USBFS_UEP_T_RES_NAK|USBFS_UEP_R_TOG|USBFS_UEP_R_RES_NAK;
+
                 /* Store All Setup Values */
                 USBFS_SetupReqType  = pUSBFS_SetupReqPak->bRequestType;
                 USBFS_SetupReqCode  = pUSBFS_SetupReqPak->bRequest;
@@ -528,9 +532,9 @@ void USBFS_IRQHandler( void )
 
                                 /* get hid descriptor */
                                 case USB_DESCR_TYP_HID:
-                                    if( USBFS_SetupReqIndex == 0x00 )
+                                    if( USBFS_SetupReqIndex == 0x02 )
                                     {
-                                        pUSBFS_Descr = &MyCfgDescr[ 18 ];
+                                        pUSBFS_Descr = &MyCfgDescr[ 84 ];
                                         len = 9;
                                     }
                                     else
@@ -826,8 +830,7 @@ void USBFS_IRQHandler( void )
                 if( errflag == 0xff)
                 {
                     /* if one request not support, return stall */
-                    USBFSD->UEP0_CTRL_H = USBFS_UEP_T_TOG|USBFS_UEP_T_RES_STALL;
-                    USBFSD->UEP0_CTRL_H = USBFS_UEP_R_TOG|USBFS_UEP_R_RES_STALL;
+                    USBFSD->UEP0_CTRL_H = USBFS_UEP_T_TOG|USBFS_UEP_T_RES_STALL|USBFS_UEP_R_TOG|USBFS_UEP_R_RES_STALL;
                 }
                 else
                 {
@@ -906,14 +909,21 @@ void USBFS_IRQHandler( void )
  */
 void USBFS_Send_Resume(void)
 {
-    USB_UDP_PUE_CLR ;
-    USB_UDM_PUE ;
-    USBFSD->UDEV_CTRL |= USBFS_UD_LOW_SPEED;
-    Delay_Ms( 8 );
-
-    USBFSD->UDEV_CTRL &= ~USBFS_UD_LOW_SPEED;
-    USB_UDP_PUE ;
-    USB_UDM_PUE_CLR ;
-    Delay_Ms( 1 );
+    GPIOC->BSXR = 0x00020001;
+    GPIOC->CFGXR = (GPIOC->CFGXR & ~0x000000FF) | 0x00000088;
+    if(PWR_VDD_SupplyVoltage() == PWR_VDD_5V)
+    {
+        AFIO->CTLR = (AFIO->CTLR & ~UDP_PUE_10K ) | UDM_PUE_10K;
+        Delay_Ms( 8 );
+        AFIO->CTLR = (AFIO->CTLR & ~UDM_PUE_10K ) | UDP_PUE_10K;
+    }
+    else
+    {
+        AFIO->CTLR = (AFIO->CTLR & ~UDP_PUE_1K5 ) | UDM_PUE_1K5;
+        Delay_Ms( 8 );
+        AFIO->CTLR = (AFIO->CTLR & ~UDM_PUE_1K5 ) | UDP_PUE_1K5;
+    }
+    GPIOC->CFGXR = (GPIOC->CFGXR & ~0x000000FF) | 0x00000084;
+    GPIOC->BSXR = 0x00010002;
 }
 

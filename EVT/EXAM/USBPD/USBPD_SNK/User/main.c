@@ -13,15 +13,25 @@
 /*
  *@Note
  *
- *PD SNK Sample code
+ * PD SNK Sample code
  *
- *Make sure that the board is not powered on before use.
- *Be sure to pay attention to the voltage when changing the request
- *to prevent burning the board.
+ * This sample code may have compatibility issues and is for learning purposes only.
+ * If you want to develop a PD project, please contact FAE.
+ 
+ * Make sure that the board is not powered on before use.
+ * Be sure to pay attention to the voltage when changing the request
+ * to prevent burning the board.
  *
- *There is no integrated 5.1K pull-down inside the chip,
- *CC_PD is only for status differentiation,
- *bit write 1 means SNK mode, write 0 means SCR mode
+ * There is no integrated 5.1K pull-down inside the chip,
+ * CC_PD is only for status differentiation,
+ * bit write 1 means SNK mode, write 0 means SCR mode
+ *
+ * Modify "PDO_Request( PDO_INDEX_1 )" in pd process.c, line 753, to modify the request voltage.
+ *
+ * According to the usage scenario of PD SNK, whether
+ * it is removed or not should be determined by detecting
+ * the Vbus voltage, this code only shows the detection
+ * and the subsequent communication flow.
  */
 
 #include "debug.h"
@@ -60,7 +70,7 @@ void TIM1_Init( u16 arr, u16 psc )
     NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
     NVIC_Init(&NVIC_InitStructure);
 
-    TIM_ITConfig( TIM1, TIM_IT_Update , ENABLE );
+    TIM_ITConfig( TIM1, TIM_IT_Update, ENABLE );
 
     TIM_Cmd( TIM1, ENABLE );
 }

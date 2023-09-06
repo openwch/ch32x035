@@ -361,11 +361,11 @@ void ch32_pin_mode(rt_device_t dev, rt_base_t pin, rt_base_t mode)
     }
     else if (mode == PIN_MODE_OUTPUT_OD)
     {
-        GPIO_InitStruct.GPIO_Mode = GPIO_Mode_Out_OD;
+        GPIO_InitStruct.GPIO_Mode = GPIO_Mode_AF_PP;
     }
     else if (mode == PIN_MODE_OUTPUT_AF_OD)
     {
-        GPIO_InitStruct.GPIO_Mode = GPIO_Mode_AF_OD;
+        GPIO_InitStruct.GPIO_Mode = GPIO_Mode_AF_PP;
     }
     else if (mode == PIN_MODE_OUTPUT_AF_PP)
     {

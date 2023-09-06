@@ -30,11 +30,19 @@
 #endif
 
 
-#define USB_IOEN                   AFIO->CTLR |= (1<<7)
-#define USB_UDP_PUE                AFIO->CTLR |= (3<<2)
-#define USB_UDP_PUE_CLR            AFIO->CTLR &= ~(3<<2)
-#define USB_UDM_PUE                AFIO->CTLR |= (3<<0)
-#define USB_UDM_PUE_CLR            AFIO->CTLR &= ~(3<<0)
+#define USB_IOEN                    0x00000080
+#define USB_PHY_V33                 0x00000040
+#define UDP_PUE_MASK                0x0000000C
+#define UDP_PUE_DISABLE             0x00000000
+#define UDP_PUE_35UA                0x00000004
+#define UDP_PUE_10K                 0x00000008
+#define UDP_PUE_1K5                 0x0000000C
+
+#define UDM_PUE_MASK                0x00000003
+#define UDM_PUE_DISABLE             0x00000000
+#define UDM_PUE_35UA                0x00000001
+#define UDM_PUE_10K                 0x00000002
+#define UDM_PUE_1K5                 0x00000003
 /*******************************************************************************/
 /* Constant Definition */
 #ifndef DEF_GET_USB_DEV_DESC

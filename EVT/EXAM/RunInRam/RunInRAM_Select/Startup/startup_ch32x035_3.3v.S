@@ -4,6 +4,7 @@
 ;* Version            : V1.0.0
 ;* Date               : 2023/04/06
 ;* Description        : vector table for eclipse toolchain.
+;*                      Applied to VDD = 3.3V
 ;*********************************************************************************
 ;* Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
 ;* Attention: This software (modified or not) and binary are used for 
@@ -23,7 +24,7 @@ _vector_base:
     .word   0
     .word   NMI_Handler                /* NMI */
     .word   HardFault_Handler          /* Hard Fault */
-    .word   0
+    .word   0x0057FFFF                 /* 0x0057FFFF-(VDD = 3.3V)  others-(VDD = 5V) */
     .word   Ecall_M_Mode_Handler       /* Ecall M Mode */
     .word   0
     .word   0
@@ -181,6 +182,18 @@ handle_reset:
 .option	pop 
 1:
 	la sp, _eusrstack 
+	/* Load highcode code  section from flash to RAM */
+2:
+    la a0, _highcode_lma
+    la a1, _highcode_vma_start
+    la a2, _highcode_vma_end
+    bgeu a1, a2, 2f
+1:
+    lw t0, (a0)
+    sw t0, (a1)
+    addi a0, a0, 4
+    addi a1, a1, 4
+    bltu a1, a2, 1b
 2:
 	/* Load data section from flash to RAM */
 	la a0, _data_lma
@@ -207,11 +220,11 @@ handle_reset:
     csrw 0xbc0, t0
 
     /* Enable nested and hardware stack */
-	li t0, 0x2
+	li t0, 0x3
 	csrw 0x804, t0
 
     /* Enable interrupt */
-   	li t0, 0x1800           
+   	li t0, 0x88           
    	csrs mstatus, t0
 
  	la t0, _vector_base

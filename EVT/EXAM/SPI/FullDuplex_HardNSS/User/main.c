@@ -19,8 +19,10 @@
  *This example demonstrates that in hardware NSS mode, the Master and Slave can
  *transmit and receive in full duplex at the same time.
  *Note: The two boards download the Master and Slave programs respectively, and
- *power on at the same time.
+ *power on at the same time.It is recommended that the NSS pin be connected to 
+ *a 10K pull-up resistor.
  *    Hardware connection:
+ *                PA4 -- PA4
  *                PA5 -- PA5
  *                PA6 -- PA6
  *                PA7 -- PA7
@@ -64,7 +66,8 @@ void SPI_FullDuplex_Init(void)
 
 #if(SPI_MODE == HOST_MODE)
     GPIO_InitStructure.GPIO_Pin = GPIO_Pin_4;
-    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU;
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
+    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
     GPIO_Init(GPIOA, &GPIO_InitStructure);
 
     GPIO_InitStructure.GPIO_Pin = GPIO_Pin_5;
@@ -101,6 +104,11 @@ void SPI_FullDuplex_Init(void)
 
 #endif
 
+#if(SPI_MODE == HOST_MODE)
+    SPI_SSOutputCmd( SPI1, ENABLE );
+
+#endif
+
     SPI_InitStructure.SPI_Direction = SPI_Direction_2Lines_FullDuplex;
 
 #if(SPI_MODE == HOST_MODE)
@@ -119,8 +127,6 @@ void SPI_FullDuplex_Init(void)
     SPI_InitStructure.SPI_FirstBit = SPI_FirstBit_MSB;
     SPI_InitStructure.SPI_CRCPolynomial = 7;
     SPI_Init(SPI1, &SPI_InitStructure);
-
-    SPI_SSOutputCmd( SPI1, DISABLE );
 
     SPI_Cmd(SPI1, ENABLE);
 }

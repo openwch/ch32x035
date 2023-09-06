@@ -4,6 +4,7 @@
 ;* Version            : V1.0.0
 ;* Date               : 2023/04/06
 ;* Description        : vector table for eclipse toolchain.
+;*                      Applied to VDD = 5V
 ;*********************************************************************************
 ;* Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
 ;* Attention: This software (modified or not) and binary are used for 
@@ -23,7 +24,7 @@ _vector_base:
     .word   0
     .word   NMI_Handler                /* NMI */
     .word   HardFault_Handler          /* Hard Fault */
-    .word   0
+    .word   0                          /* 0x0057FFFF-(VDD = 3.3V)  others-(VDD = 5V) */
     .word   Ecall_M_Mode_Handler       /* Ecall M Mode */
     .word   0
     .word   0

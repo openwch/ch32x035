@@ -270,20 +270,6 @@ extern "C" {
 #define USBFS_UIS_ENDP_MASK         0x0F      // RO, bit mask of current transfer endpoint number for USB device mode
 #define USBFS_UIS_H_RES_MASK        0x0F      // RO, bit mask of current transfer handshake response for USB host mode: 0000=no response, time out from device, others=handshake response PID received
 
-/* R32_USB_OTG_CR */
-#define USBFS_CR_SESS_VTH           0x20
-#define USBFS_CR_VBUS_VTH           0x10
-#define USBFS_CR_OTG_EN             0x08
-#define USBFS_CR_IDPU               0x04
-#define USBFS_CR_CHARGE_VBUS        0x02
-#define USBFS_CR_DISCHAR_VBUS       0x01
-
-/* R32_USB_OTG_SR */
-#define USBFS_SR_ID_DIG             0x08
-#define USBFS_SR_SESS_END           0x04
-#define USBFS_SR_SESS_VLD           0x02
-#define USBFS_SR_VBUS_VLD           0x01
-
 /* R8_UDEV_CTRL */
 #define USBFS_UD_PD_DIS             0x80      // disable USB UDP/UDM pulldown resistance: 0=enable pulldown, 1=disable
 #define USBFS_UD_DP_PIN             0x20      // ReadOnly: indicate current UDP pin level
@@ -383,8 +369,8 @@ extern "C" {
 //   1 1:  dual 64 bytes buffer by toggle bit bUH_R_TOG selection for receiving (IN endpoint), total=128bytes
 
 /* R16_UH_SETUP */
-#define USBFS_UH_PRE_PID_EN         0x0400      // USB host PRE PID enable for low speed device via hub
-#define USBFS_UH_SOF_EN             0x0004      // USB host automatic SOF enable
+#define USBFS_UH_PRE_PID_EN         0x80      // USB host PRE PID enable for low speed device via hub
+#define USBFS_UH_SOF_EN             0x40      // USB host automatic SOF enable
 
 /* R8_UH_EP_PID */
 #define USBFS_UH_TOKEN_MASK         0xF0      // bit mask of token PID for USB host transfer
