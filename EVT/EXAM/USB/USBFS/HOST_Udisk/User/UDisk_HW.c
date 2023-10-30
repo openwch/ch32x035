@@ -68,7 +68,7 @@ void Udisk_USBH_Initialization( void )
     /* Initialize USBFS host */
     DUG_PRINTF( "USBFS Host Init\r\n" );
     USBFS_RCC_Init( );
-    USBFS_Host_Init( ENABLE );
+    USBFS_Host_Init( ENABLE , PWR_VDD_SupplyVoltage());
     memset( &RootHubDev[ DEF_USB_PORT_FS ].bStatus, 0, sizeof( struct _ROOT_HUB_DEVICE ) );
     memset( &HostCtl[ DEF_USB_PORT_FS ].InterfaceNum, 0, sizeof( struct __HOST_CTL ) );
 	

@@ -1,5 +1,5 @@
 
-南京沁恒微电子股份有限公司 2023.06
+南京沁恒微电子股份有限公司 2023.10
 最新资料请到我们的网站上查询
 http://wch.cn
 
@@ -30,11 +30,16 @@ http://wch.cn
   |      |      |      |-- DMA
   |      |      |      |      |-- DMA_MEM2MEM：储存器到储存器模式例程
   |      |      |      |      |-- DMA_MEM2PERIP：储存器到外设模式、外设到储存器模式例程见各外设子例程
-  |      |      |      |-- EXTI：外部中断线例程
-  |      |      |      |-- FLASH：FLASH的擦/读/写
-  |      |      |      |-- FreeRTOS：FreeRTOS移植例程  
-  |      |      |      |-- GPIO：GPIO例程
-  |      |      |      |-- HarmonyOS：HarmonyOS移植例程  
+  |      |      |      |-- EXTI
+  |      |      |      |      |-- EXTI0：外部中断线例程 
+  |      |      |      |-- FLASH
+  |      |      |      |      |-- FLASH_Program：FLASH的擦/读/写，以及快速编程  
+  |      |      |      |-- FreeRTOS
+  |      |      |      |      |-- FreeRTOS_Core：FreeRTOS移植例程
+  |      |      |      |-- GPIO
+  |      |      |      |      |-- GPIO_Toggle：GPIO例程 
+  |      |      |      |-- HarmonyOS
+  |      |      |      |      |-- LiteOS_m：HarmonyOS移植例程
   |      |      |      |-- I2C
   |      |      |      |      |-- I2C_7bit_Mode：7位地址模式，Master/Slave 模式收发例程
   |      |      |      |      |-- I2C_10bit_Mode：10位地址模式，Master/Slave 模式收发例程
@@ -45,8 +50,11 @@ http://wch.cn
   |      |      |      |      |-- Interrupt_VTF：使用VTF IRQ中断例程  
   |      |      |      |-- IAP：IAP升级例程-内置Hex转Bin工具和IAP升级工具  
   |      |      |      |      |-- USB_UART：USB+UART IAP例程   
-  |      |      |      |-- IWDG：独立看门狗例程
-  |      |      |      |-- PIOC: PIOC接口模拟单线操作WS2812和DS1820  
+  |      |      |      |-- IWDG
+  |      |      |      |      |-- IWDG：独立看门狗例程  
+  |      |      |      |-- PIOC
+  |      |      |      |      |-- 1-Wire :PIOC接口模拟单线操作WS2812和DS1820  
+  |      |      |      |      |-- PIOC_UART :PIOC接口模拟串口  
   |      |      |      |-- OPA
   |      |      |      |      |-- CMP：比较器例程
   |      |      |      |      |-- CMP_TIM2：定时器2捕获比较器例程
@@ -63,7 +71,8 @@ http://wch.cn
   |      |      |      |-- RCC
   |      |      |      |      |-- Get_CLK：获取system-HCLK-AHB1-AHB2时钟例程   
   |      |      |      |      |-- MCO：MCO引脚时钟输出例程
-  |      |      |      |-- RT-Thread：RT-Thread移植例程 
+  |      |      |      |-- RT-Thread 
+  |      |      |      |      |-- rt_thread：RT-Thread移植例程  
   |      |      |      |-- RunInRam
   |      |      |      |      |-- RunInRAM_Select：部分程序在RAM中运行例程  
   |      |      |      |-- SDI_Printf
@@ -75,7 +84,8 @@ http://wch.cn
   |      |      |      |      |-- SPI_CRC：使用CRC错误校验，Master/Slave 模式收发例程
   |      |      |      |      |-- SPI_DMA：SPI使用DMA，Master/Slave 模式收发例程
   |      |      |      |      |-- SPI_FLASH：SPI接口操作FLASH外设例程
-  |      |      |      |-- TencentOS：TencentOS移植例程       
+  |      |      |      |-- TencentOS 
+  |      |      |      |      |-- TencentOS：TencentOS移植例程 
   |      |      |      |-- TIM
   |      |      |      |      |-- Clock_Select：时钟源选择例程
   |      |      |      |      |-- ComplementaryOutput_DeadTime：互补输出和死区插入模式例程
@@ -87,7 +97,8 @@ http://wch.cn
   |      |      |      |      |-- Synchro_ExtTrigger：从模式例程，包括复位模式、门控模式、触发模式
   |      |      |      |      |-- Synchro_Timer：定时器同步模式
   |      |      |      |      |-- TIM_DMA：定时器使用DMA例程
-  |      |      |      |-- TOUCHKEY：TouchKey检测例程 
+  |      |      |      |-- TOUCHKEY
+  |      |      |      |      |-- TKey：TouchKey检测例程 
   |      |      |      |-- USART
   |      |      |      |      |-- USART_DMA：USART使用DMA，Master/Slave 模式收发例程
   |      |      |      |      |-- USART_HalfDuplex：单线半双工模式，Master/Slave 模式收发例程
@@ -100,7 +111,7 @@ http://wch.cn
   |      |      |      |-- USB
   |      |      |      |      |-- USBFS
   |      |      |      |      |      |-- DEVICE
-  |      |      |      |      |      |      |-- CH372：模拟自定义USB设备（CH372设备），端点1，3下传，2，4上传，端点1下传的数据从端点3上传，不取反，端点2下传的数据从端点4上传，取反。
+  |      |      |      |      |      |      |-- CH372：模拟自定义USB设备（CH372设备），端点1，3，5下传，2，4, 6上传，端点1下传的数据从端点2上传，不取反，端点3 ，5下传的数据从端点4 ，6上传，取反。
   |      |      |      |      |      |      |-- Compatibility_HID：模拟HID设备，数据通过串口上下传。
   |      |      |      |      |      |      |-- CompositeKM：模拟键盘和鼠标，使用IO模拟按键，同时模拟数据可以通过串口2上传。
   |      |      |      |      |      |      |-- CompositeKM_LowSpeed：模拟低速键盘和鼠标，使用IO模拟按键，同时模拟数据可以通过串口2上传。
@@ -114,3 +125,4 @@ http://wch.cn
   |      |      |      |      |-- USBPD_SNK：PD SNK 例程
   |      |      |      |      |-- USBPD_SRC：PD SRC 例程   
   |      |      |      |-- WWDG：窗口看门狗例程
+  |      |      |      |      |-- WWDG：窗口看门狗例程  

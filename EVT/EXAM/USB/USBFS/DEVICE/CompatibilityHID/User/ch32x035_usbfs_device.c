@@ -85,7 +85,12 @@ void USBFS_Device_Endp_Init( void )
     USBFSD->UEP0_CTRL_H = USBFS_UEP_T_RES_NAK | USBFS_UEP_R_RES_ACK;
     USBFSD->UEP1_CTRL_H = USBFS_UEP_R_RES_ACK;
     USBFSD->UEP2_CTRL_H = USBFS_UEP_T_RES_NAK;
-    USBFS_Endp_Busy[ 2 ] = 0;
+
+    /* Clear End-points Busy Status */
+    for(uint8_t i=0; i<DEF_UEP_NUM; i++ )
+    {
+        USBFS_Endp_Busy[ i ] = 0;
+    }
 }
 
 /*********************************************************************
@@ -682,6 +687,7 @@ void USBFS_IRQHandler( void )
         USBFS_DevAddr = 0;
         USBFS_DevSleepStatus = 0;
         USBFS_DevEnumStatus = 0;
+
         USBFSD->DEV_ADDR = 0;
         USBFS_Device_Endp_Init( );
         USBFSD->INT_FG = USBFS_UIF_BUS_RST;
@@ -709,32 +715,5 @@ void USBFS_IRQHandler( void )
         /* other interrupts */
         USBFSD->INT_FG = intflag;
     }
-}
-
-/*********************************************************************
- * @fn      USBFS_Send_Resume
- *
- * @brief   USBFS device sends wake-up signal to host
- *
- * @return  none
- */
-void USBFS_Send_Resume(void)
-{
-    GPIOC->BSXR = 0x00020001;
-    GPIOC->CFGXR = (GPIOC->CFGXR & ~0x000000FF) | 0x00000088;
-    if(PWR_VDD_SupplyVoltage() == PWR_VDD_5V)
-    {
-        AFIO->CTLR = (AFIO->CTLR & ~UDP_PUE_10K ) | UDM_PUE_10K;
-        Delay_Ms( 8 );
-        AFIO->CTLR = (AFIO->CTLR & ~UDM_PUE_10K ) | UDP_PUE_10K;
-    }
-    else
-    {
-        AFIO->CTLR = (AFIO->CTLR & ~UDP_PUE_1K5 ) | UDM_PUE_1K5;
-        Delay_Ms( 8 );
-        AFIO->CTLR = (AFIO->CTLR & ~UDM_PUE_1K5 ) | UDP_PUE_1K5;
-    }
-    GPIOC->CFGXR = (GPIOC->CFGXR & ~0x000000FF) | 0x00000084;
-    GPIOC->BSXR = 0x00010002;
 }
 

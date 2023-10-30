@@ -1,6 +1,6 @@
 Mcu Type=CH32X035
 Address=0x08000000
-Target Path=obj\CompositeKM.hex
+Target Path=obj\CompositeKM_LowSpeed.hex
 Erase All=true
 Program=true
 Verify=true

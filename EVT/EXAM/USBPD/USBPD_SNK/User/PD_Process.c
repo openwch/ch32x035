@@ -177,7 +177,6 @@ void PD_PHY_Reset( void )
 void PD_Init( void )
 {
     GPIO_InitTypeDef GPIO_InitStructure = {0};
-
     RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOC, ENABLE);               /* Open PD I/O clock, AFIO clock and PD clock */
     RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE);
     RCC_AHBPeriphClockCmd(RCC_AHBPeriph_USBPD, ENABLE);
@@ -185,21 +184,14 @@ void PD_Init( void )
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;
     GPIO_Init(GPIOC, &GPIO_InitStructure);
-
     AFIO->CTLR |= USBPD_IN_HVT | USBPD_PHY_V33;
-
     USBPD->CONFIG = PD_DMA_EN;
     USBPD->STATUS = BUF_ERR | IF_RX_BIT | IF_RX_BYTE | IF_RX_ACT | IF_RX_RESET | IF_TX_END;
-
     /* Initialize all variables */
     memset( &PD_Ctl.PD_State, 0x00, sizeof( PD_CONTROL ) );
     Adapter_SrcCap[ 0 ] = 1;
     memcpy( &Adapter_SrcCap[ 1 ], SrcCap_5V3A_Tab, 4 );
-
     PD_PHY_Reset( );
-
-    NVIC_EnableIRQ( USBPD_IRQn );
-
     PD_Rx_Mode( );
 }
 
@@ -225,25 +217,25 @@ UINT8 PD_Detect( void )
     }
     else                                                                /* Detect insertion */
     {
-        USBPD->PORT_CC1 &= ~( CC_CE|PA_CC_AI );
+        USBPD->PORT_CC1 &= ~( CC_CMP_Mask|PA_CC_AI );
         USBPD->PORT_CC1 |= CC_CMP_22;
         Delay_Us(2);
         if( USBPD->PORT_CC1 & PA_CC_AI )
         {
             cmp_cc1 |= bCC_CMP_22;
         }
-        USBPD->PORT_CC1 &= ~( CC_CE|PA_CC_AI );
+        USBPD->PORT_CC1 &= ~( CC_CMP_Mask|PA_CC_AI );
         USBPD->PORT_CC1 |= CC_CMP_66;
 
 
-        USBPD->PORT_CC2 &= ~( CC_CE|PA_CC_AI );
+        USBPD->PORT_CC2 &= ~( CC_CMP_Mask|PA_CC_AI );
         USBPD->PORT_CC2 |= CC_CMP_22;
         Delay_Us(2);
         if( USBPD->PORT_CC2 & PA_CC_AI )
         {
             cmp_cc2 |= bCC_CMP_22;
         }
-        USBPD->PORT_CC2 &= ~( CC_CE|PA_CC_AI );
+        USBPD->PORT_CC2 &= ~( CC_CMP_Mask|PA_CC_AI );
         USBPD->PORT_CC2 |= CC_CMP_66;
 
 
@@ -399,13 +391,13 @@ void PD_Phy_SendPack( UINT8 mode, UINT8 *pbuf, UINT8 len, UINT8 sop )
 void PD_Load_Header( UINT8 ex, UINT8 msg_type )
 {
     /* Message Header
-       BIT15:    Extended;
-       BIT14-12: Number of Data Objects
-       BIT11--9: Message ID
-       BIT8:     PortPower Role/Cable Plug  0: SINK; 1: SOURCE
-       BIT7---6: Revision, 00: V1.0; 01: V2.0; 10: V3.0;
-       BIT5:     Port Data Role, 0: UFP; 1: DFP
-       BIT4---0: Message Type
+       BIT15 - Extended;
+       BIT[14:12] - Number of Data Objects
+       BIT[11:9] - Message ID
+       BIT8 - PortPower Role/Cable Plug  0: SINK; 1: SOURCE
+       BIT[7:6] - Revision, 00: V1.0; 01: V2.0; 10: V3.0;
+       BIT5 - Port Data Role, 0: UFP; 1: DFP
+       BIT[4:0] - Message Type
     */
     PD_Tx_Buf[ 0 ] = msg_type;
     if( PD_Ctl.Flag.Bit.PD_Role )
@@ -580,16 +572,18 @@ void PD_Save_Adapter_SrcCap( void )
     PDO_Len = i;
 
     /* Modify SrcCap information */
-    /* BIT31-30: Fixed Supply */
-    /* BIT29:    Dual-Role Power */
-    /* BIT28:    USB Suspend Power */
-    /* BIT27:    Unconstrained Power */
-    /* BIT26:    USB Communications */
-    /* BIT25:    Dual-Role Data */
-    /* BIT24:    Unchunked Extended Message */
-    /* BIT23-20:  */
-    /* BIT19-10: Voltage in 50mV units */
-    /* BIT9-0:   Current in 10mA units */
+       /* BIT[31:30] - Fixed Supply */
+       /* BIT29 - Dual-Role Power */
+       /* BIT28 - USB Suspend Power */
+       /* BIT27 - Unconstrained Power */
+       /* BIT26 - USB Communications */
+       /* BIT25 - Dual-Role Data */
+       /* BIT24 - Unchunked Extended Message Supported */
+       /* BIT23 - EPR Mode Capable */
+       /* BIT22 - Reserved,shall be set to zero */
+       /* BIT[21:20] - Peak Current */
+       /* BIT[19:10] - Voltage in 50mV units */
+       /* BIT[9:0] - Maximum Current in 10mA units */
     PD_Rx_Buf[ 5 ] = 0x3E;
 
     /* Save the adapter's SrcCap information */

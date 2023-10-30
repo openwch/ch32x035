@@ -13,7 +13,7 @@
 /*
  *@Note
  *FLASH erase/read/write, fast programming and OptionBytes programming:
- *Includes Standard Erase and Program, Fast Erase and Program.
+ *Includes Fast Erase and Program.
  *
 */
 
@@ -21,7 +21,9 @@
 
 
 /* Global define */
-u32 buf[64];
+#define Fadr    0x08003000
+#define Fsize   (256>>2)
+u32 buf[Fsize];
 
 /*********************************************************************
  * @fn      Option_Byte_CFG
@@ -55,47 +57,61 @@ void Option_Byte_CFG(void)
  */
 void Flash_Test_Fast(void)
 {
-    u8  i, Verity_Flag = 0;
+    u32 i;
+    u8 Verify_Flag = 0;
+    FLASH_Status s;
 
-    for(i = 0; i < 64; i++){
+    for(i = 0; i < Fsize; i++){
         buf[i] = i;
     }
 
-    FLASH_Unlock_Fast();
-
-    FLASH_ErasePage_Fast(0x08003000);
-
-    printf("256Byte Page Erase Suc\r\n");
-
-    FLASH_BufReset();
-    for(i=0; i<64; i++){
-        FLASH_BufLoad(0x08003000+4*i, buf[i]);
+    printf("Read flash\r\n");
+    for(i=0; i<Fsize; i++){
+        printf("adr-%08x v-%08x\r\n", Fadr +4*i, *(u32*)(Fadr +4*i));
     }
 
-    FLASH_ProgramPage_Fast(0x08003000);
+    s = FLASH_ROM_ERASE(Fadr, Fsize*4);
+    if(s != FLASH_COMPLETE)
+    {
+        printf("check FLASH_ADR_RANGE_ERROR FLASH_ALIGN_ERROR or FLASH_OP_RANGE_ERROR\r\n");
+        return;
+    }
 
-    printf("256Byte Page Program Suc\r\n");
+    printf("Erase flash\r\n");
+    for(i=0; i<Fsize; i++){
+        printf("adr-%08x v-%08x\r\n", Fadr +4*i, *(u32*)(Fadr +4*i));
+    }
 
-    FLASH_Lock_Fast();
-    FLASH_Lock();
+    s = FLASH_ROM_WRITE(Fadr,  buf, Fsize*4);
+    if(s != FLASH_COMPLETE)
+    {
+        printf("check FLASH_ADR_RANGE_ERROR FLASH_ALIGN_ERROR or FLASH_OP_RANGE_ERROR\r\n");
+        return;
+    }
 
-    for(i = 0; i < 64; i++){
-        if(buf[i] == *(u32 *)(0x08003000 + 4 * i))
+    printf("Write flash\r\n");
+    for(i=0; i<Fsize; i++){
+        printf("adr-%08x v-%08x\r\n", Fadr +4*i, *(u32*)(Fadr +4*i));
+    }
+
+    for(i = 0; i < Fsize; i++){
+        if(buf[i] == *(u32 *)(Fadr + 4 * i))
         {
-            Verity_Flag = 0;
+            Verify_Flag = 0;
         }
         else
         {
-            Verity_Flag = 1;
+            Verify_Flag = 1;
             break;
         }
     }
 
-    if(Verity_Flag)
-        printf("256Byte Page Verity Fail\r\n");
+    if(Verify_Flag)
+        printf("%d Byte Verify Fail\r\n", (Fsize*4));
     else
-        printf("256Byte Page Verity Suc\r\n");
+        printf("%d Byte Verify Suc\r\n", (Fsize*4));
 }
+
 
 /*********************************************************************
  * @fn      main

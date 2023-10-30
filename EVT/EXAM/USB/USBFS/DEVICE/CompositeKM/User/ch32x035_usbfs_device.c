@@ -83,6 +83,12 @@ void USBFS_Device_Endp_Init( void )
     USBFSD->UEP0_CTRL_H = USBFS_UEP_R_RES_ACK | USBFS_UEP_T_RES_NAK;
     USBFSD->UEP1_CTRL_H = USBFS_UEP_T_RES_NAK;
     USBFSD->UEP2_CTRL_H = USBFS_UEP_T_RES_NAK;
+
+    /* Clear End-points Busy Status */
+    for(uint8_t i=0; i<DEF_UEP_NUM; i++ )
+    {
+        USBFS_Endp_Busy[ i ] = 0;
+    }
 }
 
 /*********************************************************************
@@ -126,6 +132,7 @@ void USBFS_Device_Init( FunctionalState sta , PWR_VDD VDD_Voltage)
         {
             AFIO->CTLR = (AFIO->CTLR & ~(UDP_PUE_MASK | UDM_PUE_MASK )) | USB_PHY_V33 | UDP_PUE_1K5 | USB_IOEN;
         }
+
         USBFSD->BASE_CTRL = 0x00;
         USBFS_Device_Endp_Init( );
         USBFSD->DEV_ADDR = 0x00;
@@ -770,21 +777,25 @@ void USBFS_IRQHandler( void )
  */
 void USBFS_Send_Resume(void)
 {
-    GPIOC->BSXR = 0x00020001;
-    GPIOC->CFGXR = (GPIOC->CFGXR & ~0x000000FF) | 0x00000088;
     if(PWR_VDD_SupplyVoltage() == PWR_VDD_5V)
     {
+        GPIOC->BSXR = 0x00020001;
+        GPIOC->CFGXR = (GPIOC->CFGXR & ~0x000000FF) | 0x00000088;
         AFIO->CTLR = (AFIO->CTLR & ~UDP_PUE_10K ) | UDM_PUE_10K;
         Delay_Ms( 8 );
         AFIO->CTLR = (AFIO->CTLR & ~UDM_PUE_10K ) | UDP_PUE_10K;
+        GPIOC->CFGXR = (GPIOC->CFGXR & ~0x000000FF) | 0x00000084;
+        GPIOC->BSXR = 0x00010002;
     }
     else
     {
+        GPIOC->BSXR = 0x00020001;
+        GPIOC->CFGXR = (GPIOC->CFGXR & ~0x000000FF) | 0x00000088;
         AFIO->CTLR = (AFIO->CTLR & ~UDP_PUE_1K5 ) | UDM_PUE_1K5;
         Delay_Ms( 8 );
         AFIO->CTLR = (AFIO->CTLR & ~UDM_PUE_1K5 ) | UDP_PUE_1K5;
+        GPIOC->CFGXR = (GPIOC->CFGXR & ~0x000000FF) | 0x00000084;
+        GPIOC->BSXR = 0x00010002;
     }
-    GPIOC->CFGXR = (GPIOC->CFGXR & ~0x000000FF) | 0x00000084;
-    GPIOC->BSXR = 0x00010002;
 }
 

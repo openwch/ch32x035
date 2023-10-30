@@ -56,6 +56,15 @@
 #define EraseTimeout               ((uint32_t)0x000B0000)
 #define ProgramTimeout             ((uint32_t)0x00005000)
 
+/* Flash Program Vaild Address */
+#define ValidAddrStart             (FLASH_BASE)
+#define ValidAddrEnd               (FLASH_BASE + 0xF800)
+
+/* FLASH Size */
+#define Size_256B                  0x100
+#define Size_1KB                   0x400
+#define Size_32KB                  0x8000
+
 /********************************************************************************
   * @fn            FLASH_SetLatency
   *
@@ -740,4 +749,274 @@ void SystemReset_StartMode(uint32_t Mode)
     }
 
     FLASH_Lock();
+}
+
+/*********************************************************************
+ * @fn      ROM_ERASE
+ *
+ * @brief   Select erases a specified FLASH .
+ *
+ * @param   StartAddr - Erases Flash start address(StartAddr%256 == 0).
+ *          Cnt - Erases count.
+ *          Erase_Size - Erases size select.The returned value can be:
+ *          Size_32KB, Size_1KB, Size_256B.
+ *
+ * @return  none.
+ */
+static void ROM_ERASE(uint32_t StartAddr, uint32_t Cnt, uint32_t Erase_Size)
+{
+    do{
+        if(Erase_Size == Size_32KB)
+        {
+            FLASH->CTLR |= CR_BER32;
+        }
+        else if(Erase_Size == Size_1KB)
+        {
+            FLASH->CTLR |= CR_PER_Set;
+        }
+        else if(Erase_Size == Size_256B)
+        {
+            FLASH->CTLR |= CR_PAGE_ER;
+        }
+
+        FLASH->ADDR = StartAddr;
+        FLASH->CTLR |= CR_STRT_Set;
+        while(FLASH->STATR & SR_BSY)
+            ;
+
+        if(Erase_Size == Size_32KB)
+        {
+            FLASH->CTLR &= ~CR_BER32;
+            StartAddr += Size_32KB;
+        }
+        else if(Erase_Size == Size_1KB)
+        {
+            FLASH->CTLR &= ~CR_PER_Set;
+            StartAddr += Size_1KB;
+        }
+        else if(Erase_Size == Size_256B)
+        {
+            FLASH->CTLR &= ~CR_PAGE_ER;
+            StartAddr += Size_256B;
+        }
+    }while(--Cnt);
+}
+
+/*********************************************************************
+ * @fn      FLASH_ROM_ERASE
+ *
+ * @brief   Erases a specified FLASH .
+ *
+ * @param   StartAddr - Erases Flash start address(StartAddr%256 == 0).
+ *          Length - Erases Flash start Length(Length%256 == 0).
+ *
+ * @return  FLASH Status - The returned value can be: FLASH_ADR_RANGE_ERROR,
+ *        FLASH_ALIGN_ERROR, FLASH_OP_RANGE_ERROR or FLASH_COMPLETE.
+ */
+FLASH_Status FLASH_ROM_ERASE(uint32_t StartAddr, uint32_t Length)
+{
+    uint32_t Addr0 = 0, Addr1 = 0, Length0 = 0, Length1 = 0;
+
+    FLASH_Status status = FLASH_COMPLETE;
+
+    if((StartAddr < ValidAddrStart) || (StartAddr >= ValidAddrEnd))
+    {
+        return FLASH_ADR_RANGE_ERROR;
+    }
+
+    if((StartAddr + Length) > ValidAddrEnd)
+    {
+        return FLASH_OP_RANGE_ERROR;
+    }
+
+    if((StartAddr & (Size_256B-1)) || (Length & (Size_256B-1)) || (Length == 0))
+    {
+        return FLASH_ALIGN_ERROR;
+    }
+
+    /* Authorize the FPEC of Bank1 Access */
+    FLASH->KEYR = FLASH_KEY1;
+    FLASH->KEYR = FLASH_KEY2;
+
+    /* Fast mode unlock */
+    FLASH->MODEKEYR = FLASH_KEY1;
+    FLASH->MODEKEYR = FLASH_KEY2;
+
+    Addr0 = StartAddr;
+
+    if(Length >= Size_32KB)
+    {
+        Length0 = Size_32KB - (Addr0 & (Size_32KB - 1));
+        Addr1 = StartAddr + Length0;
+        Length1 = Length - Length0;
+    }
+    else if(Length >= Size_1KB)
+    {
+        Length0 = Size_1KB - (Addr0 & (Size_1KB - 1));
+        Addr1 = StartAddr + Length0;
+        Length1 = Length - Length0;
+    }
+    else if(Length >= Size_256B)
+    {
+        Length0 = Length;
+    }
+
+    /* Erase 32KB */
+    if(Length0 >= Size_32KB)//front
+    {
+        Length = Length0;
+        if(Addr0 & (Size_32KB - 1))
+        {
+            Length0 = Size_32KB - (Addr0 & (Size_32KB - 1));
+        }
+        else
+        {
+            Length0 = 0;
+        }
+
+        ROM_ERASE((Addr0 + Length0), ((Length - Length0) >> 15), Size_32KB);
+    }
+
+    if(Length1 >= Size_32KB)//back
+    {
+        StartAddr = Addr1;
+        Length = Length1;
+
+        if((Addr1 + Length1) & (Size_32KB - 1))
+        {
+            Addr1 = ((StartAddr + Length1) & (~(Size_32KB - 1)));
+            Length1 = (StartAddr + Length1) & (Size_32KB - 1);
+        }
+        else
+        {
+            Length1 = 0;
+        }
+
+        ROM_ERASE(StartAddr, ((Length - Length1) >> 15), Size_32KB);
+    }
+
+    /* Erase 1KB */
+    if(Length0 >= Size_1KB) //front
+    {
+        Length = Length0;
+        if(Addr0 & (Size_1KB - 1))
+        {
+            Length0 = Size_1KB - (Addr0 & (Size_1KB - 1));
+        }
+        else
+        {
+            Length0 = 0;
+        }
+
+        ROM_ERASE((Addr0 + Length0), ((Length - Length0) >> 10), Size_1KB);
+    }
+
+    if(Length1 >= Size_1KB) //back
+    {
+        StartAddr = Addr1;
+        Length = Length1;
+
+        if((Addr1 + Length1) & (Size_1KB - 1))
+        {
+            Addr1 = ((StartAddr + Length1) & (~(Size_1KB - 1)));
+            Length1 = (StartAddr + Length1) & (Size_1KB - 1);
+        }
+        else
+        {
+            Length1 = 0;
+        }
+
+        ROM_ERASE(StartAddr, ((Length - Length1) >> 10), Size_1KB);
+    }
+
+    /* Erase 256B */
+    if(Length0)//front
+    {
+        ROM_ERASE(Addr0, (Length0 >> 8), Size_256B);
+    }
+
+    if(Length1)//back
+    {
+        ROM_ERASE(Addr1, (Length1 >> 8), Size_256B);
+    }
+
+    FLASH->CTLR |= CR_FLOCK_Set;
+    FLASH->CTLR |= CR_LOCK_Set;
+
+    return status;
+}
+
+/*********************************************************************
+ * @fn      FLASH_ROM_WRITE
+ *
+ * @brief   Writes a specified FLASH .
+ *
+ * @param   StartAddr - Writes Flash start address(StartAddr%256 == 0).
+ *          Length - Writes Flash start Length(Length%256 == 0).
+ *          pbuf - Writes Flash value buffer.
+ *
+ * @return  FLASH Status - The returned value can be: FLASH_ADR_RANGE_ERROR,
+ *        FLASH_ALIGN_ERROR, FLASH_OP_RANGE_ERROR or FLASH_COMPLETE.
+ */
+FLASH_Status FLASH_ROM_WRITE(uint32_t StartAddr, uint32_t *pbuf, uint32_t Length)
+{
+    uint32_t i, adr;
+    uint8_t size;
+
+    FLASH_Status status = FLASH_COMPLETE;
+
+    if((StartAddr < ValidAddrStart) || (StartAddr >= ValidAddrEnd))
+    {
+        return FLASH_ADR_RANGE_ERROR;
+    }
+
+    if((StartAddr + Length) > ValidAddrEnd)
+    {
+        return FLASH_OP_RANGE_ERROR;
+    }
+
+    if((StartAddr & (Size_256B-1)) || (Length & (Size_256B-1)) || (Length == 0))
+    {
+        return FLASH_ALIGN_ERROR;
+    }
+    adr = StartAddr;
+    i = Length >> 8;
+
+    /* Authorize the FPEC of Bank1 Access */
+    FLASH->KEYR = FLASH_KEY1;
+    FLASH->KEYR = FLASH_KEY2;
+
+    /* Fast program mode unlock */
+    FLASH->MODEKEYR = FLASH_KEY1;
+    FLASH->MODEKEYR = FLASH_KEY2;
+
+    do{
+        FLASH->CTLR |= CR_PAGE_PG;
+        FLASH->CTLR |= CR_BUF_RST;
+        while(FLASH->STATR & SR_BSY)
+            ;
+        size = 64;
+        while(size)
+        {
+            *(uint32_t *)StartAddr = *(uint32_t *)pbuf;
+            FLASH->CTLR |= CR_BUF_LOAD;
+            while(FLASH->STATR & SR_BSY)
+                ;
+            StartAddr += 4;
+            pbuf += 1;
+            size -= 1;
+        }
+
+        FLASH->ADDR = adr;
+        FLASH->CTLR |= CR_STRT_Set;
+        while(FLASH->STATR & SR_BSY)
+            ;
+        FLASH->CTLR &= ~CR_PAGE_PG;
+        adr += 256;
+    }while(--i);
+
+    FLASH->CTLR |= CR_FLOCK_Set;
+    FLASH->CTLR |= CR_LOCK_Set;
+
+    return status;
 }

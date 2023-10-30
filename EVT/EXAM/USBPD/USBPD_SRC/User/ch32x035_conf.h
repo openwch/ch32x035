@@ -29,6 +29,8 @@
 #include "ch32x035_wwdg.h"
 #include "ch32x035_it.h"
 #include "ch32x035_misc.h"
+#include "ch32x035_usbpd.h"
+
 
 
 #endif
