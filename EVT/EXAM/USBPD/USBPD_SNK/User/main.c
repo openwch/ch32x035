@@ -50,28 +50,22 @@ UINT8  Tim_Ms_Cnt = 0x00;
  */
 void TIM1_Init( u16 arr, u16 psc )
 {
-    TIM_TimeBaseInitTypeDef TIM_TimeBaseInitStructure;
-    NVIC_InitTypeDef NVIC_InitStructure;
-
+    TIM_TimeBaseInitTypeDef TIM_TimeBaseInitStructure={0};
+    NVIC_InitTypeDef NVIC_InitStructure={0};
     RCC_APB2PeriphClockCmd( RCC_APB2Periph_TIM1, ENABLE );
-
     TIM_TimeBaseInitStructure.TIM_Period = arr;
     TIM_TimeBaseInitStructure.TIM_Prescaler = psc;
     TIM_TimeBaseInitStructure.TIM_ClockDivision = TIM_CKD_DIV1;
     TIM_TimeBaseInitStructure.TIM_CounterMode = TIM_CounterMode_Up;
     TIM_TimeBaseInitStructure.TIM_RepetitionCounter = 0x00;
     TIM_TimeBaseInit( TIM1, &TIM_TimeBaseInitStructure);
-
     TIM_ClearITPendingBit( TIM1, TIM_IT_Update );
-
     NVIC_InitStructure.NVIC_IRQChannel = TIM1_UP_IRQn;
     NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
     NVIC_InitStructure.NVIC_IRQChannelSubPriority = 3;
     NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
     NVIC_Init(&NVIC_InitStructure);
-
     TIM_ITConfig( TIM1, TIM_IT_Update, ENABLE );
-
     TIM_Cmd( TIM1, ENABLE );
 }
 
@@ -88,14 +82,11 @@ int main(void)
     SystemCoreClockUpdate();
     Delay_Init();
     USART_Printf_Init(921600);
-
     printf( "SystemClk:%d\r\n", SystemCoreClock );
     printf( "ChipID:%08x\r\n", DBGMCU_GetCHIPID() );
     printf( "PD SNK TEST\r\n" );
-
     PD_Init( );
     TIM1_Init( 999, 48-1);
-
     while(1)
     {
         /* Get the calculated timing interval value */
@@ -103,14 +94,12 @@ int main(void)
         Tmr_Ms_Dlt = Tim_Ms_Cnt - Tmr_Ms_Cnt_Last;
         Tmr_Ms_Cnt_Last = Tim_Ms_Cnt;
         TIM_ITConfig( TIM1, TIM_IT_Update , ENABLE );
-
         PD_Ctl.Det_Timer += Tmr_Ms_Dlt;
         if( PD_Ctl.Det_Timer > 4 )
         {
             PD_Ctl.Det_Timer = 0;
             PD_Det_Proc( );
         }
-
         PD_Main_Proc( );
     }
 }

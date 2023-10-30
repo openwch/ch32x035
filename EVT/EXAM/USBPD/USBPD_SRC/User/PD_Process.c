@@ -192,19 +192,14 @@ void PD_Init( void )
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;
     GPIO_Init(GPIOC, &GPIO_InitStructure);
-
     AFIO->CTLR |= USBPD_IN_HVT | USBPD_PHY_V33;
-
     USBPD->CONFIG = PD_DMA_EN;
     USBPD->STATUS = BUF_ERR | IF_RX_BIT | IF_RX_BYTE | IF_RX_ACT | IF_RX_RESET | IF_TX_END;
-
     /* Initialize all variables */
     memset( &PD_Ctl.PD_State, 0x00, sizeof( PD_CONTROL ) );
     Adapter_SrcCap[ 0 ] = 1;
     memcpy( &Adapter_SrcCap[ 1 ], SrcCap_5V3A_Tab, 4 );
-
     PD_PHY_Reset( );
-    NVIC_EnableIRQ( USBPD_IRQn );
     PD_Rx_Mode( );
 }
 
@@ -223,24 +218,24 @@ UINT8 PD_Detect( void )
 
     if(PD_Ctl.Flag.Bit.Connected)                                       /*Detect disconnection*/
     {
-        USBPD->PORT_CC1 &= ~( CC_CE | PA_CC_AI );
+        USBPD->PORT_CC1 &= ~( CC_CMP_Mask | PA_CC_AI );
         USBPD->PORT_CC1 |= CC_CMP_22;
         Delay_Us(2);
         if( USBPD->PORT_CC1 & PA_CC_AI )
         {
             cmp_cc1 = bCC_CMP_22;
         }
-        USBPD->PORT_CC1 &= ~( CC_CE | PA_CC_AI );
+        USBPD->PORT_CC1 &= ~( CC_CMP_Mask | PA_CC_AI );
         USBPD->PORT_CC1 |= CC_CMP_66;
 
-        USBPD->PORT_CC2 &= ~( CC_CE | PA_CC_AI );
+        USBPD->PORT_CC2 &= ~( CC_CMP_Mask | PA_CC_AI );
         USBPD->PORT_CC2 |= CC_CMP_22;
         Delay_Us(2);
         if( USBPD->PORT_CC2 & PA_CC_AI )
         {
             cmp_cc2 = bCC_CMP_22;
         }
-        USBPD->PORT_CC2 &= ~( CC_CE | PA_CC_AI );
+        USBPD->PORT_CC2 &= ~( CC_CMP_Mask | PA_CC_AI );
         USBPD->PORT_CC2 |= CC_CMP_66;
 
         if((GPIOC->INDR & PIN_CC1) != (uint32_t)Bit_RESET)
@@ -284,14 +279,14 @@ UINT8 PD_Detect( void )
     }
     else                                                                /*Detect insertion*/
     {
-        USBPD->PORT_CC1 &= ~( CC_CE|PA_CC_AI );
+        USBPD->PORT_CC1 &= ~( CC_CMP_Mask|PA_CC_AI );
         USBPD->PORT_CC1 |= CC_CMP_22;
         Delay_Us(2);
         if( USBPD->PORT_CC1 & PA_CC_AI )
         {
             cmp_cc1 |= bCC_CMP_22;
         }
-        USBPD->PORT_CC1 &= ~( CC_CE|PA_CC_AI );
+        USBPD->PORT_CC1 &= ~( CC_CMP_Mask|PA_CC_AI );
         USBPD->PORT_CC1 |= CC_CMP_66;
         Delay_Us(2);
         if( USBPD->PORT_CC1 & PA_CC_AI )
@@ -303,14 +298,14 @@ UINT8 PD_Detect( void )
             cmp_cc1 |= bCC_CMP_220;
         }
 
-        USBPD->PORT_CC2 &= ~( CC_CE|PA_CC_AI );
+        USBPD->PORT_CC2 &= ~( CC_CMP_Mask|PA_CC_AI );
         USBPD->PORT_CC2 |= CC_CMP_22;
         Delay_Us(2);
         if( USBPD->PORT_CC2 & PA_CC_AI )
         {
             cmp_cc2 |= bCC_CMP_22;
         }
-        USBPD->PORT_CC2 &= ~( CC_CE|PA_CC_AI );
+        USBPD->PORT_CC2 &= ~( CC_CMP_Mask|PA_CC_AI );
         USBPD->PORT_CC2 |= CC_CMP_66;
         Delay_Us(2);
         if( USBPD->PORT_CC2 & PA_CC_AI )
@@ -504,13 +499,13 @@ void PD_Phy_SendPack( UINT8 mode, UINT8 *pbuf, UINT8 len, UINT8 sop )
 void PD_Load_Header( UINT8 ex, UINT8 msg_type )
 {
     /* Message Header
-       BIT15:    Extended;
-       BIT14-12: Number of Data Objects
-       BIT11--9: Message ID
-       BIT8:     PortPower Role/Cable Plug  0: SINK; 1: SOURCE
-       BIT7---6: Revision, 00: V1.0; 01: V2.0; 10: V3.0;
-       BIT5:     Port Data Role, 0: UFP; 1: DFP
-       BIT4---0: Message Type
+       BIT15 - Extended;
+       BIT[14:12] - Number of Data Objects
+       BIT[11:9] - Message ID
+       BIT8 - PortPower Role/Cable Plug  0: SINK; 1: SOURCE
+       BIT[7:6] - Revision, 00: V1.0; 01: V2.0; 10: V3.0;
+       BIT5 - Port Data Role, 0: UFP; 1: DFP
+       BIT[4:0] - Message Type
     */
     PD_Tx_Buf[ 0 ] = msg_type;
     if( PD_Ctl.Flag.Bit.PD_Role )

@@ -118,7 +118,6 @@ extern __attribute__ ((aligned(4))) uint8_t  Data_Buffer[ ];
 extern void USBFS_Device_Init( FunctionalState sta , PWR_VDD VDD_Voltage);
 extern void USBFS_Device_Endp_Init(void);
 extern void USBFS_RCC_Init(void);
-extern void USBFS_Send_Resume(void);
 
 #ifdef __cplusplus
 }

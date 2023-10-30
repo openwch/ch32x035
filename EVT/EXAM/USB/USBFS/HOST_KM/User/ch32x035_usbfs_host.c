@@ -36,7 +36,6 @@ __attribute__((aligned(4))) uint8_t  USBFS_TX_Buf[ USBFS_MAX_PACKET_SIZE ];     
  */
 void USBFS_RCC_Init( void )
 {
-
     RCC_APB2PeriphClockCmd( RCC_APB2Periph_AFIO, ENABLE );
     RCC_AHBPeriphClockCmd( RCC_AHBPeriph_USBFS, ENABLE );
 }
@@ -69,8 +68,16 @@ void GPIO_USB_INIT(void)
  *
  * @return  none
  */
-void USBFS_Host_Init( FunctionalState sta )
+void USBFS_Host_Init( FunctionalState sta , PWR_VDD VDD_Voltage)
 {
+    if( VDD_Voltage == PWR_VDD_5V )
+    {
+        AFIO->CTLR = (AFIO->CTLR & ~(UDP_PUE_MASK | UDM_PUE_MASK | USB_PHY_V33)) | UDP_PUE_10K | USB_IOEN;
+    }
+    else
+    {
+        AFIO->CTLR = (AFIO->CTLR & ~(UDP_PUE_MASK | UDM_PUE_MASK )) | USB_PHY_V33 | UDP_PUE_1K5 | USB_IOEN;
+    }
 
     if( sta == ENABLE )
     {
@@ -79,15 +86,19 @@ void USBFS_Host_Init( FunctionalState sta )
         USBFSH->BASE_CTRL = USBFS_UC_HOST_MODE;
         USBFSH->HOST_CTRL = 0;
         USBFSH->DEV_ADDR = 0x00;
+
         USBFSH->HOST_EP_MOD = USBFS_UH_EP_TX_EN | USBFS_UH_EP_RX_EN;
         USBFSH->HOST_RX_DMA = (uint32_t)USBFS_RX_Buf;
         USBFSH->HOST_TX_DMA = (uint32_t)USBFS_TX_Buf;
+
         USBFSH->HOST_RX_CTRL = 0x00;
         USBFSH->HOST_TX_CTRL = 0x00;
+
         USBFSH->BASE_CTRL = USBFS_UC_HOST_MODE | USBFS_UC_INT_BUSY | USBFS_UC_DMA_EN;
-        USBFSH->HOST_SETUP = 0x40;
+
+        USBFSH->HOST_SETUP = USBFS_UH_SOF_EN;
         USBFSH->INT_FG = 0xff;
-        USBFSH->INT_EN = 0x02 | 0x01;
+        USBFSH->INT_EN = USBFS_UIE_DETECT | USBFS_UIE_TRANSFER;
     }
     else
     {

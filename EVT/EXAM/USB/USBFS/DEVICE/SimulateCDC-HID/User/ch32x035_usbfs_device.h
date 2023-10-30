@@ -97,7 +97,6 @@ extern volatile uint8_t  USBFS_Endp_Busy[ ];
 extern void USBFS_Device_Init( FunctionalState sta , PWR_VDD VDD_Voltage);
 extern void USBFS_Device_Endp_Init(void);
 extern void USBFS_RCC_Init(void);
-extern void USBFS_Send_Resume(void);
 extern void USBFS_Sleep_Wakeup_Operate(void);
 extern uint8_t USBFS_Endp_DataUp(uint8_t endp, uint8_t *pbuf, uint16_t len, uint8_t mod);
 

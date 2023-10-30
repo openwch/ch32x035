@@ -100,7 +100,7 @@ extern __attribute__((aligned(4))) uint8_t  TxBuffer[ ];           // OUT, must 
 /*******************************************************************************/
 /* Function Declaration */
 extern void USBFS_RCC_Init( void );
-extern void USBFS_Host_Init( FunctionalState sta );
+extern void USBFS_Host_Init( FunctionalState sta , PWR_VDD VDD_Voltage);
 extern uint8_t USBFSH_CheckRootHubPortStatus( uint8_t dev_sta );
 extern uint8_t USBFSH_CheckRootHubPortEnable( void );
 extern uint8_t USBFSH_CheckRootHubPortSpeed( void );

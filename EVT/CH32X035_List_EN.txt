@@ -1,5 +1,5 @@
 
-Nanjing Qinheng Microelectronics Co., Ltd. 2023.06
+Nanjing Qinheng Microelectronics Co., Ltd. 2023.10
 
 http://wch-ic.com
 
@@ -29,11 +29,16 @@ Directory
   |      |      |      |-- DMA
   |      |      |      |      |-- DMA_MEM2MEM: Memory to memory mode routine
   |      |      |      |      |-- DMA_MEM2PERIP: Memory to peripheral mode, and peripheral to memory mode routine, see peripheral sub-routines
-  |      |      |      |-- EXTI: external interrupt line routine
-  |      |      |      |-- FLASH: FLASH erase/read/write, and fast programming
-  |      |      |      |-- FreeRTOS: FreeRTOS migration routine 
-  |      |      |      |-- GPIO: GPIO routine
-  |      |      |      |-- HarmonyOS:HarmonyOS migration routine  
+  |      |      |      |-- EXTI
+  |      |      |      |      |-- EXTI0:External Interrupt Routine
+  |      |      |      |-- FLASH
+  |      |      |      |      |-- FLASH_Program:FLASH erase/read/write, and fast programming 
+  |      |      |      |-- FreeRTOS
+  |      |      |      |      |-- FreeRTOS_Core:FreeRTOS migration routines
+  |      |      |      |-- GPIO
+  |      |      |      |      |-- GPIO_Toggle:GPIO routines 
+  |      |      |      |-- HarmonyOS
+  |      |      |      |      |-- LiteOS_m：HarmonyOS migration routine
   |      |      |      |-- I2C
   |      |      |      |      |-- I2C_7bit_Mode: 7-bit addressing mode, master/slave mode, transceiver routine
   |      |      |      |      |-- I2C_10bit_Mode: 10-bit addressing mode, master/slave mode transceiver routine
@@ -44,8 +49,11 @@ Directory
   |      |      |      |      |-- Interrupt_VTF: VTF IRQ interrupt routine   
   |      |      |      |-- IAP: IAP upgrade routine, including the Hex to Bin tool and IAP upgrade tool  
   |      |      |      |      |-- USB_UART: USB+UART IAP routine    
-  |      |      |      |-- IWDG: independent watchdog routine
-  |      |      |      |-- PIOC: 1 wire operate WS2812 and DS1820.  
+  |      |      |      |-- IWDG
+  |      |      |      |      |-- IWDG:Independent Watchdog routine 
+  |      |      |      |-- PIOC
+  |      |      |      |      |--1 wire : 1 wire operate WS2812 and DS1820. 
+  |      |      |      |      |--PIOC_UART : PIOC simulates UART.
   |      |      |      |-- OPA
   |      |      |      |      |-- CMP： Comparator routines
   |      |      |      |      |-- CMP_TIM2：Timer 2 Capture Comparator Routine
@@ -62,7 +70,8 @@ Directory
   |      |      |      |-- RCC
   |      |      |      |      |-- Get_CLK:Get system-HCLK-AHB1-AHB2 clock routine   
   |      |      |      |      |-- MCO: MCO pin clock output routine    
-  |      |      |      |-- RT-Thread:RT thread migration routine 
+  |      |      |      |-- RT-Thread
+  |      |      |      |      |-- rt_thread_Core:RT-Thread migration routine  
   |      |      |      |-- RunInRam
   |      |      |      |      |-- RunInRAM_Select：Some programs run routines in RAM.
   |      |      |      |-- SDI_Printf
@@ -74,7 +83,8 @@ Directory
   |      |      |      |      |-- SPI_CRC: CRC error check and master/slave mode transceiver routine
   |      |      |      |      |-- SPI_DMA: SPI DMA, master/slave mode transceiver routine
   |      |      |      |      |-- SPI_FLASH: SPI interface operation flash peripheral routine
-  |      |      |      |-- TencentOS: TencentOS migration routine     
+  |      |      |      |-- TencentOS
+  |      |      |      |      |-- TencentOS:TencentOS migration routine  
   |      |      |      |-- TIM
   |      |      |      |      |-- Clock_Select: clock source selection routine
   |      |      |      |      |-- ComplementaryOutput_DeadTime: complementary output and deadband insertion mode routines
@@ -86,7 +96,8 @@ Directory
   |      |      |      |      |-- Synchro_ExtTrigger:slave mode routine, including reset mode, gating mode and trigger mode
   |      |      |      |      |-- Synchro_Timer:timer synchronization mode
   |      |      |      |      |-- TIM_DMA: timer DMA routines
-  |      |      |      |-- TOUCHKEY:touchkey detection routine
+  |      |      |      |-- TOUCHKEY
+  |      |      |      |      |-- TKey:TouchKey Detection Routine 
   |      |      |      |-- USART
   |      |      |      |      |-- USART_DMA: USART DMA, master/slave mode transceiver routine
   |      |      |      |      |-- USART_HalfDuplex: single wire half duplex mode, master/slave mode transceiver routine
@@ -99,7 +110,7 @@ Directory
   |      |      |      |-- USB
   |      |      |      |      |-- USBFS
   |      |      |      |      |      |-- DEVICE
-  |      |      |      |      |      |      |-- CH372:Simulates a custom USB device (CH372 device) with endpoints 1, 3 down and 2, 4 up. Data down from endpoint 1 is uploaded from endpoint 3 and not reversed, and data down from endpoint 2 is uploaded from endpoint 4 and reversed.
+  |      |      |      |      |      |      |-- CH372:Simulates a custom USB device (CH372 device) with endpoints 1, 3, 5 down and 2, 4, 6 up. Data down from endpoint 1 is uploaded from endpoint 2 and not reversed, and data down from endpoint 3, 5  is uploaded from endpoint 4, 6 and reversed.
   |      |      |      |      |      |      |-- Compatibility_HID:Simulates HID devices, with data transmitted up and down through the serial port.
   |      |      |      |      |      |      |-- CompositeKM:Simulate keyboard and mouse, use IO to simulate keystrokes, while simulated data can be uploaded through serial port 2.
   |      |      |      |      |      |      |-- CompositeKM_LowSpeed:Simulate low speed keyboard and mouse, use IO to simulate keystrokes, while simulated data can be uploaded through serial port 2.
@@ -112,5 +123,6 @@ Directory
   |      |      |      |-- USBPD
   |      |      |      |      |-- USBPD_SNK:PD SNK routine
   |      |      |      |      |-- USBPD_SRC:PD SRC routine    
-  |      |      |      |-- WWDG: window watchdog routine
+  |      |      |      |-- WWDG
+  |      |      |      |      |-- WWDG:Window Watchdog Routine
 
