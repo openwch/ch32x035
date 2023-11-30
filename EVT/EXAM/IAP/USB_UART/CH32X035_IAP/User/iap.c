@@ -120,7 +120,8 @@ u8 RecData_Deal(void)
          End_Flag = 1;
          Program_addr = FLASH_Base;
          Verity_addr = FLASH_Base;
-
+         FLASH->CTLR |= ((uint32_t)0x00008000);  //FLASH_Lock_Fast
+         FLASH->CTLR |= ((uint32_t)0x00000080);  //FLASH_Lock
          s = ERR_End;
          break;
 

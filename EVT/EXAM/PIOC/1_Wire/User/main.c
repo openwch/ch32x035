@@ -1,8 +1,8 @@
 /********************************** (C) COPYRIGHT *******************************
  * File Name          : main.c
  * Author             : WCH
- * Version            : V1.0.0
- * Date               : 2023/04/06
+ * Version            : V1.0.1
+ * Date               : 2023/11/14
  * Description        : Main program body.
  *********************************************************************************
  * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
@@ -12,7 +12,8 @@
 
 /* 1-wire example: 1W-RGB_WS2812, 1W-DS1820
  * PC18 or PC7 needs to connected  a 4.7k pull-up resistor when chip drives DS1820 mode.
- * RAM--
+ * PC18 ,PC7 and PC19 can be used to drive WS2812.
+ * RAM--;
  *  PIOC-4K
  *  User-16K
  */
@@ -23,8 +24,8 @@
 #define RGB    0
 #define DS1820 1
 
-#define Mode   DS1820
-//#define Mode   RGB_WS2812
+//#define Mode   DS1820
+#define Mode   RGB_WS2812
 
 __IO	uint16_t	temper;
 
@@ -108,7 +109,7 @@ int main(void)
 		total_bytes = rgb_data_bytes;
 
 #if 0 //short data
-        stat = RGB1W_SendSFR_Wait( total_bytes, rgb_source_addr );//SFR mode for 1~32 bytes data
+        stat = RGB1W_SendSFR_Wait( total_bytes, rgb_source_addr ,0);//SFR mode for 1~32 bytes data
         total_bytes = 0;
         if ( stat == RGB1W_ERR_OK ) printf("1-wire finished\r\n");
         else printf("1-wire error %02x\r\n", stat);
@@ -137,7 +138,7 @@ int main(void)
                     t1 = 0;
                     RGB_RAM = RGBpbuf2;
                 }
-                 RGB1W_SendRAM( total_bytes, RGB_RAM );
+                 RGB1W_SendRAM( total_bytes, RGB_RAM ,0);
 
                 total_bytes = 0;
             }

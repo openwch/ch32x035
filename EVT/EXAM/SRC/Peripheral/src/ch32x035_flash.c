@@ -2,7 +2,7 @@
  * File Name          : ch32x035_flash.c
  * Author             : WCH
  * Version            : V1.0.0
- * Date               : 2023/04/06
+ * Date               : 2023/11/23
  * Description        : This file provides all the FLASH firmware functions.
 *********************************************************************************
 * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
@@ -28,6 +28,7 @@
 #define CR_FLOCK_Set               ((uint32_t)0x00008000)
 #define CR_PAGE_PG                 ((uint32_t)0x00010000)
 #define CR_PAGE_ER                 ((uint32_t)0x00020000)
+#define CR_PAGE_ER_Reset           ((uint32_t)0xFFFDFFFF)
 #define CR_BUF_LOAD                ((uint32_t)0x00040000)
 #define CR_BUF_RST                 ((uint32_t)0x00080000)
 #define CR_BER32                   ((uint32_t)0x00800000)
@@ -131,6 +132,7 @@ FLASH_Status FLASH_ErasePage(uint32_t Page_Address)
 
     if(status == FLASH_COMPLETE)
     {
+	  	FLASH->CTLR &= (CR_OPTER_Reset & CR_PAGE_ER_Reset);
         FLASH->CTLR |= CR_PER_Set;
         FLASH->ADDR = Page_Address;
         FLASH->CTLR |= CR_STRT_Set;
@@ -158,6 +160,7 @@ FLASH_Status FLASH_EraseAllPages(void)
     status = FLASH_WaitForLastOperation(EraseTimeout);
     if(status == FLASH_COMPLETE)
     {
+	  	FLASH->CTLR &= (CR_OPTER_Reset & CR_PAGE_ER_Reset);
         FLASH->CTLR |= CR_MER_Set;
         FLASH->CTLR |= CR_STRT_Set;
 
@@ -189,6 +192,7 @@ FLASH_Status FLASH_EraseOptionBytes(void)
         FLASH->OBKEYR = FLASH_KEY1;
         FLASH->OBKEYR = FLASH_KEY2;
 
+	  	FLASH->CTLR &= (CR_OPTER_Reset & CR_PAGE_ER_Reset);
         FLASH->CTLR |= CR_OPTER_Set;
         FLASH->CTLR |= CR_STRT_Set;
         status = FLASH_WaitForLastOperation(EraseTimeout);
@@ -640,6 +644,8 @@ void FLASH_Lock_Fast(void)
  */
 void FLASH_BufReset(void)
 {
+	FLASH->CTLR &= (CR_OPTER_Reset & CR_PAGE_ER_Reset);
+
     FLASH->CTLR |= CR_PAGE_PG;
     FLASH->CTLR |= CR_BUF_RST;
     while(FLASH->STATR & SR_BSY)
@@ -659,6 +665,8 @@ void FLASH_BufReset(void)
  */
 void FLASH_BufLoad(uint32_t Address, uint32_t Data0)
 {
+	FLASH->CTLR &= (CR_OPTER_Reset & CR_PAGE_ER_Reset);
+
     FLASH->CTLR |= CR_PAGE_PG;
     *(__IO uint32_t *)(Address) = Data0;
     FLASH->CTLR |= CR_BUF_LOAD;
@@ -678,6 +686,8 @@ void FLASH_BufLoad(uint32_t Address, uint32_t Data0)
  */
 void FLASH_ErasePage_Fast(uint32_t Page_Address)
 {
+	FLASH->CTLR &= (CR_OPTER_Reset & CR_PAGE_ER_Reset);
+
     FLASH->CTLR |= CR_PAGE_ER;
     FLASH->ADDR = Page_Address;
     FLASH->CTLR |= CR_STRT_Set;
@@ -697,6 +707,8 @@ void FLASH_ErasePage_Fast(uint32_t Page_Address)
  */
 void FLASH_EraseBlock_32K_Fast(uint32_t Block_Address)
 {
+	FLASH->CTLR &= (CR_OPTER_Reset & CR_PAGE_ER_Reset);
+
     Block_Address &= 0xFFFF8000;
 
     FLASH->CTLR |= CR_BER32;
@@ -718,6 +730,8 @@ void FLASH_EraseBlock_32K_Fast(uint32_t Block_Address)
  */
 void FLASH_ProgramPage_Fast(uint32_t Page_Address)
 {
+	FLASH->CTLR &= (CR_OPTER_Reset & CR_PAGE_ER_Reset);
+
     FLASH->CTLR |= CR_PAGE_PG;
     FLASH->ADDR = Page_Address;
     FLASH->CTLR |= CR_STRT_Set;
@@ -765,6 +779,8 @@ void SystemReset_StartMode(uint32_t Mode)
  */
 static void ROM_ERASE(uint32_t StartAddr, uint32_t Cnt, uint32_t Erase_Size)
 {
+	FLASH->CTLR &= (CR_OPTER_Reset & CR_PAGE_ER_Reset);
+
     do{
         if(Erase_Size == Size_32KB)
         {
@@ -989,6 +1005,8 @@ FLASH_Status FLASH_ROM_WRITE(uint32_t StartAddr, uint32_t *pbuf, uint32_t Length
     /* Fast program mode unlock */
     FLASH->MODEKEYR = FLASH_KEY1;
     FLASH->MODEKEYR = FLASH_KEY2;
+	
+	FLASH->CTLR &= (CR_OPTER_Reset & CR_PAGE_ER_Reset);
 
     do{
         FLASH->CTLR |= CR_PAGE_PG;

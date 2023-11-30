@@ -1,5 +1,5 @@
 
-Nanjing Qinheng Microelectronics Co., Ltd. 2023.10
+Nanjing Qinheng Microelectronics Co., Ltd. 2023.11
 
 http://wch-ic.com
 
@@ -26,56 +26,101 @@ Directory
   |      |      |      |      |-- Auto_Injection: automatic injection mode routine
   |      |      |      |      |-- Discontinuous_mode: discontinuous mode routine
   |      |      |      |      |-- ExtLines_Trigger: external lines trigger ADC conversion routine
+  |      |      |      |-- APPLICATION
+  |      |      |      |      |-- WS2812_LED: Operating WS2812 via SPI\PWM Routine
   |      |      |      |-- DMA
   |      |      |      |      |-- DMA_MEM2MEM: Memory to memory mode routine
   |      |      |      |      |-- DMA_MEM2PERIP: Memory to peripheral mode, and peripheral to memory mode routine, see peripheral sub-routines
   |      |      |      |-- EXTI
-  |      |      |      |      |-- EXTI0:External Interrupt Routine
+  |      |      |      |      |-- EXTI0: External Interrupt Routine
   |      |      |      |-- FLASH
-  |      |      |      |      |-- FLASH_Program:FLASH erase/read/write, and fast programming 
+  |      |      |      |      |-- FLASH_Program: FLASH erase/read/write, and fast programming 
   |      |      |      |-- FreeRTOS
-  |      |      |      |      |-- FreeRTOS_Core:FreeRTOS migration routines
+  |      |      |      |      |-- FreeRTOS_Core: FreeRTOS migration routines
   |      |      |      |-- GPIO
-  |      |      |      |      |-- GPIO_Toggle:GPIO routines 
+  |      |      |      |      |-- GPIO_Toggle: GPIO routines 
   |      |      |      |-- HarmonyOS
-  |      |      |      |      |-- LiteOS_m：HarmonyOS migration routine
+  |      |      |      |      |-- LiteOS_m: HarmonyOS migration routine
   |      |      |      |-- I2C
   |      |      |      |      |-- I2C_7bit_Mode: 7-bit addressing mode, master/slave mode, transceiver routine
   |      |      |      |      |-- I2C_10bit_Mode: 10-bit addressing mode, master/slave mode transceiver routine
   |      |      |      |      |-- I2C_DMA: I2C DMA, master/slave mode transceiver routine
   |      |      |      |      |-- I2C_EEPROM: I2C interface routine to operate EEPROM peripheral 
   |      |      |      |      |-- I2C_PEC: PEC error check, master/slave mode transceiver routine
+  |      |      |      |      |-- I2C_7bit_Interrupt_Mode: Send/receive routines using interrupts
   |      |      |      |-- INT
   |      |      |      |      |-- Interrupt_VTF: VTF IRQ interrupt routine   
   |      |      |      |-- IAP: IAP upgrade routine, including the Hex to Bin tool and IAP upgrade tool  
   |      |      |      |      |-- USB_UART: USB+UART IAP routine    
   |      |      |      |-- IWDG
-  |      |      |      |      |-- IWDG:Independent Watchdog routine 
+  |      |      |      |      |-- IWDG: Independent Watchdog routine 
   |      |      |      |-- PIOC
-  |      |      |      |      |--1 wire : 1 wire operate WS2812 and DS1820. 
-  |      |      |      |      |--PIOC_UART : PIOC simulates UART.
+  |      |      |      |      |-- 1-Wire
+  |      |      |      |      |      |-- 1-Wire: 1 wire operate WS2812 and DS1820
+  |      |      |      |      |      |-- Ams
+  |      |      |      |      |      |      |-- PIOC_INC.ASM: PIOC assembly header file 
+  |      |      |      |      |      |      |-- RGB1W.ASM: Signal line compilation source file
+  |      |      |      |      |      |      |-- RGB1W.BAT: Compile Scripts
+  |      |      |      |      |      |      |-- RGB1W.BIN: Compile the generated data files
+  |      |      |      |      |      |      |-- RGB1W.LST: Compile the generated list file
+  |      |      |      |      |      |      |-- RGB1W_inc.h: Data files converted to hex files
+  |      |      |      |      |-- PIOC_UART
+  |      |      |      |      |      |-- PIOC_UART: PIOC simulates UART
+  |      |      |      |      |      |-- Ams
+  |      |      |      |      |      |      |-- PIOC_INC.ASM: PIOC assembly header file 
+  |      |      |      |      |      |      |-- PIOC_UART.ASM: UART compilation source file
+  |      |      |      |      |      |      |-- PIOC_UART.BAT: Compile Scripts
+  |      |      |      |      |      |      |-- PIOC_UART.BIN: Compile the generated data files
+  |      |      |      |      |      |      |-- PIOC_UART.LST: Compile the generated list file
+  |      |      |      |      |      |      |-- PIOC_UART_inc.h: Data files converted to hex files 
+  |      |      |      |      |-- PIOC_IIC 
+  |      |      |      |      |      |-- PIOC_IIC: PIOC simulates IIC
+  |      |      |      |      |      |-- Ams
+  |      |      |      |      |      |      |-- PIOC_INC.ASM: PIOC assembly header file 
+  |      |      |      |      |      |      |-- PIOC_IIC.ASM: IIC compilation source file
+  |      |      |      |      |      |      |-- PIOC_IIC.BAT: Compile Scripts
+  |      |      |      |      |      |      |-- PIOC_IIC.BIN: Compile the generated data files
+  |      |      |      |      |      |      |-- PIOC_IIC.LST: Compile the generated list file
+  |      |      |      |      |      |      |-- PIOC_IIC_inc.h: Data files converted to hex files
+  |      |      |      |      |-- PIOC_Single_Wire
+  |      |      |      |      |      |-- PIOC_Single_Wire: Single-wire debug interface to read and write external chip RAM data
+  |      |      |      |      |      |-- Ams
+  |      |      |      |      |      |      |-- PIOC_INC.ASM: PIOC assembly header file 
+  |      |      |      |      |      |      |-- PIOC_Single_Wire.ASM: IIC compilation source file
+  |      |      |      |      |      |      |-- PIOC_Single_Wire.BAT: Compile Scripts
+  |      |      |      |      |      |      |-- PIOC_Single_Wire.BIN: Compile the generated data files
+  |      |      |      |      |      |      |-- PIOC_Single_Wire.LST: Compile the generated list file
+  |      |      |      |      |      |      |-- PIOC_Single_Wire_inc.h: Data files converted to hex files
+  |      |      |      |      |-- Tool_Manual
+  |      |      |      |      |      |-- Manual
+  |      |      |      |      |      |      |-- CHRISC8B.PDF: RISC8B Core Microcontroller Instruction Set
+  |      |      |      |      |      |      |-- PIOC.PDF: Programmable Protocol I/O Microcontroller PIOC Handbook
+  |      |      |      |      |      |-- Tool
+  |      |      |      |      |      |      |-- BIN_HEX.EXE: BIN to HEX file conversion tool
+  |      |      |      |      |      |      |-- WASM53B.EXE: RISC8B microcontroller assembly tool for compiling assembly source programs into instruction code target data
+  |      |      |      |      |-- PIOC instructions for use.pdf
   |      |      |      |-- OPA
-  |      |      |      |      |-- CMP： Comparator routines
-  |      |      |      |      |-- CMP_TIM2：Timer 2 Capture Comparator Routine
-  |      |      |      |      |-- OPA： OPA as voltage follower output routine
-  |      |      |      |      |-- OPA_BKIN：OPA brake routine
-  |      |      |      |      |-- OPA_IRQ： OPA interrupt routine
-  |      |      |      |      |-- OPA_PGA：OPA PGA routine
-  |      |      |      |      |-- OPA_Poll： OPA Poll routine
-  |      |      |      |      |-- OPA_Reset：OPA Reset routine
+  |      |      |      |      |-- CMP: Comparator routines
+  |      |      |      |      |-- CMP_TIM2: Timer 2 Capture Comparator Routine
+  |      |      |      |      |-- OPA: OPA as voltage follower output routine
+  |      |      |      |      |-- OPA_BKIN: OPA brake routine
+  |      |      |      |      |-- OPA_IRQ: OPA interrupt routine
+  |      |      |      |      |-- OPA_PGA: OPA PGA routine
+  |      |      |      |      |-- OPA_Poll: OPA Poll routine
+  |      |      |      |      |-- OPA_Reset: OPA Reset routine
   |      |      |      |-- PWR
   |      |      |      |      |-- Sleep_Mode: low power, sleep mode routine
   |      |      |      |      |-- Standby_Mode: low power, standby mode routine
   |      |      |      |      |-- Stop_Mode: low power, stop mode routine
   |      |      |      |-- RCC
-  |      |      |      |      |-- Get_CLK:Get system-HCLK-AHB1-AHB2 clock routine   
+  |      |      |      |      |-- Get_CLK: Get system-HCLK-AHB1-AHB2 clock routine   
   |      |      |      |      |-- MCO: MCO pin clock output routine    
   |      |      |      |-- RT-Thread
-  |      |      |      |      |-- rt_thread_Core:RT-Thread migration routine  
+  |      |      |      |      |-- rt_thread_Core: RT-Thread migration routine  
   |      |      |      |-- RunInRam
-  |      |      |      |      |-- RunInRAM_Select：Some programs run routines in RAM.
+  |      |      |      |      |-- RunInRAM_Select: Some programs run routines in RAM.
   |      |      |      |-- SDI_Printf
-  |      |      |      |      |-- SDI_Printf：debug interface SDI, virtual serial port.     
+  |      |      |      |      |-- SDI_Printf: debug interface SDI, virtual serial port.     
   |      |      |      |-- SPI
   |      |      |      |      |-- 1Lines_half-duplex: single wire half duplex mode, master/slave mode, data transceiver
   |      |      |      |      |-- 2Lines_FullDuplex: two-wire full duplex mode, master/slave mode, data transceiver
@@ -84,7 +129,7 @@ Directory
   |      |      |      |      |-- SPI_DMA: SPI DMA, master/slave mode transceiver routine
   |      |      |      |      |-- SPI_FLASH: SPI interface operation flash peripheral routine
   |      |      |      |-- TencentOS
-  |      |      |      |      |-- TencentOS:TencentOS migration routine  
+  |      |      |      |      |-- TencentOS: TencentOS migration routine  
   |      |      |      |-- TIM
   |      |      |      |      |-- Clock_Select: clock source selection routine
   |      |      |      |      |-- ComplementaryOutput_DeadTime: complementary output and deadband insertion mode routines
@@ -93,11 +138,11 @@ Directory
   |      |      |      |      |-- One_Pulse: single pulse output routine
   |      |      |      |      |-- Output_Compare_Mode: output comparison mode routine
   |      |      |      |      |-- PWM_Output: PWM output routine
-  |      |      |      |      |-- Synchro_ExtTrigger:slave mode routine, including reset mode, gating mode and trigger mode
-  |      |      |      |      |-- Synchro_Timer:timer synchronization mode
+  |      |      |      |      |-- Synchro_ExtTrigger: slave mode routine, including reset mode, gating mode and trigger mode
+  |      |      |      |      |-- Synchro_Timer: timer synchronization mode
   |      |      |      |      |-- TIM_DMA: timer DMA routines
   |      |      |      |-- TOUCHKEY
-  |      |      |      |      |-- TKey:TouchKey Detection Routine 
+  |      |      |      |      |-- TKey: TouchKey Detection Routine 
   |      |      |      |-- USART
   |      |      |      |      |-- USART_DMA: USART DMA, master/slave mode transceiver routine
   |      |      |      |      |-- USART_HalfDuplex: single wire half duplex mode, master/slave mode transceiver routine
@@ -107,22 +152,23 @@ Directory
   |      |      |      |      |-- USART_Polling: polling transceiver mode, master/slave transceiver routine
   |      |      |      |      |-- USART_Printf: USART Print debugging routine
   |      |      |      |      |-- USART_SynchronousMode: synchronous mode, master/slave mode, transceiver routine
+  |      |      |      |      |-- USART_Idle_Recv: Serial port using DMA for indeterminate length reception routine
   |      |      |      |-- USB
   |      |      |      |      |-- USBFS
   |      |      |      |      |      |-- DEVICE
-  |      |      |      |      |      |      |-- CH372:Simulates a custom USB device (CH372 device) with endpoints 1, 3, 5 down and 2, 4, 6 up. Data down from endpoint 1 is uploaded from endpoint 2 and not reversed, and data down from endpoint 3, 5  is uploaded from endpoint 4, 6 and reversed.
-  |      |      |      |      |      |      |-- Compatibility_HID:Simulates HID devices, with data transmitted up and down through the serial port.
-  |      |      |      |      |      |      |-- CompositeKM:Simulate keyboard and mouse, use IO to simulate keystrokes, while simulated data can be uploaded through serial port 2.
-  |      |      |      |      |      |      |-- CompositeKM_LowSpeed:Simulate low speed keyboard and mouse, use IO to simulate keystrokes, while simulated data can be uploaded through serial port 2.
-  |      |      |      |      |      |      |-- SimulateCDC:Simulate a CDC serial port and use serial port 2 to send and receive.
-  |      |      |      |      |      |      |-- SimulateCDC-HID:Simulate a CDC serial port, use serial port 2 to send and receive, HID interrupt endpoints to send and receive data to reverse and upload.  
+  |      |      |      |      |      |      |-- CH372: Simulates a custom USB device (CH372 device) with endpoints 1, 3, 5 down and 2, 4, 6 up. Data down from endpoint 1 is uploaded from endpoint 2 and not reversed, and data down from endpoint 3, 5  is uploaded from endpoint 4, 6 and reversed.
+  |      |      |      |      |      |      |-- Compatibility_HID: Simulates HID devices, with data transmitted up and down through the serial port.
+  |      |      |      |      |      |      |-- CompositeKM: Simulate keyboard and mouse, use IO to simulate keystrokes, while simulated data can be uploaded through serial port 2.
+  |      |      |      |      |      |      |-- CompositeKM_LowSpeed: Simulate low speed keyboard and mouse, use IO to simulate keystrokes, while simulated data can be uploaded through serial port 2.
+  |      |      |      |      |      |      |-- SimulateCDC: Simulate a CDC serial port and use serial port 2 to send and receive.
+  |      |      |      |      |      |      |-- SimulateCDC-HID: Simulate a CDC serial port, use serial port 2 to send and receive, HID interrupt endpoints to send and receive data to reverse and upload.  
   |      |      |      |      |      |-- HOST_KM: The host operates the keypad, gets the data of the endpoints uploaded by the keypad and prints it, supports U-port under level 1 hub
-  |      |      |      |      |      |-- HOST_MTP_FileSystem:Enumeration process of a USB host to a device that supports MTP and PTP protocols, supports MTP and PTP protocols, and reads its files
-  |      |      |      |      |      |-- Host_Udisk:USB host operation USB disk routine 
-  |      |      |      |      |      |-- Udisk_Lib:U disk file system library file  
+  |      |      |      |      |      |-- HOST_MTP_FileSystem: Enumeration process of a USB host to a device that supports MTP and PTP protocols, supports MTP and PTP protocols, and reads its files
+  |      |      |      |      |      |-- Host_Udisk: USB host operation USB disk routine 
+  |      |      |      |      |      |-- Udisk_Lib: U disk file system library file  
   |      |      |      |-- USBPD
-  |      |      |      |      |-- USBPD_SNK:PD SNK routine
-  |      |      |      |      |-- USBPD_SRC:PD SRC routine    
+  |      |      |      |      |-- USBPD_SNK: PD SNK routine
+  |      |      |      |      |-- USBPD_SRC: PD SRC routine    
   |      |      |      |-- WWDG
-  |      |      |      |      |-- WWDG:Window Watchdog Routine
+  |      |      |      |      |-- WWDG: Window Watchdog Routine
 
