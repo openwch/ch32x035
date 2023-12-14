@@ -283,8 +283,8 @@ int rt_hw_usart_init(void)
     if(uart->USARTx == USART1)
     {
             GPIO_InitTypeDef GPIO_InitStructure;
-            RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART1, ENABLE);
-            RCC_APB1PeriphClockCmd(RCC_APB1Periph_GPIOB, ENABLE);
+            RCC_APB2PeriphClockCmd(RCC_APB2Periph_USART1, ENABLE);
+            RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB, ENABLE);
     //        uart->irq=USART1_IRQn;
             GPIO_InitStructure.GPIO_Pin = GPIO_Pin_10;
             GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;

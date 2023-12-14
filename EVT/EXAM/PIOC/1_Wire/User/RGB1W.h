@@ -1,8 +1,8 @@
 /********************************** (C) COPYRIGHT *******************************
  * File Name          : RGB1W.h
  * Author             : WCH
- * Version            : V1.0.0
- * Date               : 2023/07/06
+ * Version            : V1.0.1
+ * Date               : 2023/11/11
  * Description        : 1-wire example 1W-RGB, 1W-DS1820
  *********************************************************************************
  * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
@@ -49,12 +49,12 @@ void PIOC_IRQHandler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
 
 void RGB1W_Init ( void );
 
-void RGB1W_SendSFR( uint16_t total_bytes, uint8_t *p_source_addr );  //SFR mode for 1~32 bytes data
+void RGB1W_SendSFR( uint16_t total_bytes, uint8_t *p_source_addr ,uint8_t mod);  //SFR mode for 1~32 bytes data
 
-void RGB1W_SendRAM( uint16_t total_bytes, uint8_t *p_source_addr );  //RAM mode for 1~3072 bytes data
+void RGB1W_SendRAM( uint16_t total_bytes, uint8_t *p_source_addr ,uint8_t mod);  //RAM mode for 1~3072 bytes data
 
-uint8_t RGB1W_SendSFR_Wait( uint16_t total_bytes, uint8_t *p_source_addr );  //SFR mode for 1~32 bytes data
+uint8_t RGB1W_SendSFR_Wait( uint16_t total_bytes, uint8_t *p_source_addr ,uint8_t mod);  //SFR mode for 1~32 bytes data
 
-uint8_t RGB1W_SendRAM_Wait( uint16_t total_bytes, uint8_t *p_source_addr );  //RAM mode for 1~3072 bytes data
+uint8_t RGB1W_SendRAM_Wait( uint16_t total_bytes, uint8_t *p_source_addr ,uint8_t mod);  //RAM mode for 1~3072 bytes data
 
 void RGB1W_Halt( void );  //halt/sleep PIOC

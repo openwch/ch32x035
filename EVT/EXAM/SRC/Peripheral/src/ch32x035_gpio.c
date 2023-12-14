@@ -2,7 +2,7 @@
  * File Name          : ch32x035_gpio.c
  * Author             : WCH
  * Version            : V1.0.0
- * Date               : 2023/04/06
+ * Date               : 2023/11/06
  * Description        : This file provides all the GPIO firmware functions.
 *********************************************************************************
 * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
@@ -326,15 +326,8 @@ uint32_t GPIO_ReadOutputData(GPIO_TypeDef *GPIOx)
  */
 void GPIO_SetBits(GPIO_TypeDef *GPIOx, uint32_t GPIO_Pin)
 {
-    if((GPIO_Pin & ((uint32_t)0x00FFFF)) != 0x00)
-    {
-        GPIOx->BSHR = GPIO_Pin;
-    }
-
-    if(GPIO_Pin > 0x00FFFF)
-    {
-        GPIOx->BSXR = (GPIO_Pin>>0x10);
-    }
+	GPIOx->BSHR = (GPIO_Pin & (uint32_t)0x0000FFFF);
+    GPIOx->BSXR = ((GPIO_Pin & (uint32_t)0xFFFF0000) >> 0x10);
 }
 
 /*********************************************************************
@@ -370,15 +363,8 @@ void GPIO_WriteBit(GPIO_TypeDef *GPIOx, uint32_t GPIO_Pin, BitAction BitVal)
 {
     if(BitVal != Bit_RESET)
     {
-        if((GPIO_Pin & ((uint32_t)0x00FFFF)) != 0x00)
-        {
-            GPIOx->BSHR = GPIO_Pin;
-        }
-
-        if(GPIO_Pin > 0x00FFFF)
-        {
-            GPIOx->BSXR = (GPIO_Pin>>0x10);
-        }
+		GPIOx->BSHR = (GPIO_Pin & (uint32_t)0x0000FFFF);
+        GPIOx->BSXR = ((GPIO_Pin & (uint32_t)0xFFFF0000) >> 0x10);
     }
     else
     {
