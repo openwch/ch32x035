@@ -170,9 +170,18 @@ uint8_t USBFS_Endp_DataUp(uint8_t endp, uint8_t *pbuf, uint16_t len, uint8_t mod
             USBFS_Endp_Busy[ endp ] = 0x01;
 
             /* copy mode */
-            memcpy( USBFS_EP1_Buf, pbuf, len );
-            USBFSD->UEP1_TX_LEN = len;
-            USBFSD->UEP1_CTRL_H = ( USBFSD->UEP1_CTRL_H & ~USBFS_UEP_T_RES_MASK ) | USBFS_UEP_T_RES_ACK;
+            if (endp == DEF_UEP1) // endpoint1 (keyboard)?
+            {
+                memcpy( USBFS_EP1_Buf, pbuf, len );
+                USBFSD->UEP1_TX_LEN = len;
+                USBFSD->UEP1_CTRL_H = ( USBFSD->UEP1_CTRL_H & ~USBFS_UEP_T_RES_MASK ) | USBFS_UEP_T_RES_ACK;
+            }
+            else // endpoint2 (mouse)?
+            {
+                memcpy( USBFS_EP2_Buf, pbuf, len );
+                USBFSD->UEP2_TX_LEN = len;
+                USBFSD->UEP2_CTRL_H = ( USBFSD->UEP2_CTRL_H & ~USBFS_UEP_T_RES_MASK ) | USBFS_UEP_T_RES_ACK;
+            }
         }
         else
         {
