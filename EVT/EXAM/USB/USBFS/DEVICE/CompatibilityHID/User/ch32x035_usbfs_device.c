@@ -2,7 +2,7 @@
 * File Name          : ch32x035_usbfs_device.c
 * Author             : WCH
 * Version            : V1.0.0
-* Date               : 2023/04/06
+* Date               : 2023/12/26
 * Description        : This file provides all the USBFS firmware functions.
 *********************************************************************************
 * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
@@ -218,7 +218,6 @@ void USBFS_IRQHandler( void )
                             USBFS_Endp_Busy[ DEF_UEP2 ] = 0;
                             break;
 
-
                     default :
                         break;
                 }
@@ -253,7 +252,6 @@ void USBFS_IRQHandler( void )
                                     /* Standard request end-point 0 Data download */
                                     /* Add your code here */
                                 }
-
                             }
                             break;
 
@@ -695,6 +693,7 @@ void USBFS_IRQHandler( void )
     else if( intflag & USBFS_UIF_SUSPEND )
     {
         USBFSD->INT_FG = USBFS_UIF_SUSPEND;
+        Delay_Us(10);
         /* usb suspend interrupt processing */
         if( USBFSD->MIS_ST & USBFS_UMS_SUSPEND )
         {

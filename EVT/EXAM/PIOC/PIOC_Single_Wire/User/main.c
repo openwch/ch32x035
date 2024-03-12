@@ -2,7 +2,7 @@
  * File Name          : main.c
  * Author             : WCH
  * Version            : V1.0.0
- * Date               : 2023/11/22
+ * Date               : 2023/12/26
  * Description        : Main program body.
 *********************************************************************************
 * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
@@ -646,9 +646,8 @@ void PIOC_Single_Wire_RAM_ContinuityRead(uint32_t addr,uint32_t* data,uint16_t l
 int main(void)
 {
     uint16_t i=0;
-//    uint32_t a=0,b=0;
 
-    NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);
+    NVIC_PriorityGroupConfig(NVIC_PriorityGroup_1);
     SystemCoreClockUpdate();
     Delay_Init();
     USART_Printf_Init(115200);

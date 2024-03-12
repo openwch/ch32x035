@@ -2,7 +2,7 @@
 * File Name          : ch32x035_usbfs_device.c
 * Author             : WCH
 * Version            : V1.0.0
-* Date               : 2023/04/06
+* Date               : 2023/12/26
 * Description        : This file provides all the USBFS firmware functions.
 *********************************************************************************
 * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
@@ -170,18 +170,109 @@ void USBFS_Device_Init( FunctionalState sta , PWR_VDD VDD_Voltage)
  */
 uint8_t USBFS_Endp_DataUp(uint8_t endp, uint8_t *pbuf, uint16_t len, uint8_t mod)
 {
-
+    uint8_t endp_mode;
+    uint8_t buf_load_offset;
     /* DMA config, endp_ctrl config, endp_len config */
-    if( (endp>=DEF_UEP1) && (endp<=DEF_UEP7) )
+    if( ( endp >= DEF_UEP1 ) && ( endp <= DEF_UEP7 ) )
     {
         if( USBFS_Endp_Busy[ endp ] == 0 )
         {
-            /* Set end-point busy */
-            USBFS_Endp_Busy[ endp ] = 0x01;
-            /* copy mode */
-            memcpy(USBFS_EP3_Buf,pbuf,len);
-            USBFSD->UEP3_TX_LEN = len;
-            USBFSD->UEP3_CTRL_H = (USBFSD->UEP3_CTRL_H & ~USBFS_UEP_T_RES_MASK) | USBFS_UEP_T_RES_ACK;
+            if( (endp == DEF_UEP1) || (endp == DEF_UEP4) )
+            {
+                /* endp1/endp4 */
+                endp_mode = USBFSD_UEP_MOD( 0 );
+                if( endp == DEF_UEP1 )
+                {
+                    endp_mode = (uint8_t)( endp_mode >> 4 );
+                }
+            }
+            else if( ( endp == DEF_UEP2 ) || ( endp == DEF_UEP3 ) )
+            {
+                /* endp2/endp3 */
+                endp_mode = USBFSD_UEP_MOD( 1 );
+                if( endp == DEF_UEP3 )
+                {
+                    endp_mode = (uint8_t)( endp_mode >> 4 );
+                }
+            }
+            else if( ( endp == DEF_UEP5 ) || ( endp == DEF_UEP6 ) )
+            {
+                /* endp5/endp6 */
+                endp_mode = USBFSD_UEP_MOD( 2 );
+                if( endp == DEF_UEP6 )
+                {
+                    endp_mode = (uint8_t)( endp_mode >> 4 );
+                }
+            }
+            else
+            {
+                /* endp7 */
+                endp_mode = USBFSD_UEP_MOD( 3 );
+            }
+
+            if( endp_mode & USBFSD_UEP_TX_EN )
+            {
+                if( endp_mode & USBFSD_UEP_RX_EN )
+                {
+                    if( endp_mode & USBFSD_UEP_BUF_MOD )
+                    {
+                        if( USBFSD_UEP_TX_CTRL(endp) & USBFS_UEP_T_TOG )
+                        {
+                            buf_load_offset = 192;
+                        }
+                        else
+                        {
+                            buf_load_offset = 128;
+                        }
+                    }
+                    else
+                    {
+                        buf_load_offset = 64;
+                    }
+                }
+                else
+                {
+                    if( endp_mode & USBFSD_UEP_BUF_MOD )
+                    {
+                        /* double tx buffer */
+                        if( USBFSD_UEP_TX_CTRL( endp ) & USBFS_UEP_T_TOG )
+                        {
+                            buf_load_offset = 64;
+                        }
+                        else
+                        {
+                            buf_load_offset = 0;
+                        }
+                    }
+                    else
+                    {
+                        buf_load_offset = 0;
+                    }
+                }
+                if( buf_load_offset == 0 )
+                {
+                    if( mod == DEF_UEP_DMA_LOAD )
+                    {
+                        /* DMA mode */
+                        USBFSD_UEP_DMA( endp ) = (uint16_t)(uint32_t)pbuf;
+                    }
+                    else
+                    {
+                        /* copy mode */
+                        memcpy( USBFSD_UEP_BUF( endp ), pbuf, len );
+                    }
+                }
+                else
+                {
+                    memcpy( USBFSD_UEP_BUF( endp ) + buf_load_offset, pbuf, len );
+                }
+                /* tx length */
+                USBFSD_UEP_TLEN( endp ) = len;
+                /* response ack */
+                USBFSD_UEP_TX_CTRL( endp ) = ( USBFSD_UEP_TX_CTRL( endp ) & ~USBFS_UEP_T_RES_MASK ) | USBFS_UEP_T_RES_ACK;
+                /* Set end-point busy */
+                USBFS_Endp_Busy[ endp ] = 0x01;
+            }
         }
         else
         {
@@ -194,7 +285,6 @@ uint8_t USBFS_Endp_DataUp(uint8_t endp, uint8_t *pbuf, uint16_t len, uint8_t mod
     }
     return 0;
 }
-
 
 /*********************************************************************
  * @fn      USBFS_IRQHandler
@@ -882,6 +972,8 @@ void USBFS_IRQHandler( void )
     }
     else if( intflag & USBFS_UIF_SUSPEND )
     {
+        USBFSD->INT_FG = USBFS_UIF_SUSPEND;
+        Delay_Us(10);
         /* usb suspend interrupt processing */
         if ( USBFSD->MIS_ST & USBFS_UMS_SUSPEND )
         {
@@ -895,7 +987,6 @@ void USBFS_IRQHandler( void )
         {
             USBFS_DevSleepStatus &= ~0x02;
         }
-        USBFSD->INT_FG = USBFS_UIF_SUSPEND;
     }
     else
     {
