@@ -106,7 +106,7 @@ void EXTI0_INT_INIT(void)
 
   NVIC_InitStructure.NVIC_IRQChannel = EXTI7_0_IRQn;
   NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
-  NVIC_InitStructure.NVIC_IRQChannelSubPriority = 4;
+  NVIC_InitStructure.NVIC_IRQChannelSubPriority = 3;
   NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
   NVIC_Init(&NVIC_InitStructure);
 }
@@ -156,7 +156,7 @@ LITE_OS_SEC_TEXT_INIT int main(void)
 {
     unsigned int ret;
 
-	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_0);
+	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_1);
     Delay_Init();
 	USART_Printf_Init(115200);
 	printf("SystemClk:%d\r\n",SystemCoreClock);
@@ -185,10 +185,10 @@ LITE_OS_SEC_TEXT_INIT int main(void)
 void EXTI7_0_IRQHandler(void) __attribute__((interrupt()));
 void EXTI7_0_IRQHandler(void)
 {
-  /* �ж�ջʹ�õ���ԭ������main���õ�ֵ�����ж�ջ���߳�ջ�ֿ��������߳����жϣ��жϺ������Ƕ����Ƚϴ󣬲�����
-   * �߳�ջ��ѹ����������ǲ��õ�ǰ��ʽ���߳̽��ж�ʱ�����������浽��16��caller�Ĵ�����Ȼѹ���߳�ջ�������Ҫϣ
-   * ��caller�Ĵ���ѹ���ж�ջ�����жϺ�������ںͳ�����Ҫʹ�û�࣬�м�����û��жϴ����������ɣ����los_exc.S
-   * �е�ipq_entry����
+  /* 中断栈使用的是原来调用main设置的值，将中断栈和线程栈分开，这样线程跳中断，中断函数如果嵌套深度较大，不至于
+   * 线程栈被压满溢出，但是采用当前方式，线程进中断时，编译器保存到的16个caller寄存器任然压入线程栈，如果需要希
+   * 望caller寄存器压入中断栈，则中断函数的入口和出口需要使用汇编，中间调用用户中断处理函数即可，详见los_exc.S
+   * 中的ipq_entry例子
    *  */
   GET_INT_SP();
   HalIntEnter();

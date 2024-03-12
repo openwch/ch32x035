@@ -2,7 +2,7 @@
 * File Name          : ch32x035_usbfs_device.c
 * Author             : WCH
 * Version            : V1.0.0
-* Date               : 2023/04/06
+* Date               : 2024/03/07
 * Description        : This file provides all the USBFS firmware functions.
 *********************************************************************************
 * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
@@ -126,15 +126,13 @@ void GPIO_USB_INIT(void)
     GPIO_InitTypeDef GPIO_InitStructure = {0};
 
     RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOC, ENABLE);
-    GPIO_InitStructure.GPIO_Pin =  GPIO_Pin_16 | GPIO_Pin_17;
-    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU;
+    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_16;
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;
     GPIO_Init(GPIOC, &GPIO_InitStructure);
 
-    /* Enable USB multiplexing pin and PD pull-up 1.5k */
-    USB_IOEN;
-    USB_UDP_PUE;
-    /* Prohibit PN pull-up */
-    USB_UDM_PUE_CLR;
+    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_17;
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU;
+    GPIO_Init(GPIOC, &GPIO_InitStructure);
 }
 
 /*********************************************************************
@@ -144,11 +142,19 @@ void GPIO_USB_INIT(void)
  *
  * @return  none
  */
-void USBFS_Device_Init( FunctionalState sta )
+void USBFS_Device_Init( FunctionalState sta ,PWR_VDD VDD_Voltage)
 {
     if( sta )
     {
         GPIO_USB_INIT();
+        if( VDD_Voltage == PWR_VDD_5V )
+        {
+            AFIO->CTLR = (AFIO->CTLR & ~(UDP_PUE_MASK | UDM_PUE_MASK | USB_PHY_V33)) | UDP_PUE_10K | USB_IOEN;
+        }
+        else
+        {
+            AFIO->CTLR = (AFIO->CTLR & ~(UDP_PUE_MASK | UDM_PUE_MASK )) | USB_PHY_V33 | UDP_PUE_1K5 | USB_IOEN;
+        }
         USBFSD->BASE_CTRL = 0x00;
         USBFS_Device_Endp_Init( );
         USBFSD->DEV_ADDR = 0x00;
@@ -160,6 +166,7 @@ void USBFS_Device_Init( FunctionalState sta )
     }
     else
     {
+        AFIO->CTLR = AFIO->CTLR & ~(UDP_PUE_MASK | UDM_PUE_MASK | USB_IOEN);
         USBFSD->BASE_CTRL = USBFS_UC_RESET_SIE | USBFS_UC_CLR_ALL;
         Delay_Us( 10 );
         USBFSD->BASE_CTRL = 0x00;
