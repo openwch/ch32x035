@@ -2,7 +2,7 @@
  * File Name          : main.c
  * Author             : WCH
  * Version            : V1.0.0
- * Date               : 2023/04/06
+ * Date               : 2023/12/26
  * Description        : Main program body.
  *********************************************************************************
  * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
@@ -58,7 +58,7 @@ void SysTick_Handler(void)
 int main(void)
 {
     SystemCoreClockUpdate();
-    NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);
+    NVIC_PriorityGroupConfig(NVIC_PriorityGroup_1);
     USART_Printf_Init(115200);
     printf("SystemClk:%d\r\n", SystemCoreClock);
     printf( "ChipID:%08x\r\n", DBGMCU_GetCHIPID() );

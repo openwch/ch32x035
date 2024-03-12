@@ -71,8 +71,11 @@ static const struct pin_index pins[] =
     __CH32_PIN(13, B, 0),
     __CH32_PIN(14, B, 3),
     __CH32_PIN(15, B, 4),
+#if PB1_5==PB1
     __CH32_PIN(16, B, 1),
+#elif PB1_5==PB5
     __CH32_PIN(16, B, 5),
+#endif
     __CH32_PIN(17, B, 6),
     __CH32_PIN(18, B, 7),
     __CH32_PIN(19, B, 8),

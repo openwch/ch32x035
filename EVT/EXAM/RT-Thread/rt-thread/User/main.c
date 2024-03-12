@@ -2,7 +2,7 @@
  * File Name          : main.c
  * Author             : WCH
  * Version            : V1.0.0
- * Date               : 2021/06/06
+ * Date               : 2024/03/02
  * Description        : Main program body.
 *********************************************************************************
 * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
@@ -26,6 +26,11 @@
 #define LED0_PIN  5   //PA0
 
 /* Global Variable */
+/*CH32X035F8 PB1 and PB5 are the same physical pin
+ *  PB1 and PB5 cannot be used at the same time. */
+#define  PB1  0
+#define  PB5  1
+#define  PB1_5  PB1
 
 /*********************************************************************
  * @fn      LED1_BLINK_INIT
