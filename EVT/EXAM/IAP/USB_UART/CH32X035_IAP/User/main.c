@@ -2,7 +2,7 @@
  * File Name          : main.c
  * Author             : WCH
  * Version            : V1.0.0
- * Date               : 2023/04/06
+ * Date               : 2024/03/07
  * Description        : Main program body.
  *********************************************************************************
  * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
@@ -34,7 +34,7 @@
  * @return  none
  */
 void IAP_2_APP(void) {
-    USBFS_Device_Init(DISABLE);
+    USBFS_Device_Init(DISABLE,PWR_VDD_SupplyVoltage());
     GPIO_Cfg_Float();
     RCC_APB2PeriphClockCmd( RCC_APB2Periph_AFIO, DISABLE );
     RCC_AHBPeriphClockCmd( RCC_AHBPeriph_USBFS, DISABLE );
@@ -70,16 +70,8 @@ int main(void)
 
     /* Usb Init */
     USBFS_RCC_Init( );
-    u8 VDD_Voltage =PWR_VDD_SupplyVoltage();
-    if( VDD_Voltage == PWR_VDD_5V )
-     {
-          AFIO->CTLR = (AFIO->CTLR & ~(0x0000000C | 0x00000003 | 0x00000040)) | 0x00000008 | 0x00000080;
-     }
-     else
-     {
-          AFIO->CTLR = (AFIO->CTLR & ~(0x0000000C | 0x00000003 )) | 0x00000040 | 0x0000000C | 0x00000080;
-     }
-    USBFS_Device_Init( ENABLE );
+    USBFS_Device_Init( ENABLE ,PWR_VDD_SupplyVoltage());
+
     USART2_CFG(57600);
     while(1)
     {
