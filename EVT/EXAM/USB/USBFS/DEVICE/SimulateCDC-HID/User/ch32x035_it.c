@@ -2,7 +2,7 @@
  * File Name          : ch32x035_it.c
  * Author             : WCH
  * Version            : V1.0.0
- * Date               : 2023/04/06
+ * Date               : 2023/12/26
  * Description        : Main Interrupt Service Routines.
 *********************************************************************************
 * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
@@ -25,6 +25,9 @@ void TIM3_IRQHandler( void )__attribute__((interrupt("WCH-Interrupt-fast")));
  */
 void NMI_Handler(void)
 {
+    while (1)
+  {
+  }
 }
 
 /*********************************************************************

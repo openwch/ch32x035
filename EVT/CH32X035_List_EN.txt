@@ -112,6 +112,10 @@ Directory
   |      |      |      |      |-- Sleep_Mode: low power, sleep mode routine
   |      |      |      |      |-- Standby_Mode: low power, standby mode routine
   |      |      |      |      |-- Stop_Mode: low power, stop mode routine
+  |      |      |      |      |-- PVD_Wakeup：STOP mode PVD wakeup MCU Routine
+  |      |      |      |      |-- PVD_VoltageJudger：PVD voltage Judger Routine
+  |      |      |      |-- PMP
+  |      |      |      |      |-- PMP：Physical memory protection Routine
   |      |      |      |-- RCC
   |      |      |      |      |-- Get_CLK: Get system-HCLK-AHB1-AHB2 clock routine   
   |      |      |      |      |-- MCO: MCO pin clock output routine    
@@ -141,6 +145,7 @@ Directory
   |      |      |      |      |-- Synchro_ExtTrigger: slave mode routine, including reset mode, gating mode and trigger mode
   |      |      |      |      |-- Synchro_Timer: timer synchronization mode
   |      |      |      |      |-- TIM_DMA: timer DMA routines
+  |      |      |      |      |-- Encode:Timer encoder mode routines
   |      |      |      |-- TOUCHKEY
   |      |      |      |      |-- TKey: TouchKey Detection Routine 
   |      |      |      |-- USART
