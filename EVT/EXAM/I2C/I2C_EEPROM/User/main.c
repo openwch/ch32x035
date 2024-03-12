@@ -122,10 +122,10 @@ u8 AT24CXX_ReadOneByte(u16 ReadAddr)
 
 #elif (Address_Lenth  == Address_16bit)
 	I2C_SendData( I2C1, (u8)(ReadAddr>>8) );
-	while( !I2C_CheckEvent( I2C2, I2C_EVENT_MASTER_BYTE_TRANSMITTED ) );
+	while( !I2C_CheckEvent( I2C1, I2C_EVENT_MASTER_BYTE_TRANSMITTED ) );
 
 	I2C_SendData( I2C1, (u8)(ReadAddr&0x00FF) );
-	while( !I2C_CheckEvent( I2C2, I2C_EVENT_MASTER_BYTE_TRANSMITTED ) );
+	while( !I2C_CheckEvent( I2C1, I2C_EVENT_MASTER_BYTE_TRANSMITTED ) );
 
 #endif
 
