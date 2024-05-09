@@ -2,7 +2,7 @@
  * File Name          : usb_desc.c
  * Author             : WCH
  * Version            : V1.0.0
- * Date               : 2023/04/06
+ * Date               : 2024/04/16
  * Description        : usb device descriptor,configuration descriptor,
  *                      string descriptors and other descriptors.
 *********************************************************************************
@@ -24,7 +24,7 @@ const uint8_t  MyDevDescr[] =
     0x00,                                               // bDeviceProtocol
     DEF_USBD_UEP0_SIZE,                                 // bMaxPacketSize0
     (uint8_t)DEF_USB_VID, (uint8_t)(DEF_USB_VID >> 8),  // idVendor 0x1A86
-    (uint8_t)DEF_USB_PID, (uint8_t)(DEF_USB_PID >> 8),  // idProduct 0xE6E1
+    (uint8_t)DEF_USB_PID, (uint8_t)(DEF_USB_PID >> 8),  // idProduct 0xFE07
     0x00, DEF_IC_PRG_VER,                               // bcdDevice 1.00
     0x01,                                               // iManufacturer (String Index)
     0x02,                                               // iProduct (String Index)
