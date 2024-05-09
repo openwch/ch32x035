@@ -2,7 +2,7 @@
 * File Name          : ch32x035_usbfs_device.h
 * Author             : WCH
 * Version            : V1.0.0
-* Date               : 2024/04/16
+* Date               : 2023/04/06
 * Description        : This file contains all the functions prototypes for the
 *                      USBFS firmware library.
 *********************************************************************************
@@ -14,15 +14,10 @@
 #ifndef __CH32X035_USBFS_DEVICE_H_
 #define __CH32X035_USBFS_DEVICE_H_
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
+#include <ch32x035_usb.h>
 #include "debug.h"
 #include "string.h"
 #include "usb_desc.h"
-#include <ch32x035_usb.h>
-#include "UART.h"
 
 /******************************************************************************/
 /* Global Define */
@@ -49,8 +44,25 @@ extern "C" {
 #define DEF_UEP_DMA_LOAD            0 /* Direct the DMA address to the data to be processed */
 #define DEF_UEP_CPY_LOAD            1 /* Use memcpy to move data to a buffer */
 
+/* Ringbuffer define  */
+#define DEF_Ring_Buffer_Max_Blks      16
+#define DEF_RING_BUFFER_SIZE          (DEF_Ring_Buffer_Max_Blks*DEF_USBD_FS_PACK_SIZE)
+#define DEF_RING_BUFFER_REMINE        4
+#define DEF_RING_BUFFER_RESTART       10
+
+/* Ring Buffer typedef */
+typedef struct __PACKED _RING_BUFF_COMM
+{
+    volatile uint8_t LoadPtr;
+    volatile uint8_t DealPtr;
+    volatile uint8_t RemainPack;
+    volatile uint8_t PackLen[DEF_Ring_Buffer_Max_Blks];
+    volatile uint8_t StopFlag;
+} RING_BUFF_COMM, pRING_BUFF_COMM;
+
 /* Setup Request Packets */
-#define pUSBFS_SetupReqPak                 ((PUSB_SETUP_REQ)USBFS_EP0_4Buf)
+#define pUSBFS_SetupReqPak                 ((PUSB_SETUP_REQ)USBFS_EP0_Buf)
+
 
 #define USB_IOEN                    0x00000080
 #define USB_PHY_V33                 0x00000040
@@ -83,13 +95,14 @@ extern volatile uint8_t  USBFS_DevAddr;
 extern volatile uint8_t  USBFS_DevSleepStatus;
 extern volatile uint8_t  USBFS_DevEnumStatus;
 
-/* Endpoint Buffer */
-extern __attribute__ ((aligned(4))) uint8_t USBFS_EP0_4Buf[ ];
-extern __attribute__ ((aligned(4))) uint8_t USBFS_EP1_Buf[ ];
-extern __attribute__ ((aligned(4))) uint8_t USBFS_EP2_Buf[ ];
-extern __attribute__ ((aligned(4))) uint8_t USBFS_EP3_Buf[ ];
+//extern __attribute__ ((aligned(4))) uint8_t USBFS_EP6_Buf[ ];
+
 /* USB IN Endpoint Busy Flag */
 extern volatile uint8_t  USBFS_Endp_Busy[ ];
+
+/* Interrupt Service Routine Declaration*/
+extern RING_BUFF_COMM  RingBuffer_Comm;
+extern __attribute__ ((aligned(4))) uint8_t Data_Buffer[ ];
 
 /******************************************************************************/
 /* external functions */
@@ -99,10 +112,6 @@ extern void USBFS_RCC_Init(void);
 extern void USBFS_Sleep_Wakeup_Operate(void);
 extern uint8_t USBFS_Endp_DataUp(uint8_t endp, uint8_t *pbuf, uint16_t len, uint8_t mod);
 
-#ifdef __cplusplus
-}
-#endif
+void intt_function();
 
-
-#endif /* __CH32X035_USBFS_DEVICE_H_ */
-
+#endif 
