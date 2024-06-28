@@ -2,7 +2,7 @@
  * File Name          : RGB1W.c
  * Author             : WCH
  * Version            : V1.0.1
- * Date               : 2023/11/11
+ * Date               : 2024/06/05
  * Description        : 1-wire example 1W-RGB, 1W-DS1820
  *********************************************************************************
  * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
@@ -88,7 +88,7 @@ const unsigned char PIOC_1W_CODE[] =
 #include "RGB1W.h"
 #include <string.h>
 
-__IO	uint8_t		stat;
+__IO  uint8_t	stat;
 
 void PIOC_IRQHandler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
 

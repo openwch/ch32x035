@@ -2,7 +2,7 @@
  * File Name          : main.c
  * Author             : WCH
  * Version            : V1.0.0
- * Date               : 2023/12/26
+ * Date               : 2024/06/05
  * Description        : Main program body.
  *********************************************************************************
  * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
@@ -27,7 +27,7 @@
 /* Global Variable */
 void SysTick_Handler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
 
-u32 counter=0;
+volatile u32 counter=0;
 
 void SYSTICK_Init_Config(u64 ticks)
 {

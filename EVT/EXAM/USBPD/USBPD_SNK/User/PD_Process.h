@@ -22,7 +22,7 @@
 /* Variable extents */
 extern UINT8  Tmr_Ms_Cnt_Last;
 extern UINT8  Tmr_Ms_Dlt;
-extern UINT8  Tim_Ms_Cnt;
+extern volatile UINT8  Tim_Ms_Cnt;
 
 extern UINT8  PDO_Len;
 extern PD_CONTROL PD_Ctl;

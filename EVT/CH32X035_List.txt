@@ -1,7 +1,7 @@
 
-南京沁恒微电子股份有限公司 2023.11
+南京沁恒微电子股份有限公司 2024.06
 最新资料请到我们的网站上查询
-http://wch.cn
+https://wch.cn
 
 
 文件目录
@@ -168,6 +168,7 @@ http://wch.cn
   |      |      |      |      |      |      |-- CompositeKM_LowSpeed：模拟低速键盘和鼠标，使用IO模拟按键，同时模拟数据可以通过串口2上传。
   |      |      |      |      |      |      |-- SimulateCDC：模拟一个CDC串口，使用串口2收发。
   |      |      |      |      |      |      |-- SimulateCDC-HID：模拟一个CDC串口，使用串口2收发,HID中断端点下发数据取反上传。
+  |      |      |      |      |      |      |-- MSC_U-Disk：模拟一个U盘功能。
   |      |      |      |      |      |-- HOST_KM：主机操作键鼠，获取键鼠上传的端点的数据并打印，支持U口下1级hub
   |      |      |      |      |      |-- HOST_MTP_FileSystem：枚举过程的USB主机到一个支持MTP和PTP协议的设备，支持MTP和PTP协议，并读取其文件
   |      |      |      |      |      |-- Udisk_Lib：U盘文件系统库文件

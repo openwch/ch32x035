@@ -30,7 +30,7 @@
 
 void TIM1_UP_IRQHandler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
 
-UINT8  Tim_Ms_Cnt = 0x00;
+volatile UINT8  Tim_Ms_Cnt = 0x00;
 
 /*********************************************************************
  * @fn      TIM1_Init

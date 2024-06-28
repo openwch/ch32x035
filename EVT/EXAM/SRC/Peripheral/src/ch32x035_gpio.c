@@ -124,19 +124,25 @@ void GPIO_Init(GPIO_TypeDef *GPIOx, GPIO_InitTypeDef *GPIO_InitStruct)
 
     if(((uint32_t)GPIO_InitStruct->GPIO_Pin & ((uint32_t)0x00FF00)) != 0x00)
     {
-        if(GPIOx == GPIOA)
-        {
-            tmpreg = CFGHR_tmpA;
-        }
-        else if(GPIOx == GPIOB)
-        {
-            tmpreg = CFGHR_tmpB;
-        }
-        else if(GPIOx == GPIOC)
-        {
-            tmpreg = CFGHR_tmpC;
-        }
-
+       if(((*( uint32_t * )0x1FFFF704) & 0x000000F0) == 0)
+       {
+             if(GPIOx == GPIOA)
+            {
+                tmpreg = CFGHR_tmpA;
+            }
+            else if(GPIOx == GPIOB)
+            {
+                tmpreg = CFGHR_tmpB;
+            }
+            else if(GPIOx == GPIOC)
+            {
+                tmpreg = CFGHR_tmpC;
+            }
+       }
+       else
+       {
+           tmpreg = GPIOx->CFGHR;
+       }
         for(pinpos = 0x00; pinpos < 0x08; pinpos++)
         {
             pos = (((uint32_t)0x01) << (pinpos + 0x08));
@@ -161,18 +167,20 @@ void GPIO_Init(GPIO_TypeDef *GPIOx, GPIO_InitTypeDef *GPIO_InitStruct)
             }
         }
         GPIOx->CFGHR = tmpreg;
-
-        if(GPIOx == GPIOA)
+        if((*( uint32_t * )0x1FFFF704) & (0x000000F0) == 0)
         {
-            CFGHR_tmpA = tmpreg;
-        }
-        else if(GPIOx == GPIOB)
-        {
-            CFGHR_tmpB = tmpreg;
-        }
-        else if(GPIOx == GPIOC)
-        {
-            CFGHR_tmpC = tmpreg;
+            if(GPIOx == GPIOA)
+            {
+                CFGHR_tmpA = tmpreg;
+            }
+            else if(GPIOx == GPIOB)
+            {
+                CFGHR_tmpB = tmpreg;
+            }
+            else if(GPIOx == GPIOC)
+            {
+                CFGHR_tmpC = tmpreg;
+            }
         }
     }
 
