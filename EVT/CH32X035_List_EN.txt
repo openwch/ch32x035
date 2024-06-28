@@ -1,7 +1,7 @@
 
-Nanjing Qinheng Microelectronics Co., Ltd. 2023.11
+Nanjing Qinheng Microelectronics Co., Ltd. 2024.06
 
-http://wch-ic.com
+https://wch-ic.com
 
 
 Directory
@@ -167,6 +167,7 @@ Directory
   |      |      |      |      |      |      |-- CompositeKM_LowSpeed: Simulate low speed keyboard and mouse, use IO to simulate keystrokes, while simulated data can be uploaded through serial port 2.
   |      |      |      |      |      |      |-- SimulateCDC: Simulate a CDC serial port and use serial port 2 to send and receive.
   |      |      |      |      |      |      |-- SimulateCDC-HID: Simulate a CDC serial port, use serial port 2 to send and receive, HID interrupt endpoints to send and receive data to reverse and upload.  
+  |      |      |      |      |      |      |-- MSC_U-Disk: Simulate a USB flash drive function.
   |      |      |      |      |      |-- HOST_KM: The host operates the keypad, gets the data of the endpoints uploaded by the keypad and prints it, supports U-port under level 1 hub
   |      |      |      |      |      |-- HOST_MTP_FileSystem: Enumeration process of a USB host to a device that supports MTP and PTP protocols, supports MTP and PTP protocols, and reads its files
   |      |      |      |      |      |-- Host_Udisk: USB host operation USB disk routine 

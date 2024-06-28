@@ -2,7 +2,7 @@
  * File Name          : ch32x035.h
  * Author             : WCH
  * Version            : V1.0.1
- * Date               : 2023/12/26
+ * Date               : 2024/06/07
  * Description        : CH32X035 Device Peripheral Access Layer Header File.
 *********************************************************************************
 * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
@@ -23,7 +23,7 @@ extern "C" {
 
 /* Standard Peripheral Library version number */
 #define __STDPERIPH_VERSION_MAIN   (0x01) /* [15:8] main version */
-#define __STDPERIPH_VERSION_SUB    (0x06) /* [7:0] sub version */
+#define __STDPERIPH_VERSION_SUB    (0x07) /* [7:0] sub version */
 #define __STDPERIPH_VERSION        ((__STDPERIPH_VERSION_MAIN << 8)\
                                     |(__STDPERIPH_VERSION_SUB << 0))
 
@@ -2369,6 +2369,11 @@ typedef struct
 #define PWR_CTLR_PLS_0                          ((uint16_t)0x0020) /* Bit 0 */
 #define PWR_CTLR_PLS_1                          ((uint16_t)0x0040) /* Bit 1 */
 
+#define PWR_CTLR_PLS_MODE0                      ((uint16_t)0x0000) /* PVD level 0 */
+#define PWR_CTLR_PLS_MODE1                      ((uint16_t)0x0020) /* PVD level 1 */
+#define PWR_CTLR_PLS_MODE2                      ((uint16_t)0x0040) /* PVD level 2 */
+#define PWR_CTLR_PLS_MODE3                      ((uint16_t)0x0060) /* PVD level 3 */
+
 #define PWR_CTLR_LP_REG                         ((uint16_t)0x0200) /* Software configure flash into lower energy mode */
 #define PWR_CTLR_LP                             ((uint16_t)0x0C00) /* Software configure flash Status */
 #define PWR_CTLR_LP_0                           ((uint16_t)0x0400)
@@ -2955,6 +2960,77 @@ typedef struct
 /*******************  Bit definition for WWDG_STATR register  ********************/
 #define WWDG_STATR_EWIF                         ((uint8_t)0x01) /* Early Wakeup Interrupt Flag */
 
+/******************************************************************************/
+/*                              OPA and CMP                                   */
+/******************************************************************************/
+
+/*******************  Bit definition for OPA_CFGR1 register  ********************/
+#define OPA_CFGR1_POLL_EN1                      ((uint16_t)0x0001)
+#define OPA_CFGR1_POLL_EN2                      ((uint16_t)0x0002)
+#define OPA_CFGR1_BKIN_EN1                      ((uint16_t)0x0004)
+#define OPA_CFGR1_BKIN_EN2                      ((uint16_t)0x0008)
+#define OPA_CFGR1_RST_EN1                       ((uint16_t)0x0010)
+#define OPA_CFGR1_RST_EN2                       ((uint16_t)0x0020)
+#define OPA_CFGR1_BKIN_SEL                      ((uint16_t)0x0040)
+#define OPA_CFGR1_POLL_LOCK                     ((uint16_t)0x0080)
+#define OPA_CFGR1_IE_OUT1                       ((uint16_t)0x0100)
+#define OPA_CFGR1_IE_OUT2                       ((uint16_t)0x0200)
+#define OPA_CFGR1_IE_CNT                        ((uint16_t)0x0400)
+#define OPA_CFGR1_NMI_EN                        ((uint16_t)0x0800)
+#define OPA_CFGR1_IF_OUT1                       ((uint16_t)0x1000)
+#define OPA_CFGR1_IF_OUT2                       ((uint16_t)0x2000)
+#define OPA_CFGR1_IF_CNT                        ((uint16_t)0x4000)
+
+/*******************  Bit definition for OPA_CFGR2 register  ********************/
+#define OPA_CFGR2_POLL_VLU                      ((uint16_t)0x01FF)
+#define OPA_CFGR2_POLL1_NUM                     ((uint16_t)0x0600)
+#define OPA_CFGR2_POLL2_NUM                     ((uint16_t)0x1800)
+
+/*******************  Bit definition for OPA_CTLR1 register  ********************/
+#define OPA_CTLR1_EN1                           ((uint32_t)0x00000001)
+#define OPA_CTLR1_MODE1                         ((uint32_t)0x00000002)
+
+#define OPA_CTLR1_PSEL1                         ((uint32_t)0x00000018)
+
+#define OPA_CTLR1_FB_EN1                        ((uint32_t)0x00000020)
+#define OPA_CTLR1_NSEL1                         ((uint32_t)0x000001C0)
+
+#define OPA_CTLR1_EN2                           ((uint32_t)0x00010000)
+#define OPA_CTLR1_MODE2                         ((uint32_t)0x00020000)
+
+#define OPA_CTLR1_PSEL2                         ((uint32_t)0x00180000)
+
+#define OPA_CTLR1_FB_EN2                        ((uint32_t)0x00200000)
+#define OPA_CTLR1_NSEL2                         ((uint32_t)0x01C00000)
+
+#define OPA_CTLR1_OPA_LOCK                      ((uint32_t)0x80000000)
+
+/*******************  Bit definition for OPA_CTLR2 register  ********************/
+#define OPA_CTLR2_EN1                           ((uint32_t)0x00000001)
+#define OPA_CTLR2_MODE1                         ((uint32_t)0x00000002)
+#define OPA_CTLR2_NSEL1                         ((uint32_t)0x00000004)
+#define OPA_CTLR2_PSEL1                         ((uint32_t)0x00000008)
+
+#define OPA_CTLR2_EN2                           ((uint32_t)0x00000020)
+#define OPA_CTLR2_MODE2                         ((uint32_t)0x00000040)
+#define OPA_CTLR2_NSEL2                         ((uint32_t)0x00000080)
+#define OPA_CTLR2_PSEL2                         ((uint32_t)0x00000100)
+
+#define OPA_CTLR2_EN3                           ((uint32_t)0x00000400)
+#define OPA_CTLR2_MODE3                         ((uint32_t)0x00000800)
+#define OPA_CTLR2_NSEL3                         ((uint32_t)0x00001000)
+#define OPA_CTLR2_PSEL3                         ((uint32_t)0x00002000)
+
+#define OPA_CTLR2_CMP_LOCK                      ((uint32_t)0x00002000)
+
+/*******************  Bit definition for OPA_KEY register  ********************/
+#define OPA_KEY                                 ((uint32_t)0xFFFFFFFF)
+
+/*******************  Bit definition for CMP_KEY register  ********************/
+#define CMP_KEY                                 ((uint32_t)0xFFFFFFFF)
+
+/*******************  Bit definition for POLL_KEY register  ********************/
+#define POLL_KEY                                ((uint32_t)0xFFFFFFFF)
 
 #include "ch32x035_conf.h"
 

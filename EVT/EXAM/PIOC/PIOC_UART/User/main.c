@@ -2,7 +2,7 @@
  * File Name          : main.c
  * Author             : WCH
  * Version            : V1.0.0
- * Date               : 2023/12/26
+ * Date               : 2024/06/05
  * Description        : Main program body.
 *********************************************************************************
 * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
@@ -32,15 +32,15 @@ void PIOC_IRQHandler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
 #define     UART_SFR_ADDR2  ((uint8_t *)&(PIOC->D8_DATA_REG16))
 #define  R16_DATA_REG24_25  (*((volatile unsigned short *)(PIOC_SFR_BASE+0x38))) // RW/RW, data buffer 24~25
 
-uint8_t  PIOC_TX_FLAG=0;
-uint16_t PIOC_TX_RemainLEN=0;
-uint8_t  *PIOC_TX_ADDR;
+volatile uint8_t  PIOC_TX_FLAG=0;
+volatile uint16_t PIOC_TX_RemainLEN=0;
+volatile uint8_t  *PIOC_TX_ADDR;
 uint32_t PIOC_baudrate=921600;
 uint8_t  PIOC_parity=0;
 uint8_t  PIOC_stopbits=0;
 uint8_t  PIOC_word_lenth=8;
 u8 rx_buf[100]={0};
-u8 rx=0;
+volatile u8 rx=0;
 
 __attribute__((aligned(16)))  const unsigned char PIOC_CODE[] =
 {0x00,0x00,0x2B,0x63,0xFF,0x0F,0x00,0x00,0x30,0x00,0x00,0x28,0x07,0x10,0x20,0x02,   /* ..+c....0..(.... */

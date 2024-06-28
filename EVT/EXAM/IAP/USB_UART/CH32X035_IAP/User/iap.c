@@ -2,7 +2,7 @@
  * File Name          : iap.c
  * Author             : WCH
  * Version            : V1.0.0
- * Date               : 2023/04/06
+ * Date               : 2024/06/05
  * Description        : IAP
 *********************************************************************************
 * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
@@ -93,14 +93,16 @@ u8 RecData_Deal(void)
      case CMD_IAP_VERIFY:
          if (Verity_Star_flag == 0) {
              Verity_Star_flag = 1;
+            if (CodeLen != 0)
+            {
+                for (i = 0; i < (256 - CodeLen); i++) {
+                    Fast_Program_Buf[CodeLen + i] = 0xff;
+                }
 
-             for (i = 0; i < (256 - CodeLen); i++) {
-                 Fast_Program_Buf[CodeLen + i] = 0xff;
-             }
-
-             FLASH_ErasePage_Fast(Program_addr);
-             CH32_IAP_Program(Program_addr, (u32*) Fast_Program_Buf);
-             CodeLen = 0;
+                FLASH_ErasePage_Fast(Program_addr);
+                CH32_IAP_Program(Program_addr, (u32*) Fast_Program_Buf);
+                CodeLen = 0;
+            }
          }
 
          s = ERR_SCUESS;

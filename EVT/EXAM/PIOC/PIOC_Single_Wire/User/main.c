@@ -2,7 +2,7 @@
  * File Name          : main.c
  * Author             : WCH
  * Version            : V1.0.0
- * Date               : 2023/12/26
+ * Date               : 2024/06/05
  * Description        : Main program body.
 *********************************************************************************
 * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
@@ -44,10 +44,10 @@ uint8_t Timebase_Flag=0;
 uint8_t dbg_flag = 0;
 
 
-uint16_t Send_RemainLEN=0;
-uint16_t Receive_RemainLEN=0;
-uint32_t  *Send_BUF_ADDR = NULL;
-uint32_t  *Receive_BUF_ADDR = NULL;
+volatile uint16_t Send_RemainLEN=0;
+volatile uint16_t Receive_RemainLEN=0;
+volatile uint32_t *Send_BUF_ADDR = NULL;
+volatile uint32_t *Receive_BUF_ADDR = NULL;
 
 
 

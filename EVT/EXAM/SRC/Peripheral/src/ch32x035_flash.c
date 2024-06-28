@@ -12,7 +12,7 @@
 #include "ch32x035_flash.h"
 
 /* Flash Access Control Register bits */
-#define ACR_LATENCY_Mask           ((uint32_t)0x00000038)
+#define ACR_LATENCY_Mask           ((uint32_t)0xFFFFFFFC)
 
 /* Flash Control Register bits */
 #define CR_PER_Set                 ((uint32_t)0x00000002)

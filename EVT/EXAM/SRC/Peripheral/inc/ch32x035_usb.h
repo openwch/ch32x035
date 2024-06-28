@@ -2,7 +2,7 @@
  * File Name          : ch32x035_usb.h
  * Author             : WCH
  * Version            : V1.0.0
- * Date               : 2023/04/06
+ * Date               : 2024/04/17
  * Description        : This file contains all the functions prototypes for the USB
  *                      firmware library.
 *********************************************************************************
@@ -298,7 +298,6 @@ extern "C" {
 //   0 1:  single 64 bytes buffer for endpoint 0 receiving & transmittal (OUT & IN endpoint) + 64 bytes buffer for endpoint 4 transmittal (IN endpoint), total=128bytes
 //   1 1:  single 64 bytes buffer for endpoint 0 receiving & transmittal (OUT & IN endpoint)
 //           + 64 bytes buffer for endpoint 4 receiving (OUT endpoint) + 64 bytes buffer for endpoint 4 transmittal (IN endpoint), total=192bytes
-#define USBFS_UEP4_BUF_MOD          0x01
 
 /* R8_UEP2_3_MOD */
 #define USBFS_UEP3_RX_EN            0x80      // enable USB endpoint 3 receiving (OUT)

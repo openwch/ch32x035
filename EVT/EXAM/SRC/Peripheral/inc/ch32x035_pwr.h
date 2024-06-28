@@ -2,7 +2,7 @@
  * File Name          : ch32x035_pwr.h
  * Author             : WCH
  * Version            : V1.0.0
- * Date               : 2023/04/06
+ * Date               : 2024/06/14
  * Description        : This file contains all the functions prototypes for the PWR
  *                      firmware library.
 *********************************************************************************
@@ -20,10 +20,15 @@ extern "C" {
 #include "ch32x035.h"
 
 /* PVD_detection_level  */
-#define PWR_PVDLevel_2V1          ((uint32_t)0x00000000)
-#define PWR_PVDLevel_2V3          ((uint32_t)0x00000020)
-#define PWR_PVDLevel_3V0          ((uint32_t)0x00000040)
-#define PWR_PVDLevel_4V0          ((uint32_t)0x00000060)
+#define PWR_PVDLevel_0            ((uint32_t)0x00000000)
+#define PWR_PVDLevel_1            ((uint32_t)0x00000020)
+#define PWR_PVDLevel_2            ((uint32_t)0x00000040)
+#define PWR_PVDLevel_3            ((uint32_t)0x00000060)
+
+#define PWR_PVDLevel_2V1          PWR_PVDLevel_0
+#define PWR_PVDLevel_2V3          PWR_PVDLevel_1
+#define PWR_PVDLevel_3V0          PWR_PVDLevel_2
+#define PWR_PVDLevel_4V0          PWR_PVDLevel_3
 
 /* STOP_mode_entry */
 #define PWR_STOPEntry_WFI         ((uint8_t)0x01)

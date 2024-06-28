@@ -2,7 +2,7 @@
 * File Name          : main.c
 * Author             : WCH
 * Version            : V1.0.0
-* Date               : 2024/02/21
+* Date               : 2024/06/07
 * Description        : Main program body.
 *********************************************************************************
 * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
@@ -61,7 +61,7 @@ void PVD_Init(void)
     NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
     NVIC_Init(&NVIC_InitStructure);
 
-    PWR_PVDLevelConfig(PWR_PVDLevel_2V3);
+    PWR_PVDLevelConfig(PWR_PVDLevel_1);
 
 }
 
@@ -91,7 +91,7 @@ int main(void)
     printf("Fall asleep...\r\n");
     Delay_Ms(100);
     PWR_EnterSTOPMode(PWR_STOPEntry_WFI);
-    printf("Woke up!!\r\n");
+    printf("Wake up!!\r\n");
 
     while (1)
     {

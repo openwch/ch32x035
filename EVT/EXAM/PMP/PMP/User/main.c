@@ -2,7 +2,7 @@
 * File Name          : main.c
 * Author             : WCH
 * Version            : V1.0.0
-* Date               : 2024/02/21
+* Date               : 2024/06/05
 * Description        : Main program body.
 *********************************************************************************
 * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
@@ -142,7 +142,7 @@ void PMP_Set_Range(uint32_t grop, uint32_t md, uint32_t sd, uint32_t ed)
 
 volatile uint32_t ProtectSec[0x400] = {1, 2, 3, 4, 5, 6, 7};
 
-uint32_t FinalOprateAddress;
+volatile uint32_t FinalOprateAddress;
 /*********************************************************************
  * @fn      main
  *
