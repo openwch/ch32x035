@@ -1,5 +1,5 @@
 
-南京沁恒微电子股份有限公司 2024.06
+南京沁恒微电子股份有限公司 2024.11
 最新资料请到我们的网站上查询
 https://wch.cn
 
@@ -92,6 +92,15 @@ https://wch.cn
   |      |      |      |      |      |      |-- PIOC_Single_Wire.BIN：编译生成的数据文件
   |      |      |      |      |      |      |-- PIOC_Single_Wire.LST：编译生成的列表文件
   |      |      |      |      |      |      |-- PIOC_Single_Wire_inc.h：数据文件转成的hex文件
+  |      |      |      |      |-- PIOC_NEC
+  |      |      |      |      |      |-- PIOC_NEC：PIOC红外遥控例程
+  |      |      |      |      |      |-- Ams
+  |      |      |      |      |      |      |-- PIOC_INC.ASM：PIOC汇编头文件 
+  |      |      |      |      |      |      |-- PIOC_NEC.ASM：NEC汇编源文件
+  |      |      |      |      |      |      |-- PIOC_NEC.BAT：编译脚本
+  |      |      |      |      |      |      |-- PIOC_NEC.BIN：编译生成的数据文件
+  |      |      |      |      |      |      |-- PIOC_NEC.LST：编译生成的列表文件
+  |      |      |      |      |      |      |-- PIOC_NEC.h：数据文件转成的hex文件
   |      |      |      |      |-- Tool_Manual：工具和手册
   |      |      |      |      |      |-- Manual
   |      |      |      |      |      |      |-- CHRISC8B.PDF：RISC8B 内核单片机指令集
@@ -147,6 +156,7 @@ https://wch.cn
   |      |      |      |      |-- Synchro_Timer：定时器同步模式
   |      |      |      |      |-- TIM_DMA：定时器使用DMA例程
   |      |      |      |      |-- Encoder：定时器编码器例程
+  |      |      |      |      |-- TIM_INT：定时器中断例程
   |      |      |      |-- TOUCHKEY
   |      |      |      |      |-- TKey：TouchKey检测例程 
   |      |      |      |-- USART
@@ -159,6 +169,7 @@ https://wch.cn
   |      |      |      |      |-- USART_Printf：串口打印调试例程
   |      |      |      |      |-- USART_SynchronousMode：同步模式，Master/Slave 模式收发例程
   |      |      |      |      |-- USART_Idle_Recv：串口使用DMA进行不定长接收例程
+  |      |      |      |      |-- USART_SmartCard：串口智能卡例程
   |      |      |      |-- USB
   |      |      |      |      |-- USBFS
   |      |      |      |      |      |-- DEVICE

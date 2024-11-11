@@ -156,7 +156,7 @@ void vPortSetupTimerInterrupt( void )
     /* set software is lowest priority */
     NVIC_SetPriority(Software_IRQn,0xf0);
     /* set systick is lowest priority */
-    NVIC_SetPriority(SysTicK_IRQn,0xf0);
+    NVIC_SetPriority(SysTick_IRQn,0xf0);
 
     SysTick->CTLR= 0;
     SysTick->SR  = 0;
@@ -206,13 +206,13 @@ extern void xPortStartFirstTask( void );
 		with pulpino? */
 
         NVIC_EnableIRQ(Software_IRQn);
-        NVIC_EnableIRQ(SysTicK_IRQn);
+        NVIC_EnableIRQ(SysTick_IRQn);
 	}
 	#else
 	{
 		/* Enable external interrupts,global interrupt is enabled at first task start. */
         NVIC_EnableIRQ(Software_IRQn);
-        NVIC_EnableIRQ(SysTicK_IRQn);
+        NVIC_EnableIRQ(SysTick_IRQn);
 	}
 	#endif /* ( configMTIME_BASE_ADDRESS != 0 ) && ( configMTIMECMP_BASE_ADDRESS != 0 ) */
 

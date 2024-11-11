@@ -1,5 +1,5 @@
 
-Nanjing Qinheng Microelectronics Co., Ltd. 2024.06
+Nanjing Qinheng Microelectronics Co., Ltd. 2024.11
 
 https://wch-ic.com
 
@@ -91,6 +91,15 @@ Directory
   |      |      |      |      |      |      |-- PIOC_Single_Wire.BIN: Compile the generated data files
   |      |      |      |      |      |      |-- PIOC_Single_Wire.LST: Compile the generated list file
   |      |      |      |      |      |      |-- PIOC_Single_Wire_inc.h: Data files converted to hex files
+  |      |      |      |      |-- PIOC_NEC
+  |      |      |      |      |      |-- PIOC_NEC: PIOC Infrared Remote Control Routine
+  |      |      |      |      |      |-- Ams
+  |      |      |      |      |      |      |-- PIOC_INC.ASM: PIOC assembly header file 
+  |      |      |      |      |      |      |-- PIOC_NEC.ASM: NEC compilation source file
+  |      |      |      |      |      |      |-- PIOC_NEC.BAT: Compile Scripts
+  |      |      |      |      |      |      |-- PIOC_NEC.BIN: Compile the generated data files
+  |      |      |      |      |      |      |-- PIOC_NEC.LST: Compile the generated list file
+  |      |      |      |      |      |      |-- PIOC_NEC.h: Data files converted to hex files
   |      |      |      |      |-- Tool_Manual
   |      |      |      |      |      |-- Manual
   |      |      |      |      |      |      |-- CHRISC8B.PDF: RISC8B Core Microcontroller Instruction Set
@@ -146,6 +155,7 @@ Directory
   |      |      |      |      |-- Synchro_Timer: timer synchronization mode
   |      |      |      |      |-- TIM_DMA: timer DMA routines
   |      |      |      |      |-- Encode:Timer encoder mode routines
+  |      |      |      |      |-- TIM_INT:Timer interrupt routines
   |      |      |      |-- TOUCHKEY
   |      |      |      |      |-- TKey: TouchKey Detection Routine 
   |      |      |      |-- USART
@@ -158,6 +168,7 @@ Directory
   |      |      |      |      |-- USART_Printf: USART Print debugging routine
   |      |      |      |      |-- USART_SynchronousMode: synchronous mode, master/slave mode, transceiver routine
   |      |      |      |      |-- USART_Idle_Recv: Serial port using DMA for indeterminate length reception routine
+  |      |      |      |      |-- USART_SmartCard: Serial port smart card routine
   |      |      |      |-- USB
   |      |      |      |      |-- USBFS
   |      |      |      |      |      |-- DEVICE

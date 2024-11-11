@@ -2,7 +2,7 @@
  * File Name          : ch32x035_gpio.c
  * Author             : WCH
  * Version            : V1.0.0
- * Date               : 2023/11/06
+ * Date               : 2024/08/06
  * Description        : This file provides all the GPIO firmware functions.
 *********************************************************************************
 * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
@@ -124,9 +124,9 @@ void GPIO_Init(GPIO_TypeDef *GPIOx, GPIO_InitTypeDef *GPIO_InitStruct)
 
     if(((uint32_t)GPIO_InitStruct->GPIO_Pin & ((uint32_t)0x00FF00)) != 0x00)
     {
-       if(((*( uint32_t * )0x1FFFF704) & 0x000000F0) == 0)
-       {
-             if(GPIOx == GPIOA)
+        if(((*( uint32_t * )0x1FFFF704) & 0x000000F0) == 0)
+        {
+                if(GPIOx == GPIOA)
             {
                 tmpreg = CFGHR_tmpA;
             }
@@ -138,11 +138,11 @@ void GPIO_Init(GPIO_TypeDef *GPIOx, GPIO_InitTypeDef *GPIO_InitStruct)
             {
                 tmpreg = CFGHR_tmpC;
             }
-       }
-       else
-       {
-           tmpreg = GPIOx->CFGHR;
-       }
+        }
+        else
+        {
+            tmpreg = GPIOx->CFGHR;
+        }
         for(pinpos = 0x00; pinpos < 0x08; pinpos++)
         {
             pos = (((uint32_t)0x01) << (pinpos + 0x08));
@@ -167,7 +167,7 @@ void GPIO_Init(GPIO_TypeDef *GPIOx, GPIO_InitTypeDef *GPIO_InitStruct)
             }
         }
         GPIOx->CFGHR = tmpreg;
-        if((*( uint32_t * )0x1FFFF704) & (0x000000F0) == 0)
+        if(((*( uint32_t * )0x1FFFF704) & 0x000000F0) == 0)
         {
             if(GPIOx == GPIOA)
             {

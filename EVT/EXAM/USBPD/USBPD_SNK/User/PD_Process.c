@@ -2,7 +2,7 @@
 * File Name          : PD_process.c
 * Author             : WCH
 * Version            : V1.0.0
-* Date               : 2023/04/06
+* Date               : 2024/10/25
 * Description        : This file provides all the PD firmware functions.
 *********************************************************************************
 * Copyright (c) 2023 Nanjing Qinheng Microelectronics Co., Ltd.
@@ -224,9 +224,6 @@ UINT8 PD_Detect( void )
         {
             cmp_cc1 |= bCC_CMP_22;
         }
-        USBPD->PORT_CC1 &= ~( CC_CMP_Mask|PA_CC_AI );
-        USBPD->PORT_CC1 |= CC_CMP_66;
-
 
         USBPD->PORT_CC2 &= ~( CC_CMP_Mask|PA_CC_AI );
         USBPD->PORT_CC2 |= CC_CMP_22;
@@ -235,17 +232,14 @@ UINT8 PD_Detect( void )
         {
             cmp_cc2 |= bCC_CMP_22;
         }
-        USBPD->PORT_CC2 &= ~( CC_CMP_Mask|PA_CC_AI );
-        USBPD->PORT_CC2 |= CC_CMP_66;
-
 
         if (USBPD->PORT_CC1 & CC_PD)
         {
-            if (cmp_cc1 & bCC_CMP_22 == bCC_CMP_22)
+            if ((cmp_cc1 & bCC_CMP_22) == bCC_CMP_22)
             {
                 ret = 1;
             }
-            if (cmp_cc2 & bCC_CMP_22 == bCC_CMP_22)
+            if ((cmp_cc2 & bCC_CMP_22) == bCC_CMP_22)
             {
                 if( ret )
                 {

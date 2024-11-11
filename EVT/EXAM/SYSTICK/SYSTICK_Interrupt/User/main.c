@@ -2,7 +2,7 @@
  * File Name          : main.c
  * Author             : WCH
  * Version            : V1.0.0
- * Date               : 2024/06/05
+ * Date               : 2024/07/08
  * Description        : Main program body.
  *********************************************************************************
  * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
@@ -36,8 +36,8 @@ void SYSTICK_Init_Config(u64 ticks)
     SysTick->CMP = ticks;
     SysTick->CTLR =0xF;
 
-    NVIC_SetPriority(SysTicK_IRQn, 15);
-    NVIC_EnableIRQ(SysTicK_IRQn);
+    NVIC_SetPriority(SysTick_IRQn, 15);
+    NVIC_EnableIRQ(SysTick_IRQn);
 }
 
 void SysTick_Handler(void)

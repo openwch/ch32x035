@@ -928,9 +928,9 @@ void USBFS_Send_Resume(void)
     {
         GPIOC->BSXR = 0x00010002;
         GPIOC->CFGXR = (GPIOC->CFGXR & ~0x000000FF) | 0x00000088;
-        AFIO->CTLR = (AFIO->CTLR & ~UDP_PUE_10K ) | UDP_PUE_10K;
+        AFIO->CTLR = (AFIO->CTLR & ~UDM_PUE_10K ) | UDP_PUE_10K;
         Delay_Ms( 8 );
-        AFIO->CTLR = (AFIO->CTLR & ~UDM_PUE_10K ) | UDM_PUE_10K;
+        AFIO->CTLR = (AFIO->CTLR & ~UDP_PUE_10K ) | UDM_PUE_10K;
         GPIOC->CFGXR = (GPIOC->CFGXR & ~0x000000FF) | 0x00000048;
         GPIOC->BSXR = 0x00020001;
     }
@@ -938,9 +938,9 @@ void USBFS_Send_Resume(void)
     {
         GPIOC->BSXR = 0x00010002;
         GPIOC->CFGXR = (GPIOC->CFGXR & ~0x000000FF) | 0x00000088;
-        AFIO->CTLR = (AFIO->CTLR & ~UDP_PUE_1K5 ) | UDP_PUE_1K5;
+        AFIO->CTLR = (AFIO->CTLR & ~UDM_PUE_1K5 ) | UDP_PUE_1K5;
         Delay_Ms( 8 );
-        AFIO->CTLR = (AFIO->CTLR & ~UDM_PUE_1K5 ) | UDM_PUE_1K5;
+        AFIO->CTLR = (AFIO->CTLR & ~UDP_PUE_1K5 ) | UDM_PUE_1K5;
         GPIOC->CFGXR = (GPIOC->CFGXR & ~0x000000FF) | 0x00000048;
         GPIOC->BSXR = 0x00020001;
     }

@@ -2,7 +2,7 @@
  * File Name          : ch32x035_it.c
  * Author             : WCH
  * Version            : V1.0.0
- * Date               : 2023/12/26
+ * Date               : 2024/10/30
  * Description        : Main Interrupt Service Routines.
 *********************************************************************************
 * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
@@ -49,6 +49,7 @@ void HardFault_Handler(void)
     printf("mcause:%08x\r\n",__get_MCAUSE());
     printf("mtval:%08x\r\n",__get_MTVAL());
     printf("mepc:%08x\r\n",__get_MEPC());
+	NVIC_SystemReset();
 	while (1)
 	{
 
