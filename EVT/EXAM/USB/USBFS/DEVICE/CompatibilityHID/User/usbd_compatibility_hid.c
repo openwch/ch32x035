@@ -330,7 +330,7 @@ void UART2_Tx_Service( void )
  *
  * @return  none
  */
-void HID_Set_Report_Deal()
+void HID_Set_Report_Deal( void )
 {
     uint16_t i;
     if (HID_Set_Report_Flag == SET_REPORT_WAIT_DEAL)

@@ -2,7 +2,7 @@
  * File Name          : main.c
  * Author             : WCH
  * Version            : V1.0.0
- * Date               : 2023/12/26
+ * Date               : 2024/07/22
  * Description        : Main program body.
 *********************************************************************************
 * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
@@ -29,7 +29,7 @@
 #include "PD_Process.h"
 
 void TIM1_UP_IRQHandler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
-
+void EXTI15_8_IRQHandler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
 volatile UINT8  Tim_Ms_Cnt = 0x00;
 
 /*********************************************************************
@@ -61,6 +61,33 @@ void TIM1_Init( u16 arr, u16 psc )
 }
 
 /*********************************************************************
+ * @fn      EXTI_INIT
+ *
+ * @brief   Initialize Wake up EXTI
+ *
+ * @return  none
+ */
+void EXTI_INIT(void)
+{
+    EXTI_InitTypeDef EXTI_InitStructure = {0};
+    /* GPIOC.14 ----> EXTI_Line14 */
+    GPIO_EXTILineConfig(GPIO_PortSourceGPIOC, GPIO_PinSource14);
+    EXTI_InitStructure.EXTI_Line = EXTI_Line14;
+    EXTI_InitStructure.EXTI_Mode = EXTI_Mode_Interrupt;
+    EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Falling;
+    EXTI_InitStructure.EXTI_LineCmd = ENABLE;
+    EXTI_Init(&EXTI_InitStructure);
+
+    /* GPIOC.15 ----> EXTI_Line15 */
+    GPIO_EXTILineConfig(GPIO_PortSourceGPIOC, GPIO_PinSource15);
+    EXTI_InitStructure.EXTI_Line = EXTI_Line15;
+    EXTI_InitStructure.EXTI_Mode = EXTI_Mode_Interrupt;
+    EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Falling;
+    EXTI_InitStructure.EXTI_LineCmd = ENABLE;
+    EXTI_Init(&EXTI_InitStructure);
+}
+
+/*********************************************************************
  * @fn      main
  *
  * @brief   Main program.
@@ -78,6 +105,7 @@ int main(void)
     printf( "PD SRC TEST\r\n" );
     PD_Init( );
     TIM1_Init( 999, 48-1);
+    EXTI_INIT();
     while(1)
     {
         /* Get the calculated timing interval value */
@@ -108,5 +136,30 @@ void TIM1_UP_IRQHandler(void)
     {
         Tim_Ms_Cnt++;
         TIM_ClearITPendingBit( TIM1, TIM_IT_Update );
+    }
+}
+
+/*********************************************************************
+ * @fn      EXTI15_8_IRQHandler
+ *
+ * @brief   This function handles EXTI14 and EXTI15 exception.
+ *
+ * @return  none
+ */
+void EXTI15_8_IRQHandler(void)
+{
+  if(EXTI_GetITStatus(EXTI_Line14)!=RESET)
+  {
+      SystemInit();
+      printf(" Wake_up\r\n");
+      EXTI_ClearITPendingBit(EXTI_Line14);     /* Clear Flag */
+      NVIC_DisableIRQ(EXTI15_8_IRQn);
+  }
+  if(EXTI_GetITStatus(EXTI_Line15)!=RESET)
+  {
+      SystemInit();
+      printf(" Wake_up\r\n");
+      EXTI_ClearITPendingBit(EXTI_Line15);     /* Clear Flag */
+      NVIC_DisableIRQ(EXTI15_8_IRQn);
     }
 }

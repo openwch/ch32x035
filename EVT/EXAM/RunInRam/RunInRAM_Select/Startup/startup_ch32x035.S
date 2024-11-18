@@ -225,7 +225,7 @@ handle_reset:
 	csrw 0x804, t0
 /* Enable global interrupt and configure privileged mode */
    	li t0, 0x88           
-   	csrs mstatus, t0
+   	csrw mstatus, t0
 /* Configure the interrupt vector table recognition mode and entry address mode */
  	la t0, _vector_base
     ori t0, t0, 3           

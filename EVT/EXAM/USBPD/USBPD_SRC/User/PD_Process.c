@@ -2,7 +2,7 @@
 * File Name          : PD_process.c
 * Author             : WCH
 * Version            : V1.0.0
-* Date               : 2023/07/12
+* Date               : 2024/07/22
 * Description        : This file provides all the PD firmware functions.
 *********************************************************************************
 * Copyright (c) 2023 Nanjing Qinheng Microelectronics Co., Ltd.
@@ -648,6 +648,17 @@ void PD_Main_Proc( )
     {
         case STA_DISCONNECT:
             printf("Disconnect\r\n");
+#if(Lowpower==LowpowerON)
+            RCC_APB1PeriphClockCmd(RCC_APB1Periph_PWR, ENABLE);
+            EXTI_ClearITPendingBit(EXTI_Line14);
+            EXTI_ClearITPendingBit(EXTI_Line15);
+            NVIC_EnableIRQ(EXTI15_8_IRQn);
+            printf("Fell deep sleep\r\n");
+            Delay_Ms(100);
+            PWR_EnterSTANDBYMode();
+#elif(Lowpower==LowpowerOff)
+
+#endif
             PD_PHY_Reset( );
             break;
 

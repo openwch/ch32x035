@@ -2,7 +2,7 @@
  * File Name          : ch32x035_it.c
  * Author             : WCH
  * Version            : V1.0.0
- * Date               : 2023/12/26
+ * Date               : 2024/10/30
  * Description        : Main Interrupt Service Routines.
 *********************************************************************************
 * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
@@ -60,6 +60,7 @@ void HardFault_Handler(void)
         default:
             break;
     }
+	NVIC_SystemReset();
     while (1)
     {
     }

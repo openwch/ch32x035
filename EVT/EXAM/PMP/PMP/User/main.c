@@ -2,7 +2,7 @@
 * File Name          : main.c
 * Author             : WCH
 * Version            : V1.0.0
-* Date               : 2024/06/05
+* Date               : 2024/09/20
 * Description        : Main program body.
 *********************************************************************************
 * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
@@ -181,8 +181,8 @@ int main(void)
     for (uint32_t z = (uint32_t)&ProtectSec[sizeof(ProtectSec) / sizeof(*ProtectSec) - 1];
          z > (uint32_t)ProtectSec; z -= 1)
     {
-        FinalOprateAddress = z;
-        *(uint8_t *)z = 0;
+        FinalOprateAddress = *(uint8_t*)z;
+        *(uint8_t*)z = 0;
     }
 
     printf("Operation succeed!!\r\n");

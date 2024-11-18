@@ -893,7 +893,7 @@ void USBFS_IRQHandler( void )
     else if( intflag & USBFS_UIF_SUSPEND )
     {
         USBFSD->INT_FG = USBFS_UIF_SUSPEND;
-
+        Delay_Us(10);
         /* usb suspend interrupt processing */
         if( USBFSD->MIS_ST & USBFS_UMS_SUSPEND )
         {

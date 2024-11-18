@@ -2,7 +2,7 @@
  * File Name          : ch32x035_usb.h
  * Author             : WCH
  * Version            : V1.0.0
- * Date               : 2024/04/17
+ * Date               : 2024/08/02
  * Description        : This file contains all the functions prototypes for the USB
  *                      firmware library.
 *********************************************************************************
@@ -222,6 +222,7 @@ extern "C" {
 /* R8_USB_INT_EN */
 #define USBFS_UIE_DEV_SOF           0x80
 #define USBFS_UIE_DEV_NAK           0x40
+#define USBFS_UID_1_WIRE            0x20
 #define USBFS_UIE_FIFO_OV           0x10
 #define USBFS_UIE_HST_SOF           0x08
 #define USBFS_UIE_SUSPEND           0x04
