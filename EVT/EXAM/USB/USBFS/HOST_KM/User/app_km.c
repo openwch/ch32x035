@@ -1,8 +1,8 @@
 /********************************** (C) COPYRIGHT  *******************************
  * File Name          : app_km.c
  * Author             : WCH
- * Version            : V1.0.0
- * Date               : 2023/04/06
+ * Version            : V1.0.1
+ * Date               : 2025/03/10
  * Description        : The USB host operates the keyboard and mouse.
 *********************************************************************************
 * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
@@ -1169,8 +1169,6 @@ uint8_t HUB_Port_PreEnum2( uint8_t hub_port, uint8_t *pbuf )
                 DUG_PRINTF( "HUB_PE2_ERR1:%x\r\n", s );
                 return s;
             }
-
-            Delay_Ms( 10 );
             do
             {
                 s = HUB_GetPortStatus( RootHubDev.bEp0MaxPks, hub_port, &buf[ 0 ] );
@@ -1180,13 +1178,15 @@ uint8_t HUB_Port_PreEnum2( uint8_t hub_port, uint8_t *pbuf )
                     return s;
                 }
                 retry++;
-            }while( ( !( buf[ 2 ] & 0x10 ) ) && ( retry <= 10 ) );
+                Delay_Ms(1);
+            }while( ( !( buf[ 2 ] & 0x10 ) ) && ( retry <= 100 ) );
         }
         else
         {
             retry = 0;
         }
-        if( retry != 10 )
+        
+        if( retry != 100 )
         {
             retry = 0;
             s = s = HUB_ClearPortFeature( RootHubDev.bEp0MaxPks, hub_port, HUB_C_PORT_RESET  );
