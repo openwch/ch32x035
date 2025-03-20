@@ -1,8 +1,8 @@
 /********************************** (C) COPYRIGHT *******************************
 * File Name          : ch32x035_usbfs_host.c
 * Author             : WCH
-* Version            : V1.0.0
-* Date               : 2023/04/06
+* Version            : V1.0.1
+* Date               : 2025/03/10
 * Description        : USB full-speed port host operation functions.
 *********************************************************************************
 * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
@@ -222,14 +222,22 @@ void USBFSH_SetSelfSpeed( uint8_t speed )
  */
 void USBFSH_ResetRootHubPort( uint8_t mode )
 {
-        USBFSH_SetSelfAddr( 0x00 );
-        USBFSH->HOST_CTRL &= ~0x01;
-        USBFSH_SetSelfSpeed( USB_FULL_SPEED );
-        USBFSH->HOST_CTRL = (USBFSH->HOST_CTRL & ~0x04) | 0x02;
-        Delay_Ms(15);                                                         // 复位时间10mS到20mS
-        USBFSH->HOST_CTRL = USBFSH->HOST_CTRL & ~0x02;
-        Delay_Us(250);
-        USBFSH->INT_FG = 0x01;
+    USBFSH_SetSelfAddr( 0x00 );
+    USBFSH_SetSelfSpeed( 1 );
+    if( mode <= 1 )
+    {
+        USBFSH->HOST_CTRL = ( USBFSH->HOST_CTRL & ~USBFS_UH_LOW_SPEED ) | USBFS_UH_BUS_RESET;
+    }
+    if( mode == 0 )
+    {
+        Delay_Ms( DEF_BUS_RESET_TIME ); // Reset time from 10mS to 20mS
+    }
+    if( mode != 1 )
+    {
+        USBFSH->HOST_CTRL = USBFSH->HOST_CTRL & ~USBFS_UH_BUS_RESET; // End Reset
+    }
+    Delay_Ms( 2 );
+    USBFSH->INT_FG = USBFS_UIF_DETECT;
 }
 
 /*********************************************************************
@@ -651,10 +659,9 @@ uint8_t USBFSH_GetEndpData( uint8_t endp_num, uint8_t *pendp_tog, uint8_t *pbuf,
     s = USBFSH_Transact( ( USB_PID_IN << 4 ) | endp_num, *pendp_tog, 0 );
     if( s == ERR_SUCCESS )
     {
+        *pendp_tog ^= USBFS_UH_R_TOG;
         *plen = USBFSH->RX_LEN;
         memcpy( pbuf, USBFS_RX_Buf, *plen );
-
-        *pendp_tog  ^= USBFS_UH_R_TOG;
     }
     
     return s;

@@ -1,8 +1,8 @@
 /********************************** (C) COPYRIGHT *******************************
 * File Name          : PD_Process.h
 * Author             : WCH
-* Version            : V1.0.0
-* Date               : 2024/07/22
+* Version            : V1.0.1
+* Date               : 2025/03/06
 * Description        : This file contains all the functions prototypes for the
 *                      PD library.
 *********************************************************************************
@@ -17,10 +17,14 @@
 #ifdef __cplusplus
  extern "C" {
 #endif
-
 #define LowpowerON 1
 #define LowpowerOff 0
 #define Lowpower LowpowerON
+
+#define GPIOWake_up 1
+#define USBPDWake_up 0
+#define Wake_up_mode GPIOWake_up
+
 
 /******************************************************************************/
 /* Variable extents */

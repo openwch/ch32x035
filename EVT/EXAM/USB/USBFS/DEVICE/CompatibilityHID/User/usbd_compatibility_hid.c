@@ -2,7 +2,7 @@
  * File Name  : usbd_compatibility_hid.c
  * Author     : WCH
  * Version    : v0.01
- * Date       : 2023/04/06
+ * Date       : 2025/03/10
  * Description:
 *******************************************************************************
 * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
@@ -343,8 +343,7 @@ void HID_Set_Report_Deal( void )
         printf("\r\n");
         HID_Set_Report_Flag = SET_REPORT_DEAL_OVER;
         USBFSD->UEP0_TX_LEN  = 0;
-        USBFSD->UEP0_CTRL_H =  USBFS_UEP_T_RES_ACK | USBFS_UEP_T_TOG;
-
+        USBFSD->UEP0_CTRL_H = (USBFSD->UEP0_CTRL_H & ~USBFS_UEP_T_RES_MASK) | USBFS_UEP_T_TOG | USBFS_UEP_T_RES_ACK;
     }
 }
 

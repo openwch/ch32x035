@@ -1,8 +1,8 @@
 /********************************** (C) COPYRIGHT *******************************
  * File Name          : main.c
  * Author             : WCH
- * Version            : V1.0.0
- * Date               : 2024/07/22
+ * Version            : V1.0.1
+ * Date               : 2025/03/11
  * Description        : Main program body.
 *********************************************************************************
 * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
@@ -16,7 +16,6 @@
  * PD SRC Sample code
  *
  * This sample code may have compatibility issues and is for learning purposes only.
- * If you want to develop a PD project, please contact FAE.
  *
  * Be sure to remove the pull-down resistors on both CC wires when using this Sample code!
  *
@@ -29,7 +28,11 @@
 #include "PD_Process.h"
 
 void TIM1_UP_IRQHandler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
+#if(Wake_up_mode==USBPDWake_up)
+void USBPDWakeUp_IRQHandler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
+#elif(Wake_up_mode==GPIOWake_up)
 void EXTI15_8_IRQHandler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
+#endif
 volatile UINT8  Tim_Ms_Cnt = 0x00;
 
 /*********************************************************************
@@ -69,6 +72,14 @@ void TIM1_Init( u16 arr, u16 psc )
  */
 void EXTI_INIT(void)
 {
+#if(Wake_up_mode==USBPDWake_up)
+    EXTI_InitTypeDef EXTI_InitStructure = {0};
+    EXTI_InitStructure.EXTI_Line = EXTI_Line29;
+    EXTI_InitStructure.EXTI_Mode = EXTI_Mode_Interrupt;
+    EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Falling;
+    EXTI_InitStructure.EXTI_LineCmd = ENABLE;
+    EXTI_Init(&EXTI_InitStructure);
+#elif(Wake_up_mode==GPIOWake_up)
     EXTI_InitTypeDef EXTI_InitStructure = {0};
     /* GPIOC.14 ----> EXTI_Line14 */
     GPIO_EXTILineConfig(GPIO_PortSourceGPIOC, GPIO_PinSource14);
@@ -85,6 +96,8 @@ void EXTI_INIT(void)
     EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Falling;
     EXTI_InitStructure.EXTI_LineCmd = ENABLE;
     EXTI_Init(&EXTI_InitStructure);
+#endif
+
 }
 
 /*********************************************************************
@@ -104,8 +117,8 @@ int main(void)
     printf( "ChipID:%08x\r\n", DBGMCU_GetCHIPID() );
     printf( "PD SRC TEST\r\n" );
     PD_Init( );
-    TIM1_Init( 999, 48-1);
     EXTI_INIT();
+    TIM1_Init( 999, 48-1);
     while(1)
     {
         /* Get the calculated timing interval value */
@@ -151,15 +164,40 @@ void EXTI15_8_IRQHandler(void)
   if(EXTI_GetITStatus(EXTI_Line14)!=RESET)
   {
       SystemInit();
-      printf(" Wake_up\r\n");
+      printf(" GPIO Wake_up\r\n");
       EXTI_ClearITPendingBit(EXTI_Line14);     /* Clear Flag */
       NVIC_DisableIRQ(EXTI15_8_IRQn);
   }
   if(EXTI_GetITStatus(EXTI_Line15)!=RESET)
   {
       SystemInit();
-      printf(" Wake_up\r\n");
+      printf(" GPIO Wake_up\r\n");
       EXTI_ClearITPendingBit(EXTI_Line15);     /* Clear Flag */
       NVIC_DisableIRQ(EXTI15_8_IRQn);
     }
+
 }
+
+/*********************************************************************
+ * @fn      USBPDWakeUp_IRQHandler
+ *
+ * @brief   This function handles USBPD WakeUp exception.
+ *
+ * @return  none
+ */
+void USBPDWakeUp_IRQHandler(void)
+{
+  if(EXTI_GetITStatus(EXTI_Line29)!=RESET)
+  {
+      SystemInit();
+      EXTI_ClearITPendingBit(EXTI_Line29);     /* Clear Flag */
+      NVIC_DisableIRQ(USBPDWakeUp_IRQn);
+      USBPD->CONFIG&=~IE_PD_IO;
+      printf("USBPDWakeUp\r\n");
+      USBPD->PORT_CC1&=~(CC_PU_Mask);
+      USBPD->PORT_CC2&=~(CC_PU_Mask);
+      USBPD->PORT_CC1|=CC_PU_330;
+      USBPD->PORT_CC2|=CC_PU_330;
+  }
+}
+
