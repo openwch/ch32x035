@@ -1,8 +1,8 @@
 /********************************** (C) COPYRIGHT *******************************
 * File Name          : PD_process.c
 * Author             : WCH
-* Version            : V1.0.0
-* Date               : 2024/07/22
+* Version            : V1.0.1
+* Date               : 2025/03/06
 * Description        : This file provides all the PD firmware functions.
 *********************************************************************************
 * Copyright (c) 2023 Nanjing Qinheng Microelectronics Co., Ltd.
@@ -334,6 +334,7 @@ UINT8 PD_Detect( void )
                   ret = 1;
                 }
             }
+
             if ((((cmp_cc2 & bCC_CMP_66) == bCC_CMP_66) & ((cmp_cc2 & bCC_CMP_220) == 0x00)) == 1)
             {
                 if(ret)
@@ -649,13 +650,31 @@ void PD_Main_Proc( )
         case STA_DISCONNECT:
             printf("Disconnect\r\n");
 #if(Lowpower==LowpowerON)
+#if(Wake_up_mode==USBPDWake_up)
+            RCC_APB1PeriphClockCmd(RCC_APB1Periph_PWR, ENABLE);
+            EXTI_ClearITPendingBit(EXTI_Line29);
+            USBPD->PORT_CC1&=~(CC_PU_Mask);
+            USBPD->PORT_CC2&=~(CC_PU_Mask);
+            USBPD->PORT_CC1|=CC_PU_80;
+            USBPD->PORT_CC2|=CC_PU_80;
+            USBPD->PORT_CC1|=CC_CMP_123;
+            USBPD->PORT_CC2|=CC_CMP_123;
+            USBPD->CONFIG&=~WAKE_POLAR;
+            NVIC_DisableIRQ(USBPD_IRQn);
+            USBPD->CONFIG|=IE_PD_IO;
+            printf("Fell deep sleep\r\n");
+            NVIC_EnableIRQ(USBPDWakeUp_IRQn);
+            Delay_Ms(100);
+            PWR_EnterSTANDBYMode();
+#elif(Wake_up_mode==GPIOWake_up)
             RCC_APB1PeriphClockCmd(RCC_APB1Periph_PWR, ENABLE);
             EXTI_ClearITPendingBit(EXTI_Line14);
             EXTI_ClearITPendingBit(EXTI_Line15);
-            NVIC_EnableIRQ(EXTI15_8_IRQn);
             printf("Fell deep sleep\r\n");
+            NVIC_EnableIRQ(EXTI15_8_IRQn);
             Delay_Ms(100);
             PWR_EnterSTANDBYMode();
+#endif
 #elif(Lowpower==LowpowerOff)
 
 #endif

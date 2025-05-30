@@ -1,0 +1,16 @@
+Mcu Type=CH32X035
+Address=0x08000000
+Target Path=obj/CH32X035C8T6++.hex
+Erase All=true
+Program=true
+Verify=true
+Reset=true
+
+Vendor=WCH
+Link=WCH-Link
+Toolchain=RISC-V
+Series=CH32X035
+MCU=CH32X035C8T6
+Description=Website: https://www.wch.cn/products/CH32X035.html?\nROM(byte): 62K, SRAM(byte): 20K, CHIP PINS: 48, GPIO PORTS: 46.\nWCH CH32X035 series of mainstream MCUs covers the needs of a large variety of applications in the industrial,medical and consumer markets. High performance with first-class peripherals and low-power,low-voltage operation is paired with a high level of integration at accessible prices with a simple architecture and easy-to-use tools.
+
+PeripheralVersion=1.8
