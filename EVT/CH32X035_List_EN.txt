@@ -35,6 +35,7 @@ Directory
   |      |      |      |      |-- EXTI0: External Interrupt Routine
   |      |      |      |-- FLASH
   |      |      |      |      |-- FLASH_Program: FLASH erase/read/write, and fast programming 
+  |      |      |      |      |-- BootAsUser:Boot Flash used for user flash
   |      |      |      |-- FreeRTOS
   |      |      |      |      |-- FreeRTOS_Core: FreeRTOS migration routines
   |      |      |      |-- GPIO

@@ -1,8 +1,8 @@
 /********************************** (C) COPYRIGHT *******************************
  * File Name          : main.c
  * Author             : WCH
- * Version            : V1.0.0
- * Date               : 2023/12/26
+ * Version            : V1.0.1
+ * Date               : 2025/08/13
  * Description        : Main program body.
  *********************************************************************************
  * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
@@ -16,6 +16,10 @@
  *EXTI_Line0(PA0)
  *This routine demonstrates WFI enters sleep mode, PA0 pin input low level triggers external
  *interrupt EXTI_Line0 to exit sleep mode,Program execution continues after wake-up.
+ *@Note
+ * For the small package model of the chip, there are some pins that have not been led out compared to the largest package, 
+ * or some pins that have been packaged but not used. These pins need to be set as pull-down\up inputs to reduce power 
+ * consumption.Please refer to the routine configuration for details. 
  *
  */
 
@@ -42,7 +46,6 @@ void EXTI0_INT_INIT(void)
 
     GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0;
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU;
-    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
     GPIO_Init(GPIOA, &GPIO_InitStructure);
 
     /* GPIOA.0 ----> EXTI_Line0 */
@@ -69,9 +72,23 @@ void EXTI0_INT_INIT(void)
  */
 int main(void)
 {
+    GPIO_InitTypeDef GPIO_InitStructure = {0};
     NVIC_PriorityGroupConfig(NVIC_PriorityGroup_1);
     SystemCoreClockUpdate();
     Delay_Init();
+    Delay_Ms(1000);
+
+     /* To reduce power consumption, unused GPIOs need to be set as pull-up inputs. */
+    RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA | RCC_APB2Periph_GPIOB | RCC_APB2Periph_GPIOC | RCC_APB2Periph_AFIO, ENABLE);
+    RCC_APB1PeriphClockCmd(RCC_APB1Periph_PWR, ENABLE);
+    GPIO_PinRemapConfig(GPIO_Remap_SWJ_Disable, ENABLE);
+
+    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_All;
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU;
+    GPIO_Init(GPIOA, &GPIO_InitStructure);
+    GPIO_Init(GPIOB, &GPIO_InitStructure);
+    GPIO_Init(GPIOC, &GPIO_InitStructure);
+    
     USART_Printf_Init(115200);
     printf("SystemClk:%d\r\n", SystemCoreClock);
     printf( "ChipID:%08x\r\n", DBGMCU_GetCHIPID() );
