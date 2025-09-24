@@ -36,6 +36,7 @@ https://wch.cn
   |      |      |      |      |-- EXTI0：外部中断线例程 
   |      |      |      |-- FLASH
   |      |      |      |      |-- FLASH_Program：FLASH的擦/读/写，以及快速编程  
+  |      |      |      |      |-- BootAsUser：Boot Flash 用作用户区
   |      |      |      |-- FreeRTOS
   |      |      |      |      |-- FreeRTOS_Core：FreeRTOS移植例程
   |      |      |      |-- GPIO

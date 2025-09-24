@@ -22,8 +22,8 @@ extern "C" {
 #define HSI_VALUE              ((uint32_t)48000000) /* Value of the Internal oscillator in Hz */
 
 /* Standard Peripheral Library version number */
-#define __STDPERIPH_VERSION_MAIN   (0x01) /* [15:8] main version */
-#define __STDPERIPH_VERSION_SUB    (0x09) /* [7:0] sub version */
+#define __STDPERIPH_VERSION_MAIN   (0x02) /* [15:8] main version */
+#define __STDPERIPH_VERSION_SUB    (0x00) /* [7:0] sub version */
 #define __STDPERIPH_VERSION        ((__STDPERIPH_VERSION_MAIN << 8)\
                                     |(__STDPERIPH_VERSION_SUB << 0))
 

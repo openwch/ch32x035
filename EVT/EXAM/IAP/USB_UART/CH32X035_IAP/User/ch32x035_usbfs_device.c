@@ -1,8 +1,8 @@
 /********************************** (C) COPYRIGHT *******************************
 * File Name          : ch32x035_usbfs_device.c
 * Author             : WCH
-* Version            : V1.0.0
-* Date               : 2024/03/07
+* Version            : V1.0.1
+* Date               : 2025/08/07
 * Description        : This file provides all the USBFS firmware functions.
 *********************************************************************************
 * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
@@ -46,7 +46,7 @@ uint8_t* pEP2_RAM_Addr;                       //ep2_out(64)+ep2_in(64)
 /******************************************************************************/
 /* Device Descriptor */
 const uint8_t MyDevDescrHD[] = { 0x12, 0x01, 0x10, 0x01, 0xFF, 0x80, 0x55,
-        DevEP0SIZE, 0x48, 0x43, 0xe0, 0x55,  //USB MODULE
+        DevEP0SIZE, 0x86, 0x1A, 0xe0, 0x55,  //USB MODULE
         (u8) Version_Num, (u8) (Version_Num >> 8),
         0x00, 0x00, 0x00, 0x01 };
 

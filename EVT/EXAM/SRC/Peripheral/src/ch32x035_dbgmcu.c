@@ -1,8 +1,8 @@
 /********************************** (C) COPYRIGHT  *******************************
  * File Name          : ch32x035_dbgmcu.c
  * Author             : WCH
- * Version            : V1.0.0
- * Date               : 2023/04/06
+ * Version            : V1.0.1
+ * Date               : 2025/09/05
  * Description        : This file provides all the DBGMCU firmware functions.
 *********************************************************************************
 * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
@@ -22,7 +22,7 @@
  */
 uint32_t DBGMCU_GetREVID(void)
 {
-	return ((*(uint32_t *)0x1FFFF704) >> 16);
+	return ((*(uint32_t *)0x1FFFF704) & IDCODE_DEVID_MASK);
 }
 
 /*********************************************************************
@@ -34,7 +34,7 @@ uint32_t DBGMCU_GetREVID(void)
  */
 uint32_t DBGMCU_GetDEVID(void)
 {
-	return ((*(uint32_t *)0x1FFFF704) & IDCODE_DEVID_MASK);
+	return ((*(uint32_t *)0x1FFFF704) >> 16);
 }
 
 /*********************************************************************
@@ -106,13 +106,13 @@ void DBGMCU_Config(uint32_t DBGMCU_Periph, FunctionalState NewState)
  *
  * @return Device identifier.
  *          ChipID List-
- *	CH32X035R8T6-0x035006x1
- *  CH32X035C8T6-0x035106x1
- *  CH32X035F8U6-0x035E06x1
- *  CH32X035G8U6-0x035606x1
- *  CH32X035G8R6-0x035B06x1
- *  CH32X035F7P6-0x035706x1
- *  CH32X033F8P6-0x035A06x1
+ *	CH32X035R8T-0x035006x1
+ *  CH32X035C8T-0x035106x1
+ *  CH32X035F8U-0x035E06x1
+ *  CH32X035G8U-0x035606x1
+ *  CH32X035G8R-0x035B06x1
+ *  CH32X035F7P-0x035706x1
+ *  CH32X033F8P-0x035A06x1
  */
 uint32_t DBGMCU_GetCHIPID( void )
 {

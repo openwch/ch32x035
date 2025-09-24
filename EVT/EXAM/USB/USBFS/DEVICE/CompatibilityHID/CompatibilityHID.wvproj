@@ -7,7 +7,7 @@
 			"toolchain": "RISC-V",
 			"series": "CH32X035",
 			"rtos": "NoneOS",
-			"mcu": "CH32X035R8T6",
+			"mcu": "CH32X035R8T",
 			"description": "ROM(byte): 62K, SRAM(byte): 20K, CHIP PINS: 64, GPIO PORTS: 60.\\nWCH CH32X035 series of mainstream MCUs covers the needs of a large variety of applications in the industrial,medical and consumer markets. High performance with first-class peripherals and low-power,low-voltage operation is paired with a high level of integration at accessible prices with a simple architecture and easy-to-use tools.",
 			"link": "WCH-Link",
 			"peripheral_version": "1.5"

@@ -1,8 +1,8 @@
 /********************************** (C) COPYRIGHT *******************************
  * File Name          : main.c
  * Author             : WCH
- * Version            : V1.0.0
- * Date               : 2023/04/06
+ * Version            : V1.0.1
+ * Date               : 2025/07/16
  * Description        : Main program body.
  *********************************************************************************
  * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
@@ -15,7 +15,7 @@
  *external trigger routines to start two timers synchronously:
  *TIM1_CH1(PB9)
  *This example demonstrates the TIM_CH1(PB9) pin pull-up input, the pin detects a
- *rising edge, then starts TIM1 and TIM2.
+ *falling edge, then starts TIM1 and TIM2.
  *
  */
 
