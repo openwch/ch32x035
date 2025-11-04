@@ -44,9 +44,9 @@ u8 pbuf[] = {0x80,0x40,0xC0,0x20,0xA0};
 u8 RxBuffer1[TxSize1] = {0};                                                 /* USART2 Using  */
 u8 RxBuffer2[TxSize2] = {0};                                                 /* SPI1   Using  */
 
-u8 TxCnt1 = 0, RxCnt1 = 0;
-u8 TxCnt2 = 0, RxCnt2 = 0;
-u8 Tempdata = 0x00;
+vu8 TxCnt1 = 0, RxCnt1 = 0;
+vu8 TxCnt2 = 0, RxCnt2 = 0;
+vu8 Tempdata = 0x00;
 
 TestStatus TransferStatus1 = FAILED;
 TestStatus TransferStatus2 = FAILED;

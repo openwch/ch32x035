@@ -1,8 +1,8 @@
 /********************************** (C) COPYRIGHT *******************************
  * File Name          : main.c
  * Author             : WCH
- * Version            : V1.0.2
- * Date               : 2025/01/09
+ * Version            : V1.0.3
+ * Date               : 2025/10/29
  * Description        : Main program body.
  *********************************************************************************
  * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
@@ -87,16 +87,10 @@ void ADC_Function_Init(void)
  */
 void TIM1_PWM_In(u16 arr, u16 psc, u16 ccp)
 {
-    GPIO_InitTypeDef        GPIO_InitStructure = {0};
     TIM_OCInitTypeDef       TIM_OCInitStructure = {0};
     TIM_TimeBaseInitTypeDef TIM_TimeBaseInitStructure = {0};
 
     RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOC | RCC_APB2Periph_TIM1, ENABLE);
-
-    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_16;
-    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
-    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-    GPIO_Init(GPIOC, &GPIO_InitStructure);
 
     TIM_TimeBaseInitStructure.TIM_Period = arr;
     TIM_TimeBaseInitStructure.TIM_Prescaler = psc;
@@ -111,9 +105,6 @@ void TIM1_PWM_In(u16 arr, u16 psc, u16 ccp)
     TIM_OC4Init(TIM1, &TIM_OCInitStructure);
 
     TIM_CtrlPWMOutputs(TIM1, ENABLE);
-    TIM_OC4PreloadConfig(TIM1, TIM_OCPreload_Disable);
-    TIM_ARRPreloadConfig(TIM1, ENABLE);
-    TIM_SelectOutputTrigger(TIM1, TIM_TRGOSource_Update);
     TIM_Cmd(TIM1, ENABLE);
 }
 

@@ -1,8 +1,8 @@
 /********************************** (C) COPYRIGHT  *******************************
  * File Name          : libCH32_USBPD.h
  * Author             : WCH
- * Version            : V1.0.0
- * Date               : 2023/04/06
+ * Version            : V1.0.1
+ * Date               : 2025/10/27
  * Description        :
 *********************************************************************************
 * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
@@ -183,7 +183,7 @@ extern st_Extended_Header *rxExtHeader;
 extern st_PD_PHY PD_PHY;
 extern st_PD_DEVICE PD_DEVICE;
 extern u32 SrcCap[7];
-extern u8 SrcCapCnt;
+extern vu8 SrcCapCnt;
 extern u32 SinkCap[7];
-extern u8 SinkCapCnt;
+extern vu8 SinkCapCnt;
 #endif /* USBPD_LIBCH32_USBPD_H_ */

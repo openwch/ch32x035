@@ -1,8 +1,8 @@
 /********************************** (C) COPYRIGHT *******************************
  * File Name          : main.c
  * Author             : WCH
- * Version            : V1.0.0
- * Date               : 2023/12/26
+ * Version            : V1.0.1
+ * Date               : 2025/10/29
  * Description        : Main program body.
  *********************************************************************************
  * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
@@ -12,13 +12,16 @@
 
 /*
  *@Note
- *OPA interrupt routine:
- *OPA2_CHP0--PA7
+ *OPA IRQ routine:
+ *OPA2_CHP --PA7  PB3  PB7
  *OPA2_CHN1--PA5
  *OPA2_OUT--PA4
  *
- *In this example, PA5 and PA4 are short-circuited, and the external voltage is input from PA7,
- *when PA7 high voltage enter the OPA interrupt when the OPA in query function
+ *The number of positive terminals polling is 3, and the polling interval is 81uS.
+ *When doing comparison follow-up, input different voltage values , the three positive
+ *directions, and the output terminal voltage will output the positive terminal voltage according to the polling interval.
+ *according to the polling interval.when PA7 high voltage enter the OPA interrupt when the OPA in query function
+ *
  */
 
 #include "debug.h"
@@ -37,10 +40,18 @@ void OPA2_Init( void )
     OPA_InitTypeDef  OPA_InitStructure = {0};
     NVIC_InitTypeDef NVIC_InitStructure = {0};
 
-    RCC_APB2PeriphClockCmd( RCC_APB2Periph_GPIOA, ENABLE );
-    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_7|GPIO_Pin_5|GPIO_Pin_4;
+    RCC_APB2PeriphClockCmd( RCC_APB2Periph_GPIOA|RCC_APB2Periph_GPIOB, ENABLE );
+    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_7|GPIO_Pin_5;
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AIN;
+    GPIO_Init( GPIOA, &GPIO_InitStructure );
+
+    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_4;
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;
     GPIO_Init( GPIOA, &GPIO_InitStructure );
+
+    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_7|GPIO_Pin_3;
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AIN;
+    GPIO_Init( GPIOB, &GPIO_InitStructure );
 
     NVIC_InitStructure.NVIC_IRQChannel = OPA_IRQn;
     NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;

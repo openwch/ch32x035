@@ -1,8 +1,8 @@
 /********************************** (C) COPYRIGHT *******************************
 * File Name          : PD_process.c
 * Author             : WCH
-* Version            : V1.0.1
-* Date               : 2025/03/06
+* Version            : V1.0.2
+* Date               : 2025/10/27
 * Description        : This file provides all the PD firmware functions.
 *********************************************************************************
 * Copyright (c) 2023 Nanjing Qinheng Microelectronics Co., Ltd.
@@ -22,12 +22,12 @@ __attribute__ ((aligned(4))) uint8_t PD_Tx_Buf[ 34 ];                           
 /******************************************************************************/
 UINT8 PD_Ack_Buf[ 2 ];                                                          /* PD-ACK buffer */
 
-UINT8  Tmr_Ms_Cnt_Last;                                                         /* System timer millisecond timing final value */
-UINT8  Tmr_Ms_Dlt;                                                              /* System timer millisecond timing this interval value */
+__IO UINT8  Tmr_Ms_Cnt_Last;                                                         /* System timer millisecond timing final value */
+__IO UINT8  Tmr_Ms_Dlt;                                                              /* System timer millisecond timing this interval value */
 PD_CONTROL PD_Ctl;                                                              /* PD Control Related Structures */
 UINT8  Adapter_SrcCap[ 30 ];                                                    /* Contents of the SrcCap message for the adapter */
 
-UINT8  PDO_Len;
+__IO UINT8  PDO_Len;
 
 /* SrcCap Table */
 UINT8 SrcCap_5V3A_Tab[ 4 ]  = { 0X2C, 0X91, 0X01, 0X3E };

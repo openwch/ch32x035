@@ -1,8 +1,8 @@
 /********************************** (C) COPYRIGHT *******************************
  * File Name          : main.c
  * Author             : WCH
- * Version            : V1.0.0
- * Date               : 2023/12/26
+ * Version            : V1.0.1
+ * Date               : 2025/10/29
  * Description        : Main program body.
  *********************************************************************************
  * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
@@ -13,7 +13,7 @@
 /*
  *@Note
  *OPA2 is used as a voltage follower output, the external voltage
- *is output to OPA1, and the ADC samples OPA1
+ *is output to OPA2, and the ADC samples OPA2
  *OPA2_CHP0--PA7
  *OPA2_CHN1--PA5
  *OPA2_OUT--PA4
@@ -39,7 +39,7 @@ void OPA2_Init( void )
 
     RCC_APB2PeriphClockCmd( RCC_APB2Periph_GPIOA, ENABLE );
     GPIO_InitStructure.GPIO_Pin = GPIO_Pin_7|GPIO_Pin_5;
-    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AIN;
     GPIO_Init( GPIOA, &GPIO_InitStructure );
 
     OPA_InitStructure.OPA_NUM=OPA2;

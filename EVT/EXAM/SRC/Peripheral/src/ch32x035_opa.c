@@ -1,8 +1,8 @@
 /********************************** (C) COPYRIGHT  *******************************
  * File Name          : ch32x035_opa.c
  * Author             : WCH
- * Version            : V1.0.0
- * Date               : 2023/04/06
+ * Version            : V1.0.1
+ * Date               : 2025/10/23
  * Description        : This file provides all the OPA firmware functions.
 *********************************************************************************
 * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
@@ -116,8 +116,8 @@ void OPA_Init(OPA_InitTypeDef *OPA_InitStruct)
 
     if(OPA_InitStruct->OPA_NUM == OPA1)
     {
-        tmp1 &= 0xFCFF;
-        tmp2 &= 0xFFFF0001;
+        tmp1 &= 0xF9FF;
+        tmp2 &= 0xFFFFFE05;
 
         tmp1 |= (OPA_InitStruct->POLL_NUM << 9);
         tmp2 |= (OPA_InitStruct->Mode << 1) | (OPA_InitStruct->PSEL << 3)
@@ -125,19 +125,20 @@ void OPA_Init(OPA_InitTypeDef *OPA_InitStruct)
     }
     else if(OPA_InitStruct->OPA_NUM == OPA2)
     {
-        tmp1 &= 0xF3FF;
-        tmp2 &= 0x0001FFFF;
+        tmp1 &= 0xE7FF;
+        tmp2 &= 0xFE05FFFF;
 
         tmp1 |= (OPA_InitStruct->POLL_NUM << 11);
         tmp2 |= (OPA_InitStruct->Mode << 17) | (OPA_InitStruct->PSEL << 19)
                 | (OPA_InitStruct->FB << 21) | (OPA_InitStruct->NSEL << 22);
     }
-
+	
+	tmp0 &= 0xF080;
     tmp0 |= (OPA_InitStruct->PSEL_POLL) | (OPA_InitStruct->BKIN_EN << 2)
                      | (OPA_InitStruct->RST_EN << 4) | (OPA_InitStruct->BKIN_SEL << 6)
                      | (OPA_InitStruct->OUT_IE << 8) | (OPA_InitStruct->CNT_IE << 10)
                      | (OPA_InitStruct->NMI_IE << 11);
-    tmp1 &= 0xFF00;
+    tmp1 &= 0xFE00;
     tmp1 |= OPA_InitStruct->OPA_POLL_Interval;
 
     OPA->CFGR1 = tmp0;

@@ -56,7 +56,7 @@
 */
 /* Save caller registers */
 .macro SAVE_CONTEXT
-    csrrw sp, CSR_MSCRATCH, sp     /* 把中断栈给sp,并把线程栈存到mscratch */
+    csrrw sp, CSR_MSCRATCH, sp     /* Assign the interrupt stack to sp, and store the thread stack in mscratch */
     /* Allocate stack space for context saving */
 #ifndef __riscv_32e
     addi sp, sp, -20*REGBYTES
@@ -120,7 +120,7 @@
     /* De-allocate the stack space */
     addi sp, sp, 14*REGBYTES
 #endif /* __riscv_32e */
-    csrrw sp, CSR_MSCRATCH, sp         /* 退出后把线程栈给sp,把中断栈存入mscratch */
+    csrrw sp, CSR_MSCRATCH, sp         /* After exiting, pass the thread stack to sp, and store the interrupt stack in mscratch */
 .endm
 
 
@@ -155,7 +155,7 @@ irq_entry:
     /* Critical section with interrupts disabled */
     DISABLE_MIE
 /*************************/
-    /* jal  irq_handler */   /* 跳转到中断处理函数  */
+    /* jal  irq_handler */   /* Jump to the interrupt handling function  */
 /*************************/
     la t0, g_intCount
     lw t1, 0(t0)

@@ -1,8 +1,8 @@
 /********************************** (C) COPYRIGHT *******************************
  * File Name          : main.c
  * Author             : WCH
- * Version            : V1.0.0
- * Date               : 2024/06/05
+ * Version            : V1.0.1
+ * Date               : 2025/10/27
  * Description        : Main program body.
 *********************************************************************************
 * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
@@ -35,10 +35,10 @@ void PIOC_IRQHandler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
 volatile uint8_t  PIOC_TX_FLAG=0;
 volatile uint16_t PIOC_TX_RemainLEN=0;
 volatile uint8_t  *PIOC_TX_ADDR;
-uint32_t PIOC_baudrate=921600;
-uint8_t  PIOC_parity=0;
-uint8_t  PIOC_stopbits=0;
-uint8_t  PIOC_word_lenth=8;
+volatile uint32_t PIOC_baudrate=921600;
+volatile uint8_t  PIOC_parity=0;
+volatile uint8_t  PIOC_stopbits=0;
+volatile uint8_t  PIOC_word_lenth=8;
 u8 rx_buf[100]={0};
 volatile u8 rx=0;
 

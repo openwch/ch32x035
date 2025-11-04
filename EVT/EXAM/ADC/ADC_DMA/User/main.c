@@ -1,8 +1,8 @@
 /********************************** (C) COPYRIGHT *******************************
  * File Name          : main.c
  * Author             : WCH
- * Version            : V1.0.0
- * Date               : 2023/04/06
+ * Version            : V1.0.1
+ * Date               : 2025/10/29
  * Description        : Main program body.
  *********************************************************************************
  * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
@@ -152,7 +152,9 @@ int main(void)
 
     ADC_RegularChannelConfig(ADC1, ADC_Channel_1, 1, ADC_SampleTime_11Cycles);
     ADC_SoftwareStartConvCmd(ADC1, ENABLE);
-    Delay_Ms(50);
+    while(DMA_GetFlagStatus(DMA1_FLAG_TC1) == RESET) /* Wait until ADC DMA1 Transfer Complete */
+    {
+    }
     ADC_SoftwareStartConvCmd(ADC1, DISABLE);
 
     for(i = 0; i < 1024; i++){

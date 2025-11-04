@@ -1,8 +1,8 @@
 /********************************** (C) COPYRIGHT  *******************************
  * File Name          : ch32x035_flash.h
  * Author             : WCH
- * Version            : V1.0.1
- * Date               : 2025/04/16
+ * Version            : V1.0.2
+ * Date               : 2025/10/29
  * Description        : This file contains all the functions prototypes for the FLASH
  *                      firmware library.
 *********************************************************************************
@@ -113,7 +113,7 @@ typedef enum
 #define Start_Mode_BOOT                  ((uint32_t)0x00004000)
 
 
-/*Functions used for all CH32V00x devices*/
+/*Functions used for all CH32X035 devices*/
 void         FLASH_SetLatency(uint32_t FLASH_Latency);
 void         FLASH_Unlock(void);
 void         FLASH_Lock(void);

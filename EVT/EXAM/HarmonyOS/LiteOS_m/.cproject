@@ -137,8 +137,6 @@
 							</tool>
 						</toolChain>
 					</folderInfo>
-					<fileInfo id="ilg.gnumcueclipse.managedbuild.cross.riscv.config.elf.release.1008047074.1630706625" name="ch643_usb.h" rcbsApplicability="disable" resourcePath="Peripheral/inc/ch643_usb.h" toolsToInvoke=""/>
-					<fileInfo id="ilg.gnumcueclipse.managedbuild.cross.riscv.config.elf.release.1008047074.529083857" name="ch643_usb_host.h" rcbsApplicability="disable" resourcePath="Peripheral/inc/ch643_usb_host.h" toolsToInvoke=""/>
 					<folderInfo id="ilg.gnumcueclipse.managedbuild.cross.riscv.config.elf.release.1008047074.334436054" name="/" resourcePath="LiteOS/components/exchook">
 						<toolChain id="ilg.gnumcueclipse.managedbuild.cross.riscv.toolchain.elf.release.2062228612" name="RISC-V Cross GCC" superClass="ilg.gnumcueclipse.managedbuild.cross.riscv.toolchain.elf.release" unusedChildren="">
 							<option id="ilg.gnumcueclipse.managedbuild.cross.riscv.option.addtools.createflash.1311852988.1812227985" name="Create flash image" superClass="ilg.gnumcueclipse.managedbuild.cross.riscv.option.addtools.createflash.1311852988"/>
@@ -232,7 +230,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="Startup/startup_ch32x035_3.3v.S|Startup/startup_ch643_D8W.S|Startup/startup_ch643.S|LiteOS/components/cppsupport|User/task_sample.c|LiteOS/kal|Peripheral|LiteOS/third_party/cmsis/CMSIS/Core|LiteOS/components/exchook|LiteOS/third_party/cmsis|User/task_sample.h|LiteOS/components/net|Debug|LiteOS/testsuits|LiteOS/components/fs" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry excluding="LiteOS/components/cppsupport|User/task_sample.c|LiteOS/kal|Peripheral|LiteOS/third_party/cmsis/CMSIS/Core|LiteOS/components/exchook|LiteOS/third_party/cmsis|User/task_sample.h|LiteOS/components/net|Debug|LiteOS/testsuits|LiteOS/components/fs" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Debug"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Peripheral"/>
 					</sourceEntries>

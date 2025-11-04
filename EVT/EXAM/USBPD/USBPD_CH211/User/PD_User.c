@@ -1,8 +1,8 @@
 /********************************** (C) COPYRIGHT *******************************
 * File Name          : PD_User.C
 * Author             : WCH
-* Version            : V1.0
-* Date               : 2022/04/28
+* Version            : V1.0.1
+* Date               : 2025/10/27
 * Description        : 
 *********************************************************************************
 * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
@@ -17,11 +17,11 @@
 
 //The device acts as a source, sending the Source_Capabilities message content
 u32 SrcCap[] = 	{0x3A21912C,};	//5V3A
-u8 SrcCapCnt = 1;
+vu8 SrcCapCnt = 1;
 
 //The device acts as a sink, sending the content of the Sink_Capabilities message.
 u32 SinkCap[] = {0x2A01912C,};	//5V3A
-u8 SinkCapCnt = 1;
+vu8 SinkCapCnt = 1;
 
 /*********************************************************************
  * @fn      PD_User_Snk_DevIn

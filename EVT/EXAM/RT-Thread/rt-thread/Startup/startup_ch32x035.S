@@ -1,9 +1,9 @@
 ;/********************************** (C) COPYRIGHT *******************************
 ;* File Name          : startup_ch32x035.s
 ;* Author             : WCH
-;* Version            : V1.0.1
-;* Date               : 2023/12/26
-;* Description        : vector table for eclipse toolchain.
+;* Version            : V1.0.2
+;* Date               : 2025/10/27
+;* Description        : CH32X035 StartUp File.
 ;*********************************************************************************
 ;* Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
 ;* Attention: This software (modified or not) and binary are used for 

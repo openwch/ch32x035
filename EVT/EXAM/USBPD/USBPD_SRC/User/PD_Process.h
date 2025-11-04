@@ -1,8 +1,8 @@
 /********************************** (C) COPYRIGHT *******************************
 * File Name          : PD_Process.h
 * Author             : WCH
-* Version            : V1.0.1
-* Date               : 2025/03/06
+* Version            : V1.0.2
+* Date               : 2025/10/27
 * Description        : This file contains all the functions prototypes for the
 *                      PD library.
 *********************************************************************************
@@ -28,11 +28,11 @@
 
 /******************************************************************************/
 /* Variable extents */
-extern UINT8  Tmr_Ms_Cnt_Last;
-extern UINT8  Tmr_Ms_Dlt;
+extern __IO UINT8  Tmr_Ms_Cnt_Last;
+extern __IO UINT8  Tmr_Ms_Dlt;
 extern volatile UINT8  Tim_Ms_Cnt;
 
-extern UINT8  PDO_Len;
+extern __IO UINT8  PDO_Len;
 extern PD_CONTROL PD_Ctl;
 
 extern UINT8 send_data[ ];

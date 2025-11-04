@@ -1,8 +1,8 @@
 /********************************** (C) COPYRIGHT *******************************
  * File Name          : main.c
  * Author             : WCH
- * Version            : V1.0.0
- * Date               : 2024/06/05
+ * Version            : V1.0.1
+ * Date               : 2025/10/27
  * Description        : Main program body.
 *********************************************************************************
 * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
@@ -31,17 +31,17 @@ void PIOC_Single_Wire_SingleWrite(uint8_t addr,uint32_t data);
 //#define    Timebase_8X  3
 
 #ifdef Timebase_1X
-uint8_t  Timebase = Timebase_1X;
+volatile uint8_t  Timebase = Timebase_1X;
 #elif  Timebase_4X
-uint8_t  Timebase = Timebase_4X;
+volatile uint8_t  Timebase = Timebase_4X;
 #elif  Timebase_8X
-uint8_t  Timebase = Timebase_8X;
+volatile uint8_t  Timebase = Timebase_8X;
 #else
-uint8_t  Timebase = Timebase_def;
+volatile uint8_t  Timebase = Timebase_def;
 #endif
 
-uint8_t Timebase_Flag=0;
-uint8_t dbg_flag = 0;
+volatile uint8_t Timebase_Flag=0;
+volatile uint8_t dbg_flag = 0;
 
 
 volatile uint16_t Send_RemainLEN=0;

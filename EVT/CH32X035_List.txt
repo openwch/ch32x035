@@ -1,5 +1,5 @@
 
-南京沁恒微电子股份有限公司 2024.11
+南京沁恒微电子股份有限公司 2025.10
 最新资料请到我们的网站上查询
 https://wch.cn
 
@@ -59,7 +59,7 @@ https://wch.cn
   |      |      |      |-- PIOC
   |      |      |      |      |-- 1-Wire
   |      |      |      |      |      |-- 1-Wire：PIOC接口模拟单线操作WS2812和DS1820
-  |      |      |      |      |      |-- Ams
+  |      |      |      |      |      |-- Asm
   |      |      |      |      |      |      |-- PIOC_INC.ASM：PIOC汇编头文件 
   |      |      |      |      |      |      |-- RGB1W.ASM：单线汇编源文件
   |      |      |      |      |      |      |-- RGB1W.BAT：编译脚本
@@ -68,7 +68,7 @@ https://wch.cn
   |      |      |      |      |      |      |-- RGB1W_inc.h：数据文件转成的hex文件
   |      |      |      |      |-- PIOC_UART
   |      |      |      |      |      |-- PIOC_UART：PIOC接口模拟串口
-  |      |      |      |      |      |-- Ams
+  |      |      |      |      |      |-- Asm
   |      |      |      |      |      |      |-- PIOC_INC.ASM：PIOC汇编头文件 
   |      |      |      |      |      |      |-- PIOC_UART.ASM：串口汇编源文件
   |      |      |      |      |      |      |-- PIOC_UART.BAT：编译脚本
@@ -77,7 +77,7 @@ https://wch.cn
   |      |      |      |      |      |      |-- PIOC_UART_inc.h：数据文件转成的hex文件 
   |      |      |      |      |-- PIOC_IIC 
   |      |      |      |      |      |-- PIOC_IIC：PIOC接口模拟IIC
-  |      |      |      |      |      |-- Ams
+  |      |      |      |      |      |-- Asm
   |      |      |      |      |      |      |-- PIOC_INC.ASM：PIOC汇编头文件 
   |      |      |      |      |      |      |-- PIOC_IIC.ASM：IIC汇编源文件
   |      |      |      |      |      |      |-- PIOC_IIC.BAT：编译脚本
@@ -86,7 +86,7 @@ https://wch.cn
   |      |      |      |      |      |      |-- PIOC_IIC_inc.h：数据文件转成的hex文件
   |      |      |      |      |-- PIOC_Single_Wire
   |      |      |      |      |      |-- PIOC_Single_Wire：单线调试接口，读写外部芯片RAM数据
-  |      |      |      |      |      |-- Ams
+  |      |      |      |      |      |-- Asm
   |      |      |      |      |      |      |-- PIOC_INC.ASM：PIOC汇编头文件 
   |      |      |      |      |      |      |-- PIOC_Single_Wire.ASM：单线汇编源文件
   |      |      |      |      |      |      |-- PIOC_Single_Wire.BAT：编译脚本
@@ -95,7 +95,7 @@ https://wch.cn
   |      |      |      |      |      |      |-- PIOC_Single_Wire_inc.h：数据文件转成的hex文件
   |      |      |      |      |-- PIOC_NEC
   |      |      |      |      |      |-- PIOC_NEC：PIOC红外遥控例程
-  |      |      |      |      |      |-- Ams
+  |      |      |      |      |      |-- Asm
   |      |      |      |      |      |      |-- PIOC_INC.ASM：PIOC汇编头文件 
   |      |      |      |      |      |      |-- PIOC_NEC.ASM：NEC汇编源文件
   |      |      |      |      |      |      |-- PIOC_NEC.BAT：编译脚本

@@ -1,8 +1,8 @@
 /********************************** (C) COPYRIGHT  *******************************
  * File Name          : ch32x035.h
  * Author             : WCH
- * Version            : V1.0.2
- * Date               : 2025/03/10
+ * Version            : V1.0.3
+ * Date               : 2025/10/29
  * Description        : CH32X035 Device Peripheral Access Layer Header File.
 *********************************************************************************
 * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
@@ -23,7 +23,7 @@ extern "C" {
 
 /* Standard Peripheral Library version number */
 #define __STDPERIPH_VERSION_MAIN   (0x02) /* [15:8] main version */
-#define __STDPERIPH_VERSION_SUB    (0x00) /* [7:0] sub version */
+#define __STDPERIPH_VERSION_SUB    (0x01) /* [7:0] sub version */
 #define __STDPERIPH_VERSION        ((__STDPERIPH_VERSION_MAIN << 8)\
                                     |(__STDPERIPH_VERSION_SUB << 0))
 
@@ -400,7 +400,6 @@ typedef struct
 } AWU_TypeDef;
 
 /* PD Registers */
-
 typedef struct
 {
     union
@@ -477,11 +476,12 @@ typedef struct
     __IO uint8_t  MIS_ST;
     __IO uint8_t  INT_FG;
     __IO uint8_t  INT_ST;
-    __IO uint32_t RX_LEN;
+    __IO uint16_t RX_LEN;
+    uint16_t      RESERVED1;
     __IO uint8_t  UEP4_1_MOD;
     __IO uint8_t  UEP2_3_MOD;
     __IO uint8_t  UEP567_MOD;
-    uint8_t       RESERVED1;
+    uint8_t       RESERVED2;
     __IO uint32_t UEP0_DMA;
     __IO uint32_t UEP1_DMA;
     __IO uint32_t UEP2_DMA;
@@ -521,7 +521,6 @@ typedef struct
             __IO uint16_t  UEP4_CTRL_H;
         };
     };
-    uint32_t      RESERVED2;
     uint32_t      RESERVED3;
     uint32_t      RESERVED4;
     uint32_t      RESERVED5;
@@ -529,10 +528,11 @@ typedef struct
     uint32_t      RESERVED7;
     uint32_t      RESERVED8;
     uint32_t      RESERVED9;
+    uint32_t      RESERVED10;
     __IO uint32_t UEP5_DMA;
     __IO uint32_t UEP6_DMA;
     __IO uint32_t UEP7_DMA;
-    uint32_t      RESERVED10;
+    uint32_t      RESERVED11;
     union{
         __IO uint32_t  UEP5_CTRL;
         struct{
@@ -2565,7 +2565,7 @@ typedef struct
 #define TIM_CKD_1                               ((uint16_t)0x0200) /* Bit 1 */
 
 #define TIM_CMP_BK                              ((uint16_t)0x1000) /* voltage comparator break enable, TIM1 only */
-#define TIM_CAPOV                               ((uint16_t)0x4000) /* Cfg mode of capture value */
+#define TIM_CAPOV                               ((uint16_t)0x4000) /* configure of capture value */
 #define TIM_CAPLVL                              ((uint16_t)0x8000) 
 
 /*******************  Bit definition for TIM_CTLR2 register  ********************/

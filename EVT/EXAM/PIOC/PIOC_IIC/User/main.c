@@ -1,8 +1,8 @@
 /********************************** (C) COPYRIGHT *******************************
  * File Name          : main.c
  * Author             : WCH
- * Version            : V1.0.0
- * Date               : 2023/12/26
+ * Version            : V1.0.1
+ * Date               : 2025/10/27
  * Description        : Main program body.
 *********************************************************************************
 * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
@@ -37,7 +37,7 @@ void PIOC_IIC_SLAVE(uint8_t *p_send_addr,uint16_t send_len,uint8_t *p_receive_ad
 #define     IIC_SFR_ADDR1  ((uint8_t *)&(PIOC->D8_DATA_REG8))
 #define     IIC_SFR_ADDR2  ((uint8_t *)&(PIOC->D8_DATA_REG16))
 #define     IIC_SFR_ADDR3  ((uint8_t *)&(PIOC->D8_DATA_REG24))
-#define   R16_DATA_REG4_5  (*((volatile unsigned short *)(PIOC_SFR_BASE+0x24))) // RW/RW, data buffer 4~5
+#define     R16_DATA_REG4_5  (*((volatile unsigned short *)(PIOC_SFR_BASE+0x24))) // RW/RW, data buffer 4~5
 #define     PIOC_TIM_PSC2      ((uint8_t)0x07)
 #define     PIOC_TIM_PSC4      ((uint8_t)0x06)
 #define     PIOC_TIM_PSC8      ((uint8_t)0x05)
@@ -47,11 +47,11 @@ void PIOC_IIC_SLAVE(uint8_t *p_send_addr,uint16_t send_len,uint8_t *p_receive_ad
 #define     PIOC_TIM_PSC512    ((uint8_t)0x01)
 #define     PIOC_TIM_PSC2048   ((uint8_t)0x00)
 
-uint8_t  PIOC_IIC_FLAG=0;
-uint16_t PIOC_IIC_RemainLEN0=0;
-uint16_t PIOC_IIC_RemainLEN1=0;
-uint16_t PIOC_IIC_RemainLEN2=0;
-uint16_t PIOC_IIC_RemainLEN3=0;
+volatile uint8_t  PIOC_IIC_FLAG=0;
+volatile uint16_t PIOC_IIC_RemainLEN0=0;
+volatile uint16_t PIOC_IIC_RemainLEN1=0;
+volatile uint16_t PIOC_IIC_RemainLEN2=0;
+volatile uint16_t PIOC_IIC_RemainLEN3=0;
 uint8_t  *PIOC_IIC_BUF_ADDR0 = NULL;
 uint8_t  *PIOC_IIC_BUF_ADDR1 = NULL;
 uint8_t  *PIOC_IIC_BUF_ADDR2 = NULL;
