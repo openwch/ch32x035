@@ -1,8 +1,8 @@
 /********************************** (C) COPYRIGHT  *******************************
  * File Name          : debug.c
  * Author             : WCH
- * Version            : V1.0.0
- * Date               : 2023/04/06
+ * Version            : V1.0.1
+ * Date               : 2025/10/29
  * Description        : This file contains all the functions prototypes for UART
  *                      Printf , Delay functions.
 *********************************************************************************
@@ -181,9 +181,8 @@ int _write(int fd, char *buf, int size)
     {
 
         /**
-         * data0  data1 共8个字节
-         * data0最低位的字节存放长度，最大为 7
-         *
+         * data0  data1 8 byte
+         * data0 The storage length of the lowest byte, with a maximum of 7 bytes.
          */
 
         while( (*(DEBUG_DATA0_ADDRESS) != 0u))

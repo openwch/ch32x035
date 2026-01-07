@@ -1,8 +1,8 @@
 /********************************** (C) COPYRIGHT *******************************
  * File Name          : main.c
  * Author             : WCH
- * Version            : V1.0.1
- * Date               : 2025/01/09
+ * Version            : V1.0.2
+ * Date               : 2025/10/27
  * Description        : Main program body.
  *********************************************************************************
  * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
@@ -15,14 +15,14 @@
  * and you can choose the command method or the IO method to jump to the APP .
  * Key  parameters: CalAddr - address in flash (same in APP), note that this address needs to be unused.
  *                  CheckNum - The value of 'CalAddr' that needs to be modified.
- * Tips :the routine need IAP software version 1.50.
+ * Tips :the routine need IAP software version 1.50 or later.
  */
 
 #include "ch32x035_usbfs_device.h"
 #include "debug.h"
 #include "iap.h"
 
-extern u8 End_Flag;
+extern vu8 End_Flag;
 
 #define UPGRADE_MODE_COMMAND   0
 #define UPGRADE_MODE_IO        1

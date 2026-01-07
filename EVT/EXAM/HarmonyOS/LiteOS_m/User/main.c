@@ -43,7 +43,7 @@
 
 /* Global Variable */
 __attribute__((aligned (8))) UINT8 g_memStart[LOSCFG_SYS_HEAP_SIZE];
-UINT32 g_VlaueSp=0;
+__IO UINT32 g_VlaueSp=0;
 
 /*********************************************************************
  * @fn      taskSampleEntry2
@@ -185,11 +185,15 @@ LITE_OS_SEC_TEXT_INIT int main(void)
 void EXTI7_0_IRQHandler(void) __attribute__((interrupt()));
 void EXTI7_0_IRQHandler(void)
 {
-  /* 中断栈使用的是原来调用main设置的值，将中断栈和线程栈分开，这样线程跳中断，中断函数如果嵌套深度较大，不至于
-   * 线程栈被压满溢出，但是采用当前方式，线程进中断时，编译器保存到的16个caller寄存器任然压入线程栈，如果需要希
-   * 望caller寄存器压入中断栈，则中断函数的入口和出口需要使用汇编，中间调用用户中断处理函数即可，详见los_exc.S
-   * 中的ipq_entry例子
-   *  */
+  /*
+   * The interrupt stack uses the value originally set by calling main, separating the interrupt stack
+   * from the thread stack. This allows the thread to skip interrupts, and if the interrupt function is
+   * nested deeply, it will not overflow the thread stack. However, using the current method, when the 
+   * thread enters an interrupt, the 16 caller registers saved by the compiler will still be pushed into 
+   * the thread stack. If you want the caller registers to be pushed into the interrupt stack, the entry 
+   * and exit of the interrupt function need to be assembled, and the user interrupt handling function can
+   * be called in between. See the example of ipqentry in lossexp.S for details.
+   */
   GET_INT_SP();
   HalIntEnter();
   if(EXTI_GetITStatus(EXTI_Line0)!=RESET)

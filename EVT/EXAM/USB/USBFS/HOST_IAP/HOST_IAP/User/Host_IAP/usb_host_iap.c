@@ -1,8 +1,8 @@
 /********************************** (C) COPYRIGHT  *******************************
  * File Name          : iap.c
  * Author             : WCH
- * Version            : V1.0.0
- * Date               : 2022/08/20
+ * Version            : V1.0.1
+ * Date               : 2025/10/29
  * Description        : IAP
 *********************************************************************************
 * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
@@ -522,9 +522,9 @@ void IAP_Jump_APP(void)
     /* .... */
     /* Jump Code */
 #if DEF_CORE_TYPE == DEF_CORE_CM3
-    jump2app = (iapfun) * (vu32*)(DEF_APP_CODE_START_ADDR + 4);		//用户代码区第二个字为程序开始地址(复位地址)
-    MSR_MSP(*(vu32*)DEF_APP_CODE_START_ADDR);					//初始化用户代码区堆栈指针(用户代码区的第一个字用于存放栈顶地址)
-    jump2app();									             //跳转到APP.
+    jump2app = (iapfun) * (vu32*)(DEF_APP_CODE_START_ADDR + 4);
+    MSR_MSP(*(vu32*)DEF_APP_CODE_START_ADDR);
+    jump2app();
 #elif DEF_CORE_TYPE == DEF_CORE_RV
     /* Code for Jump, Enable Chip soft reset interrupt, jump to application code in soft reset interrupt */
     Delay_Ms(500);

@@ -1,8 +1,8 @@
 /********************************** (C) COPYRIGHT *******************************
 * File Name          : ch32x035_usbfs_host.c
 * Author             : WCH
-* Version            : V1.0.1
-* Date               : 2025/03/10
+* Version            : V1.0.2
+* Date               : 2025/10/27
 * Description        : USB full-speed port host operation functions.
 *********************************************************************************
 * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
@@ -82,6 +82,7 @@ void USBFS_Host_Init( FunctionalState sta , PWR_VDD VDD_Voltage)
         GPIO_USB_INIT();
 
         USBFSH->BASE_CTRL = USBFS_UC_HOST_MODE;
+        while(!(USBFSH->BASE_CTRL & USBFS_UC_HOST_MODE));
         USBFSH->HOST_CTRL = 0;
         USBFSH->DEV_ADDR = 0x00;
 
