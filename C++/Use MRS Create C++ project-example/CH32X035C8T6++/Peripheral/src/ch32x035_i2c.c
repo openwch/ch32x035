@@ -457,7 +457,7 @@ uint8_t I2C_ReceiveData(I2C_TypeDef *I2Cx)
  * @brief   Transmits the address byte to select the slave device.
  *
  * @param   I2Cx - where x can be 1 to select the I2C peripheral.
- *          Address - specifies the slave address which will be transmitted.
+ *          Address_7bit - specifies the slave 7bit address which will be transmitted.
  *          I2C_Direction - specifies whether the I2C device will be a
  *        Transmitter or a Receiver.
  *            I2C_Direction_Transmitter - Transmitter mode.
@@ -465,8 +465,12 @@ uint8_t I2C_ReceiveData(I2C_TypeDef *I2Cx)
  *
  * @return  none
  */
-void I2C_Send7bitAddress(I2C_TypeDef *I2Cx, uint8_t Address, uint8_t I2C_Direction)
+void I2C_Send7bitAddress(I2C_TypeDef *I2Cx, uint8_t Address_7bit, uint8_t I2C_Direction)
 {
+    uint8_t Address;
+
+    Address = (Address_7bit & 0x7F) << 1;
+
     if(I2C_Direction != I2C_Direction_Transmitter)
     {
         Address |= OADDR1_ADD0_Set;

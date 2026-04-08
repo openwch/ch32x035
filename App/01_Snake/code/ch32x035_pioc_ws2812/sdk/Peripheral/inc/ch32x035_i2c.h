@@ -299,7 +299,7 @@ void     I2C_GeneralCallCmd(I2C_TypeDef *I2Cx, FunctionalState NewState);
 void     I2C_ITConfig(I2C_TypeDef *I2Cx, uint16_t I2C_IT, FunctionalState NewState);
 void     I2C_SendData(I2C_TypeDef *I2Cx, uint8_t Data);
 uint8_t  I2C_ReceiveData(I2C_TypeDef *I2Cx);
-void     I2C_Send7bitAddress(I2C_TypeDef *I2Cx, uint8_t Address, uint8_t I2C_Direction);
+void     I2C_Send7bitAddress(I2C_TypeDef *I2Cx, uint8_t Address_7bit, uint8_t I2C_Direction);
 uint16_t I2C_ReadRegister(I2C_TypeDef *I2Cx, uint8_t I2C_Register);
 void     I2C_SoftwareResetCmd(I2C_TypeDef *I2Cx, FunctionalState NewState);
 void     I2C_NACKPositionConfig(I2C_TypeDef *I2Cx, uint16_t I2C_NACKPosition);

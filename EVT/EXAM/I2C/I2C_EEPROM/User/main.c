@@ -112,7 +112,7 @@ u8 AT24CXX_ReadOneByte(u16 ReadAddr)
 	I2C_GenerateSTART( I2C1, ENABLE );
 
 	while( !I2C_CheckEvent( I2C1, I2C_EVENT_MASTER_MODE_SELECT ) );
-	I2C_Send7bitAddress( I2C1, 0XA0, I2C_Direction_Transmitter );
+	I2C_Send7bitAddress( I2C1, 0X50, I2C_Direction_Transmitter );
 
 	while( !I2C_CheckEvent( I2C1, I2C_EVENT_MASTER_TRANSMITTER_MODE_SELECTED ) );
 
@@ -132,7 +132,7 @@ u8 AT24CXX_ReadOneByte(u16 ReadAddr)
 	I2C_GenerateSTART( I2C1, ENABLE );
 
 	while( !I2C_CheckEvent( I2C1, I2C_EVENT_MASTER_MODE_SELECT ) );
-	I2C_Send7bitAddress( I2C1, 0XA0, I2C_Direction_Receiver );
+	I2C_Send7bitAddress( I2C1, 0X50, I2C_Direction_Receiver );
 
 	while( !I2C_CheckEvent( I2C1, I2C_EVENT_MASTER_RECEIVER_MODE_SELECTED ) );
   while( I2C_GetFlagStatus( I2C1, I2C_FLAG_RXNE ) ==  RESET )
@@ -159,7 +159,7 @@ void AT24CXX_WriteOneByte(u16 WriteAddr, u8 DataToWrite)
 	I2C_GenerateSTART( I2C1, ENABLE );
 
 	while( !I2C_CheckEvent( I2C1, I2C_EVENT_MASTER_MODE_SELECT ) );
-	I2C_Send7bitAddress( I2C1, 0XA0, I2C_Direction_Transmitter );
+	I2C_Send7bitAddress( I2C1, 0X50, I2C_Direction_Transmitter );
 
 	while( !I2C_CheckEvent( I2C1, I2C_EVENT_MASTER_TRANSMITTER_MODE_SELECTED ) );
 

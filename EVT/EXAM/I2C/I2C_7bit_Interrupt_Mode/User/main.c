@@ -203,10 +203,10 @@ void I2C1_EV_IRQHandler(void )
       {
           if(master_sate == 0 ){
               master_sate = 1;
-              I2C_Send7bitAddress( I2C1, 0x02, I2C_Direction_Transmitter );
+              I2C_Send7bitAddress( I2C1, 0x01, I2C_Direction_Transmitter );
           }else{
               master_sate = 4;
-              I2C_Send7bitAddress( I2C1, 0x02, I2C_Direction_Receiver );
+              I2C_Send7bitAddress( I2C1, 0x01, I2C_Direction_Receiver );
           }
       }
 

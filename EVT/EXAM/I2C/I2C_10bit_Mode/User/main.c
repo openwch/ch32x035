@@ -112,10 +112,10 @@ int main(void)
 	I2C_GenerateSTART( I2C1, ENABLE );
 
 	while( !I2C_CheckEvent( I2C1, I2C_EVENT_MASTER_MODE_SELECT ) );
-	I2C_Send7bitAddress( I2C1, 0xF0, I2C_Direction_Transmitter );
+	I2C_Send7bitAddress( I2C1, 0x78, I2C_Direction_Transmitter );
 
 	while( !I2C_CheckEvent( I2C1, I2C_EVENT_MASTER_MODE_ADDRESS10 ) );
-	I2C_Send7bitAddress( I2C1, 0x02, I2C_Direction_Transmitter );
+	I2C_Send7bitAddress( I2C1, 0x01, I2C_Direction_Transmitter );
 
 	while( !I2C_CheckEvent( I2C1, I2C_EVENT_MASTER_TRANSMITTER_MODE_SELECTED ) );
 
