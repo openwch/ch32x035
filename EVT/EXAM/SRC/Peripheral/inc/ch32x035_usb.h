@@ -1,8 +1,8 @@
 /********************************** (C) COPYRIGHT  *******************************
  * File Name          : ch32x035_usb.h
  * Author             : WCH
- * Version            : V1.0.1
- * Date               : 2025/10/29
+ * Version            : V1.0.2
+ * Date               : 2026/08/24
  * Description        : This file contains all the functions prototypes for the USB
  *                      firmware library.
 *********************************************************************************
@@ -15,10 +15,6 @@
 
 #ifdef __cplusplus
 extern "C" {
-#endif
-
-#ifdef __cplusplus
- extern "C" {
 #endif
 
 /*******************************************************************************/
