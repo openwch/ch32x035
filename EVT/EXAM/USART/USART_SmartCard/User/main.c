@@ -1,8 +1,8 @@
 /********************************** (C) COPYRIGHT *******************************
  * File Name          : main.c
  * Author             : WCH
- * Version            : V1.0.0
- * Date               : 2024/02/20
+ * Version            : V1.0.1
+ * Date               : 2026/10/16
  * Description        : Main program body.
  *********************************************************************************
  * Copyright (c) 2024 Nanjing Qinheng Microelectronics Co., Ltd.
@@ -186,6 +186,10 @@ int ATR_Parse(ATR_TypeDef *atr, uint8_t *atr_buf, int32_t len) {
             }
             index++;
             atr->pn = index;
+            if (index >= ATR_MAX_PROTOCOLS) {
+                printf("error: too many protocols\n");
+                return 1;
+            }
 
             if (Yi & 0xF0) {
                 if (Yi & 0x10) {
@@ -284,7 +288,7 @@ void USART2_SmartCard_CFG(void) {
     USART_SmartCardCmd(USART2, ENABLE);
 
     // baud * ETU * Psc * 2 = SysClock
-    // 9216 * 372 * 7 * 2 ¡Ö 48000000
+    // 9216 * 372 * 7 * 2 â‰ˆ 48000000
     USART_SetPrescaler(USART2, 7);
     USART_SetGuardTime(USART2, 0);
 
@@ -335,7 +339,7 @@ void SC_TransmitData(uint8_t *data, uint16_t len) {
  *
  * @return  None
  */
-void SC_ReceiveData(uint8_t *data, uint16_t *len) {
+void SC_ReceiveData(uint8_t *data, uint16_t *len, uint16_t max) {
     uint32_t i = 0, t = 0;
 
     USART2->CTLR1 &= ~USART_MODE;
@@ -343,6 +347,9 @@ void SC_ReceiveData(uint8_t *data, uint16_t *len) {
 
     while (1) {
         if (USART_GetFlagStatus(USART2, USART_FLAG_RXNE) == SET) {
+            if (i >= max) {
+                break;
+            }
             data[i] = USART_ReceiveData(USART2);
             i++;
             t = 0;
@@ -387,7 +394,7 @@ int main(void) {
     GPIO_SetBits(GPIOA, RST_PIN);
 
     // try to get ATR
-    SC_ReceiveData(recvbuf, &recvlen);
+    SC_ReceiveData(recvbuf, &recvlen, ATR_MAX_SIZE);
 
     if (recvlen == 0) {
         printf("cannot get ATR\r\n");
@@ -416,8 +423,8 @@ int main(void) {
         // Sending PPS, trying to switch to mode 0
         SC_TransmitData(pps, sizeof(pps));
 
-        SC_ReceiveData(recvbuf, &recvlen);
-        if (memcmp(pps, recvbuf, recvlen) != 0) {
+        SC_ReceiveData(recvbuf, &recvlen, ATR_MAX_SIZE);
+        if (recvlen != sizeof(pps) || memcmp(pps, recvbuf, sizeof(pps)) != 0) {
             printf("pps \n");
             for (int i = 0; i < recvlen; i++) {
                 printf("%02x ", recvbuf[i]);
@@ -434,11 +441,13 @@ int main(void) {
 
     printf("Try to Get Challenge\r\n");
     SC_TransmitData(testcmd, 5);
-    SC_ReceiveData(recvbuf, &recvlen);
+    SC_ReceiveData(recvbuf, &recvlen, ATR_MAX_SIZE);
 
-    printf("SW1 = %x \r\n", recvbuf[recvlen - 2]);
-    printf("SW2 = %x \r\n", recvbuf[recvlen - 1]);
-    if (recvbuf[recvlen - 2] == 0x90 && recvbuf[recvlen - 1] == 0x00 && recvlen > 0)  {
+    if (recvlen >= 2) {
+        printf("SW1 = %x \r\n", recvbuf[recvlen - 2]);
+        printf("SW2 = %x \r\n", recvbuf[recvlen - 1]);
+    }
+    if ((recvlen >= 2) && (recvbuf[recvlen - 2] == 0x90) && (recvbuf[recvlen - 1] == 0x00))  {
         printf("Get Challenge success\r\n");
     }else{
         printf("Get Challenge failure\r\n");

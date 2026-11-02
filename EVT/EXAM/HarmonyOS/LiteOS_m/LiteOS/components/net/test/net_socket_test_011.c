@@ -217,7 +217,6 @@ static void ParsePackageIpUdp(struct netif *netif, struct pbuf *btBuf)
     ICUNIT_ASSERT_EQUAL(dataLen, strlen(MSG), 4);
     LogPrintln("=================================");
 
-    // 回应udp报文
     ReplayUdpTask();
 }
 
@@ -322,7 +321,6 @@ static void UdpTestNetifTask(void *p)
     struct ifreq nif;
     int ret;
 
-    // 注册网卡
     btProxyNf = CreateBtNetIf();
 
     /* socket creation */
@@ -335,7 +333,6 @@ static void UdpTestNetifTask(void *p)
     ret = bind(sfd, (struct sockaddr*)&srvAddr, sizeof(srvAddr));
     LWIP_ASSERT("socket invalid param.", ret == 0);
 
-    /* 指定网卡接口 */
     char *inface = NETIF_NAME_BT;
     (void)strcpy_s(nif.ifr_name, sizeof(nif.ifr_name), inface);
     if (setsockopt(sfd, SOL_SOCKET, SO_BINDTODEVICE, (char *)&nif, sizeof(nif)) < 0) {
@@ -393,7 +390,6 @@ static void ArpPackageProc(struct netif *netif, struct pbuf *p)
         return;
     }
 
-    // 回应arp报文
     ReplayArpTask();
 }
 

@@ -21,7 +21,7 @@
 const    uint8_t  *pUSBFS_Descr;
 #define Version_Num   0x0100   //V0100
 #define DevEP0SIZE    0x40
-u8 EP2_Tx_Buffer[2];
+vu8 EP2_Tx_Buffer[2];
 
 /* Setup Request */
 volatile uint8_t  USBFS_SetupReqCode;

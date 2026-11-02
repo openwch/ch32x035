@@ -1,8 +1,8 @@
 /********************************** (C) COPYRIGHT *******************************
  * File Name          : main.c
  * Author             : WCH
- * Version            : V1.0.1
- * Date               : 2025/10/27
+ * Version            : V1.0.2
+ * Date               : 2026/10/14
  * Description        : Main program body.
 *********************************************************************************
 * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
@@ -34,11 +34,11 @@ void PIOC_IRQHandler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
 
 volatile uint8_t  PIOC_TX_FLAG=0;
 volatile uint16_t PIOC_TX_RemainLEN=0;
-volatile uint8_t  *PIOC_TX_ADDR;
 volatile uint32_t PIOC_baudrate=921600;
 volatile uint8_t  PIOC_parity=0;
 volatile uint8_t  PIOC_stopbits=0;
 volatile uint8_t  PIOC_word_lenth=8;
+uint8_t * volatile PIOC_TX_ADDR = NULL;
 u8 rx_buf[100]={0};
 volatile u8 rx=0;
 
@@ -374,7 +374,7 @@ int main(void)
     SystemCoreClockUpdate();
     Delay_Init();
     USART_Printf_Init(921600);
-    printf("SystemClk:%d\r\n", SystemCoreClock);
+    printf("SystemClk:%u\r\n", SystemCoreClock);
     printf( "ChipID:%08x\r\n", DBGMCU_GetCHIPID() );
     printf("GPIO Toggle TEST\r\n");
     GPIO_Toggle_INIT();

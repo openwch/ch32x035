@@ -41,8 +41,8 @@ extern "C" {
 
 //USBPD->TX_SEL
 #define TX_SEL1             (0<<0)
-#define TX_SEL1_SYNC1       (0<<0)              //0 £ºSYNC1
-#define TX_SEL1_RST1        (1<<0)              //1 £ºRST1
+#define TX_SEL1_SYNC1       (0<<0)              //0 : SYNC1
+#define TX_SEL1_RST1        (1<<0)              //1 : RST1
 #define TX_SEL2             (0<<2)
 #define TX_SEL2_SYNC1       (0<<2)              //00:SYNC1
 #define TX_SEL2_SYNC3       (1<<2)              //01:SYNC3
@@ -59,9 +59,9 @@ extern "C" {
 //USBPD->STATUS
 #define BMC_AUX             (3<<0)              //BMC auxiliary information, when doing receive SOP:,when doing send CRC: CRC byte counter
 #define BMC_AUX_INVALID     (0<<0)              //00: not valid
-#define BMC_AUX_SOP0        (1<<0)              //01£ºSOP0
-#define BMC_AUX_SOP1_HRST   (2<<0)              //10£ºSOP1 hard reset
-#define BMC_AUX_SOP2_CRST   (3<<0)              //11£ºSOP2 cable reset
+#define BMC_AUX_SOP0        (1<<0)              //01: SOP0
+#define BMC_AUX_SOP1_HRST   (2<<0)              //10: SOP1 hard reset
+#define BMC_AUX_SOP2_CRST   (3<<0)              //11: SOP2 cable reset
 #define BUF_ERR             (1<<2)              //BUFFER or DMA error interrupt flag, write 1 to clear 0, write 0 to void
 #define IF_RX_BIT           (1<<3)              //Receive bit or 5bit interrupt flag, write 1 to clear 0, write 0 to void
 #define IF_RX_BYTE          (1<<4)              //Receive byte or SOP interrupt flag, write 1 to clear 0, write 0 to void
@@ -72,21 +72,21 @@ extern "C" {
 //USBPD->PORT_CC1
 //USBPD->PORT_CC2
 #define PA_CC_AI            (1<<0)              //CC1 port comparator analogue input
-#define CC_PD               (1<<1)              //CC1 port down resistor enable,0: disable pull down resistor ,1: enable 5.1K¦¸ pull down resistor
+#define CC_PD               (1<<1)              //CC1 port down resistor enable,0: disable pull down resistor ,1: enable 5.1KÎ© pull down resistor
 #define CC_PU_CLR           (3<<2)              //CC1 port pull-up current selection
 #define CC_NO_PU            (0<<2)              //00: Pull-up current forbidden
-#define CC_PU_330           (1<<2)              //01£º330uA
-#define CC_PU_180           (2<<2)              //10£º180uA
+#define CC_PU_330           (1<<2)              //01: 330uA
+#define CC_PU_180           (2<<2)              //10: 180uA
 #define CC_PU_80            (3<<2)              //11: 80uA
 #define CC_LVO              (1<<4)              //CC1 port output low voltage enable,0: normal voltage VDD weak drive output,1: low voltage drive output
 #define CC_CE               (7<<5)              //Enable of voltage comparator on port /CC1,001: Reserved
 #define CC_NO_CMP           (0<<5)              //000: closed
-#define CC_CMP_22           (2<<5)              //010£º0.22V
-#define CC_CMP_45           (3<<5)              //011£º0.45V
-#define CC_CMP_55           (4<<5)              //100£º0.55V
-#define CC_CMP_66           (5<<5)              //101£º0.66V
-#define CC_CMP_95           (6<<5)              //110£º0.95V
-#define CC_CMP_123          (7<<5)              //111£º1.23V
+#define CC_CMP_22           (2<<5)              //010: 0.22V
+#define CC_CMP_45           (3<<5)              //011: 0.45V
+#define CC_CMP_55           (4<<5)              //100: 0.55V
+#define CC_CMP_66           (5<<5)              //101: 0.66V
+#define CC_CMP_95           (6<<5)              //110: 0.95V
+#define CC_CMP_123          (7<<5)              //111: 1.23V
 
 
 #define USBPD_IN_HVT       (1<<9)

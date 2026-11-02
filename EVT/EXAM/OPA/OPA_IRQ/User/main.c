@@ -1,8 +1,8 @@
 /********************************** (C) COPYRIGHT *******************************
  * File Name          : main.c
  * Author             : WCH
- * Version            : V1.0.1
- * Date               : 2025/10/29
+ * Version            : V1.0.2
+ * Date               : 2026/10/16
  * Description        : Main program body.
  *********************************************************************************
  * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
@@ -25,7 +25,7 @@
  */
 
 #include "debug.h"
-
+vu8  IntResponse=0 ;
 
 /*********************************************************************
  * @fn      OPA2_Init
@@ -85,7 +85,7 @@ void OPA_IRQHandler(void)
 {
     if(OPA_GetFlagStatus(OPA_FLAG_OUT_OPA2)!=RESET)
     {
-    printf("Run at EXTI\r\n");
+    IntResponse=1;
     OPA_ClearFlag(OPA_FLAG_OUT_OPA2);     /* Clear Flag */
     }
 }
@@ -111,6 +111,12 @@ int main(void)
 
     while(1)
     {
+        if(IntResponse == 1)
+        {
+			IntResponse=0;
+           printf("Run at EXTI\r\n");
+        }
+        
     }
 }
 

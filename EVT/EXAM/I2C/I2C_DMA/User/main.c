@@ -1,8 +1,8 @@
 /********************************** (C) COPYRIGHT *******************************
  * File Name          : main.c
  * Author             : WCH
- * Version            : V1.0.0
- * Date               : 2023/12/26
+ * Version            : V1.0.1
+ * Date               : 2026/10/16
  * Description        : Main program body.
  *********************************************************************************
  * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
@@ -180,7 +180,7 @@ int main(void)
     NVIC_PriorityGroupConfig(NVIC_PriorityGroup_1);
     SystemCoreClockUpdate();
     Delay_Init();
-    USART_Printf_Init( 460800 );
+    USART_Printf_Init( 115200 );
     printf( "SystemClk:%d\r\n", SystemCoreClock );
     printf( "ChipID:%08x\r\n", DBGMCU_GetCHIPID() );
 
@@ -217,6 +217,7 @@ int main(void)
     DMA_Cmd( DMA1_Channel7, ENABLE );
     
     while( ( !DMA_GetFlagStatus( DMA1_FLAG_TC7 ) ) );
+    DMA_ClearFlag( DMA1_FLAG_TC7 );
     while( !I2C_CheckEvent( I2C1, I2C_EVENT_SLAVE_STOP_DETECTED ) );
     I2C1->CTLR1 &= I2C1->CTLR1;
 		

@@ -43,7 +43,7 @@ static VOID TaskF01(VOID)
 
     ICUNIT_ASSERT_EQUAL_VOID(g_losTask.runTask->priority, OS_TASK_PRIORITY_HIGHEST, g_losTask.runTask->priority);
 
-    newPrio = TASK_PRIO_TEST - 4; // 4，get new priority, it is higher than the task of testsuit.
+    newPrio = TASK_PRIO_TEST - 4; // 4, get new priority, it is higher than the task of testsuit.
     ret = LOS_CurTaskPriSet(newPrio);
     ICUNIT_ASSERT_EQUAL_VOID(ret, LOS_OK, ret);
 

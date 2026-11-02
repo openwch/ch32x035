@@ -1,8 +1,8 @@
 /********************************** (C) COPYRIGHT *******************************
  * File Name          : main.c
  * Author             : WCH
- * Version            : V1.0.0
- * Date               : 2021/06/06
+ * Version            : V1.0.1
+ * Date               : 2025/12/16
  * Description        : Main program body.
  *********************************************************************************
  * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
@@ -65,10 +65,10 @@ void TIM2_UP_IRQHandler()
  */
 void TIM2_Encoder_Init()
 {
-    TIM_TimeBaseInitTypeDef TIM_TimeBaseStructure;
-    TIM_ICInitTypeDef TIM_ICInitStructure;
-    GPIO_InitTypeDef GPIO_InitStructure;
-    NVIC_InitTypeDef NVIC_InitStructure;
+    TIM_TimeBaseInitTypeDef TIM_TimeBaseStructure = {0};
+    TIM_ICInitTypeDef TIM_ICInitStructure = {0};
+    GPIO_InitTypeDef GPIO_InitStructure = {0};
+    NVIC_InitTypeDef NVIC_InitStructure = {0};
 
     RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA, ENABLE);
     RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2, ENABLE);

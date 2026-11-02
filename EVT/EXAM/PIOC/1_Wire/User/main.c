@@ -1,8 +1,8 @@
 /********************************** (C) COPYRIGHT *******************************
  * File Name          : main.c
  * Author             : WCH
- * Version            : V1.0.1
- * Date               : 2023/11/14
+ * Version            : V1.0.2
+ * Date               : 2026/10/14
  * Description        : Main program body.
  *********************************************************************************
  * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
@@ -21,8 +21,8 @@
 #include "debug.h"
 #include "RGB1W.h"
 
-#define RGB    0
-#define DS1820 1
+#define RGB_WS2812    0
+#define DS1820        1
 
 //#define Mode   DS1820
 #define Mode   RGB_WS2812
@@ -120,8 +120,8 @@ int main(void)
         stat = 0x80;//free
         if ( stat != 0xFF ) {//RGB1W completed
             if ( stat < 0x80 ) {//got status in interrupt
-                if ( stat == RGB1W_ERR_OK ) printf("1-wire finished\r\n")/**/;
-                else printf("1-wire error %02x\r\n", stat)/* */;
+                if ( stat == RGB1W_ERR_OK ) printf("1-wire finished\r\n");
+                else printf("1-wire error %02x\r\n", stat);
                 stat = 0x80;//free
             }
             if ( stat == 0x80 && total_bytes && timer_to_run ) {//RAM mode for 1~3072 bytes data

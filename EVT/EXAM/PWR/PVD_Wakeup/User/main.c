@@ -1,8 +1,8 @@
 /********************************** (C) COPYRIGHT *******************************
 * File Name          : main.c
 * Author             : WCH
-* Version            : V1.0.0
-* Date               : 2024/06/07
+* Version            : V1.0.1
+* Date               : 2026/10/14
 * Description        : Main program body.
 *********************************************************************************
 * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
@@ -27,7 +27,6 @@ void PVD_IRQHandler(void)
     if (EXTI_GetITStatus(EXTI_Line26) != RESET)
     {
         SystemInit();
-        printf("Run at EXTI\r\n");
         EXTI_ClearITPendingBit(EXTI_Line26);
     }
 }
@@ -46,14 +45,14 @@ void PVD_Init(void)
     RCC_APB1PeriphClockCmd(RCC_APB1Periph_PWR, ENABLE);
     RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE);
 
-    EXTI_InitTypeDef EXIT_InitStructure = {0};
+    EXTI_InitTypeDef EXTI_InitStructure = {0};
     NVIC_InitTypeDef NVIC_InitStructure = {0};
 
-    EXIT_InitStructure.EXTI_Line = EXTI_Line26;
-    EXIT_InitStructure.EXTI_LineCmd = ENABLE;
-    EXIT_InitStructure.EXTI_Mode = EXTI_Mode_Interrupt;
-    EXIT_InitStructure.EXTI_Trigger = EXTI_Trigger_Falling; // 4.2V
-    EXTI_Init(&EXIT_InitStructure);
+    EXTI_InitStructure.EXTI_Line = EXTI_Line26;
+    EXTI_InitStructure.EXTI_LineCmd = ENABLE;
+    EXTI_InitStructure.EXTI_Mode = EXTI_Mode_Interrupt;
+    EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Falling; 
+    EXTI_Init(&EXTI_InitStructure);
 
     NVIC_InitStructure.NVIC_IRQChannel = PVD_IRQn;
     NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
@@ -79,7 +78,7 @@ int main(void)
     SystemCoreClockUpdate();
     Delay_Init();
     USART_Printf_Init(115200);
-    printf("SystemClk:%d\r\n", SystemCoreClock);
+    printf("SystemClk:%u\r\n", SystemCoreClock);
     printf("ChipID:%08x\r\n", DBGMCU_GetCHIPID());
 
     printf("PVD wakeup TEST\r\n");
@@ -91,6 +90,7 @@ int main(void)
     printf("Fall asleep...\r\n");
     Delay_Ms(100);
     PWR_EnterSTOPMode(PWR_STOPEntry_WFI);
+    Delay_Ms(20);
     printf("Wake up!!\r\n");
 
     while (1)

@@ -123,9 +123,9 @@ int main(void)
 
 void USART2_IRQHandler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
 /*********************************************************************
- * @fn      USART3_IRQHandler
+ * @fn      USART2_IRQHandler
  *
- * @brief   This function handles USART3 global interrupt request.
+ * @brief   This function handles USART2 global interrupt request.
  *
  * @return  none
  */

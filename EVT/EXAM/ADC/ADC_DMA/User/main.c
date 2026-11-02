@@ -1,8 +1,8 @@
 /********************************** (C) COPYRIGHT *******************************
  * File Name          : main.c
  * Author             : WCH
- * Version            : V1.0.1
- * Date               : 2025/10/29
+ * Version            : V1.0.2
+ * Date               : 2026/10/16
  * Description        : Main program body.
  *********************************************************************************
  * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
@@ -19,9 +19,11 @@
  */
 
 #include "debug.h"
+/* Global define */
+#define Num 1024
 
-/* Global Variable */
-u16 TxBuf[1024];
+/* Global Variable */ 
+volatile u16 TxBuf[Num]; 
 
 /*********************************************************************
  * @fn      ADC_Function_Init
@@ -58,43 +60,6 @@ void ADC_Function_Init(void)
     ADC_Cmd(ADC1, ENABLE);
 }
 
-/*********************************************************************
- * @fn      Get_ADC_Val
- *
- * @brief   Returns ADCx conversion result data.
- *
- * @param   ch - ADC channel.
- *            ADC_Channel_0 - ADC Channel0 selected.
- *            ADC_Channel_1 - ADC Channel1 selected.
- *            ADC_Channel_2 - ADC Channel2 selected.
- *            ADC_Channel_3 - ADC Channel3 selected.
- *            ADC_Channel_4 - ADC Channel4 selected.
- *            ADC_Channel_5 - ADC Channel5 selected.
- *            ADC_Channel_6 - ADC Channel6 selected.
- *            ADC_Channel_7 - ADC Channel7 selected.
- *            ADC_Channel_8 - ADC Channel8 selected.
- *            ADC_Channel_9 - ADC Channel9 selected.
- *            ADC_Channel_10 - ADC Channel10 selected.
- *            ADC_Channel_11 - ADC Channel11 selected.
- *            ADC_Channel_12 - ADC Channel12 selected.
- *            ADC_Channel_13 - ADC Channel13 selected.
- *            ADC_Channel_14 - ADC Channel14 selected.
- *            ADC_Channel_15 - ADC Channel15 selected.
- *
- * @return  none
- */
-u16 Get_ADC_Val(u8 ch)
-{
-    u16 val;
-
-    ADC_RegularChannelConfig(ADC1, ch, 1, ADC_SampleTime_11Cycles);
-    ADC_SoftwareStartConvCmd(ADC1, ENABLE);
-
-    while(!ADC_GetFlagStatus(ADC1, ADC_FLAG_EOC));
-    val = ADC_GetConversionValue(ADC1);
-
-    return val;
-}
 
 /*********************************************************************
  * @fn      DMA_Tx_Init
@@ -147,7 +112,7 @@ int main(void)
 
     ADC_Function_Init();
 
-    DMA_Tx_Init(DMA1_Channel1, (u32)&ADC1->RDATAR, (u32)TxBuf, 1024);
+	DMA_Tx_Init( DMA1_Channel1, (u32)&ADC1->RDATAR, (u32)TxBuf, Num );  
     DMA_Cmd(DMA1_Channel1, ENABLE);
 
     ADC_RegularChannelConfig(ADC1, ADC_Channel_1, 1, ADC_SampleTime_11Cycles);
@@ -157,7 +122,7 @@ int main(void)
     }
     ADC_SoftwareStartConvCmd(ADC1, DISABLE);
 
-    for(i = 0; i < 1024; i++){
+	for(i=0; i<Num; i++){
         printf("%04d\r\n", TxBuf[i]);
         Delay_Ms(10);
     }

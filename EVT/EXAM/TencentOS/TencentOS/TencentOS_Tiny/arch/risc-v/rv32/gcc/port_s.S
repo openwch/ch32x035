@@ -196,7 +196,7 @@ SW_Handler:
 
 	/* switch to irq stk */
     mv t0, sp
-    lw sp, k_irq_stk_top     	/* cpu_init中减去一个字空间 */
+    lw sp, k_irq_stk_top     	
     sw t0, 0(sp)
     /* clear software interrupt */
 	call   sw_clearpend

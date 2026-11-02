@@ -42,7 +42,7 @@ static UINT32 TestCase(VOID)
 
     pool = (void *)((UINT32)(UINTPTR)g_memPool + MIN_DLNK_POOL_SIZE - LOS_DLNK_NODE_HEAD_SIZE);
 
-    ret = LOS_MemInit(pool, MIN_DLNK_POOL_SIZE + 1000); // 1000, Initialize the appropriate memory pool space。
+    ret = LOS_MemInit(pool, MIN_DLNK_POOL_SIZE + 1000); // 1000, Initialize the appropriate memory pool space.
     ICUNIT_ASSERT_EQUAL(ret, LOS_OK, ret);
 
     ret = LOS_MemDeInit(pool);

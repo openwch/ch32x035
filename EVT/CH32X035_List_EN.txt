@@ -1,5 +1,5 @@
 
-Nanjing Qinheng Microelectronics Co., Ltd. 2025.10
+Nanjing Qinheng Microelectronics Co., Ltd. 2026.10
 
 https://wch-ic.com
 
@@ -122,10 +122,10 @@ Directory
   |      |      |      |      |-- Sleep_Mode: low power, sleep mode routine
   |      |      |      |      |-- Standby_Mode: low power, standby mode routine
   |      |      |      |      |-- Stop_Mode: low power, stop mode routine
-  |      |      |      |      |-- PVD_Wakeup：STOP mode PVD wakeup MCU Routine
-  |      |      |      |      |-- PVD_VoltageJudger：PVD voltage Judger Routine
+  |      |      |      |      |-- PVD_Wakeup: STOP mode PVD wakeup MCU Routine
+  |      |      |      |      |-- PVD_VoltageJudger: PVD voltage Judger Routine
   |      |      |      |-- PMP
-  |      |      |      |      |-- PMP：Physical memory protection Routine
+  |      |      |      |      |-- PMP: Physical memory protection Routine
   |      |      |      |-- RCC
   |      |      |      |      |-- Get_CLK: Get system-HCLK-AHB1-AHB2 clock routine   
   |      |      |      |      |-- MCO: MCO pin clock output routine    
@@ -186,7 +186,8 @@ Directory
   |      |      |      |      |      |-- Udisk_Lib: U disk file system library file  
   |      |      |      |-- USBPD
   |      |      |      |      |-- USBPD_SNK: PD SNK routine
-  |      |      |      |      |-- USBPD_SRC: PD SRC routine    
+  |      |      |      |      |-- USBPD_SRC: PD SRC routine 
+  |      |      |      |      |-- USBPD_CH211: PD + CH211 routine  
   |      |      |      |-- WWDG
   |      |      |      |      |-- WWDG: Window Watchdog Routine
 

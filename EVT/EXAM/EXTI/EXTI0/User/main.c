@@ -86,7 +86,7 @@ int main(void)
 void EXTI7_0_IRQHandler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
 
 /*********************************************************************
- * @fn      EXTI0_IRQHandler
+ * @fn      EXTI7_0_IRQHandler
  *
  * @brief   This function handles EXTI0 Handler.
  *
@@ -96,7 +96,9 @@ void EXTI7_0_IRQHandler(void)
 {
   if(EXTI_GetITStatus(EXTI_Line0)!=RESET)
   {
+    #if 0
     printf("Run at EXTI\r\n");
+    #endif
     EXTI_ClearITPendingBit(EXTI_Line0);     /* Clear Flag */
   }
 }

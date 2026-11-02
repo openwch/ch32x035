@@ -472,8 +472,11 @@ void USBFS_IRQHandler( void )
                                  }
                                  else if( USBFS_SetupReqCode == HID_SET_REPORT )
                                  {
+                                     if( Hid_Report_Ptr + len > sizeof( HID_Report_Buffer ) )
+                                     {
+                                         len = sizeof( HID_Report_Buffer ) - Hid_Report_Ptr;
+                                     }
                                      memcpy(&HID_Report_Buffer[Hid_Report_Ptr],USBFS_EP0_4Buf,len);
-                                     USBFS_SetupReqLen -= len;
                                      Hid_Report_Ptr += len;
                                      USBFSD->UEP0_CTRL_H ^= USBFS_UEP_R_TOG;
                                      USBFSD->UEP0_CTRL_H = (USBFSD->UEP0_CTRL_H & ~USBFS_UEP_R_RES_MASK) | USBFS_UEP_R_RES_ACK;
@@ -556,6 +559,7 @@ void USBFS_IRQHandler( void )
                             case CDC_GET_LINE_CODING:
                                 pUSBFS_Descr = (uint8_t *)&Uart.Com_Cfg[ 0 ];
                                 len = 7;
+                                memcpy( USBFS_EP0_4Buf, pUSBFS_Descr, len );
                                 break;
 
                             case CDC_SET_LINE_CODING:
@@ -572,7 +576,7 @@ void USBFS_IRQHandler( void )
                                  break;
 
                             case HID_GET_REPORT:                            /* 0x01: GET_REPORT */
-                                if( USBFS_SetupReqIndex == 0x00 )
+                                if( USBFS_SetupReqIndex == 0x02 )
                                 {
                                     Hid_Report_Ptr = 0;
                                     len = (USBFS_SetupReqLen >= DEF_USBD_UEP0_SIZE) ? DEF_USBD_UEP0_SIZE : USBFS_SetupReqLen;
@@ -586,7 +590,7 @@ void USBFS_IRQHandler( void )
                                 break;
 
                             case HID_SET_IDLE:                              /* 0x0A: SET_IDLE */
-                                if( USBFS_SetupReqIndex == 0x00 )
+                                if( USBFS_SetupReqIndex == 0x02 )
                                 {
                                     USBFS_HidIdle = (uint8_t)( USBFS_SetupReqValue >> 8 );
                                 }
@@ -597,7 +601,7 @@ void USBFS_IRQHandler( void )
                                 break;
 
                             case HID_SET_PROTOCOL:                          /* 0x0B: SET_PROTOCOL */
-                                if( USBFS_SetupReqIndex == 0x00 )
+                                if( USBFS_SetupReqIndex == 0x02 )
                                 {
                                     USBFS_HidProtocol = (uint8_t)USBFS_SetupReqValue;
                                 }
@@ -608,7 +612,7 @@ void USBFS_IRQHandler( void )
                                 break;
 
                             case HID_GET_IDLE:                              /* 0x02: GET_IDLE */
-                                if( USBFS_SetupReqIndex == 0x00 )
+                                if( USBFS_SetupReqIndex == 0x02 )
                                 {
                                     USBFS_EP0_4Buf[ 0 ] = USBFS_HidIdle;
                                     len = 1;
@@ -620,7 +624,7 @@ void USBFS_IRQHandler( void )
                                 break;
 
                              case HID_GET_PROTOCOL:                          /* 0x03: GET_PROTOCOL */
-                                 if( USBFS_SetupReqIndex == 0x00 )
+                                 if( USBFS_SetupReqIndex == 0x02 )
                                  {
                                      USBFS_EP0_4Buf[ 0 ] = USBFS_HidProtocol;
                                      len = 1;
@@ -645,10 +649,6 @@ void USBFS_IRQHandler( void )
                         errflag = 0xFF;
                     }
 
-                    /* Copy Descriptors to Endp0 DMA buffer */
-                    len = (USBFS_SetupReqLen >= DEF_USBD_UEP0_SIZE) ? DEF_USBD_UEP0_SIZE : USBFS_SetupReqLen;
-                    memcpy( USBFS_EP0_4Buf, pUSBFS_Descr, len );
-                    pUSBFS_Descr += len;
                 }
                 else
                 {
@@ -768,6 +768,10 @@ void USBFS_IRQHandler( void )
                                 {
                                     /* clear usb sleep status, device not prepare to sleep */
                                     USBFS_DevSleepStatus &= ~0x01;
+                                }
+                                else
+                                {
+                                    errflag = 0xFF;
                                 }
                             }
                             else if( ( USBFS_SetupReqType & USB_REQ_RECIP_MASK ) == USB_REQ_RECIP_ENDP )

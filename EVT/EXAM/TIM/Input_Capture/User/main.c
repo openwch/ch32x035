@@ -1,8 +1,8 @@
 /********************************** (C) COPYRIGHT *******************************
  * File Name          : main.c
  * Author             : WCH
- * Version            : V1.0.0
- * Date               : 2023/12/26
+ * Version            : V1.0.1
+ * Date               : 2026/10/15
  * Description        : Main program body.
  *********************************************************************************
  * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
@@ -47,7 +47,7 @@ void Input_Capture_Init(u16 arr, u16 psc)
     GPIO_Init(GPIOB, &GPIO_InitStructure);
     GPIO_ResetBits(GPIOB, GPIO_Pin_9);
 
-    TIM_TimeBaseInitStructure.TIM_Period = arr;
+    TIM_TimeBaseInitStructure.TIM_Period = arr-1;
     TIM_TimeBaseInitStructure.TIM_Prescaler = psc;
     TIM_TimeBaseInitStructure.TIM_ClockDivision = TIM_CKD_DIV1;
     TIM_TimeBaseInitStructure.TIM_CounterMode = TIM_CounterMode_Up;
@@ -108,13 +108,17 @@ void TIM1_CC_IRQHandler(void)
 {
     if( TIM_GetITStatus( TIM1, TIM_IT_CC1 ) != RESET )
     {
+        #if 0
         printf( "CH1_Val:%d\r\n", TIM_GetCapture1( TIM1 ) );
+        #endif
         TIM_SetCounter( TIM1, 0 );
     }
 
     if( TIM_GetITStatus( TIM1, TIM_IT_CC2 ) != RESET )
     {
+        #if 0
         printf( "CH2_Val:%d\r\n", TIM_GetCapture2( TIM1 ) );
+        #endif
     }
 
     TIM_ClearITPendingBit( TIM1, TIM_IT_CC1 | TIM_IT_CC2 );

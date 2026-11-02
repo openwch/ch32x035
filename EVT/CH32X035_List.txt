@@ -1,5 +1,5 @@
 
-南京沁恒微电子股份有限公司 2025.10
+南京沁恒微电子股份有限公司 2026.06
 最新资料请到我们的网站上查询
 https://wch.cn
 
@@ -187,6 +187,7 @@ https://wch.cn
   |      |      |      |      |      |-- Host_Udisk：USB主机操作U盘例程 
   |      |      |      |-- USBPD
   |      |      |      |      |-- USBPD_SNK：PD SNK 例程
-  |      |      |      |      |-- USBPD_SRC：PD SRC 例程   
+  |      |      |      |      |-- USBPD_SRC：PD SRC 例程
+  |      |      |      |      |-- USBPD_CH211：PD + CH211 例程  
   |      |      |      |-- WWDG：窗口看门狗例程
   |      |      |      |      |-- WWDG：窗口看门狗例程  

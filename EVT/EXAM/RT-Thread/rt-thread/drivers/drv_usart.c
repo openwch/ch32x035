@@ -88,7 +88,7 @@ static rt_err_t ch32_configure(struct rt_serial_device *serial, struct serial_co
 
     if(uart->USARTx == USART1)
     {
-        GPIO_InitTypeDef GPIO_InitStructure;
+        GPIO_InitTypeDef GPIO_InitStructure = {0};
         RCC_APB2PeriphClockCmd(RCC_APB2Periph_USART1|RCC_APB2Periph_GPIOB, ENABLE);
 
 //        uart->irq=USART1_IRQn;
@@ -105,7 +105,7 @@ static rt_err_t ch32_configure(struct rt_serial_device *serial, struct serial_co
     }
     if(uart->USARTx == USART2)
         {
-            GPIO_InitTypeDef GPIO_InitStructure;
+            GPIO_InitTypeDef GPIO_InitStructure = {0};
             RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA, ENABLE);
             RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART2, ENABLE);
 
@@ -282,7 +282,7 @@ int rt_hw_usart_init(void)
 
     if(uart->USARTx == USART1)
     {
-            GPIO_InitTypeDef GPIO_InitStructure;
+            GPIO_InitTypeDef GPIO_InitStructure = {0};
             RCC_APB2PeriphClockCmd(RCC_APB2Periph_USART1, ENABLE);
             RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB, ENABLE);
     //        uart->irq=USART1_IRQn;
@@ -323,7 +323,7 @@ int rt_hw_usart_init(void)
 
     if(uart->USARTx == USART2)
     {
-            GPIO_InitTypeDef GPIO_InitStructure;
+            GPIO_InitTypeDef GPIO_InitStructure = {0};
             RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART2, ENABLE);
             RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA, ENABLE);
     //        uart->irq=USART2_IRQn;

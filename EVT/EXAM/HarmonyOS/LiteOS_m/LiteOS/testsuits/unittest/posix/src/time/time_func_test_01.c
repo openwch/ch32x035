@@ -140,7 +140,6 @@ static char *TmToStr(const struct tm *stm, char *timeStr, unsigned len)
  */
 LITE_TEST_CASE(PosixTimeFuncTestSuite, testTimeUSleep001, Function | MediumTest | Level1)
 {
-    // wifiiot无法支持10ms以下的sleep
     int interval[] = {15*1000, 20*1000, 30*1000, 300*1000};
     for (unsigned int j = 0; j < sizeof(interval) / sizeof(int); j++) {
         LOG("\ntest interval:%d\n", interval[j]);

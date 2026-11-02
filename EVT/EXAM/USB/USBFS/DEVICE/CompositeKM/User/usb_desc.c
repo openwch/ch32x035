@@ -1,5 +1,5 @@
 /********************************** (C) COPYRIGHT *******************************
- * File Name          : composite_km_desc.h
+ * File Name          : usb_desc.c
  * Author             : WCH
  * Version            : V1.0.0
  * Date               : 2023/04/06
@@ -183,7 +183,7 @@ const uint8_t  MyQuaDesc[ ] =
     0x00,                                                   // bDeviceSubClass
     0x00,                                                   // bDeviceProtocol
     0x40,                                                   // bMaxPacketSize0
-    0x00,                                                   // bNumConfigurations
+    0x01,                                                   // bNumConfigurations
     0x00                                                    // bReserved
 };
 

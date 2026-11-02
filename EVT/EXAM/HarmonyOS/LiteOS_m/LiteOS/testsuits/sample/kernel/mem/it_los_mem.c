@@ -96,7 +96,7 @@ VOID ItSuiteLosMem(void)
     ItLosMem018();
     ItLosMem019();
     ItLosMem020();
-#if (LOSCFG_TEST_MUCH_LOG == 1) // when open this， Too many logs will printed
+#if (LOSCFG_TEST_MUCH_LOG == 1) // when open this, Too many logs will printed
     ItLosMem035();
     ItLosMem036();
     ItLosMem037();

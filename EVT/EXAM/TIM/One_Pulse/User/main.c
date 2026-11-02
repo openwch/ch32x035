@@ -91,7 +91,7 @@ int main(void)
 	printf("SystemClk:%d\r\n",SystemCoreClock);
 	printf( "ChipID:%08x\r\n", DBGMCU_GetCHIPID() );
 
-	One_Pulse_Init( 200, 48000-1, 100 );
+	One_Pulse_Init( 200-1, 48000-1, 100 );
 
 	while(1);
 }

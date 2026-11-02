@@ -1,8 +1,8 @@
 /********************************** (C) COPYRIGHT *******************************
  * File Name          : main.c
  * Author             : WCH
- * Version            : V1.0.0
- * Date               : 2023/03/22
+ * Version            : V1.0.2
+ * Date               : 2026/10/15
  * Description        : Main program body.
  *********************************************************************************
  * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
@@ -14,6 +14,8 @@
  *@Note
  *FLASH erase/read/write, fast programming and OptionBytes programming:
  *Includes Fast Erase and Program.
+ *It is recommended to use the erase function - FLASH_ROM_ERASE.
+ *It is recommended to use the program function - FLASH_ROM_WRITE. 
  *
 */
 
@@ -39,7 +41,7 @@ void Option_Byte_CFG(void)
     status = FLASH_UserOptionByteConfig(OB_IWDG_SW, OB_STOP_NoRST, OB_STDBY_NoRST, OB_RST_EN_DT12ms);
 
     if(status == FLASH_RDP) printf("MCU in read protected state, user option byte cannot be configured. \
-            Need to use WCHISPTool or WCH-LinkUtility for configuration ");
+            Need to use WCHISPTool or WCH-LinkUtility for configuration \r\n");
     else{
         printf("0x1FFFF800-%08x\r\n", *(u32*)0x1FFFF800);
         printf("0x1FFFF804-%08x\r\n", *(u32*)0x1FFFF804);
@@ -125,14 +127,18 @@ int main(void)
     SystemCoreClockUpdate();
     Delay_Init();
 
-    Delay_Ms(1000);
     USART_Printf_Init(115200);
-    printf("SystemClk-1:%d\r\n", SystemCoreClock);
+    printf("SystemClk:%d\r\n", SystemCoreClock);
     printf( "ChipID:%08x\r\n", DBGMCU_GetCHIPID() );
+
+    __disable_irq();
     Flash_Test_Fast();
     Option_Byte_CFG();
+    __enable_irq();
 
-    while(1);
+    while(1)
+    {
+    }
 }
 
 

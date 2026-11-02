@@ -1,8 +1,8 @@
 /********************************** (C) COPYRIGHT *******************************
  * File Name          : main.c
  * Author             : WCH
- * Version            : V1.0.1
- * Date               : 2025/07/29
+ * Version            : V1.0.2
+ * Date               : 2026/10/14
  * Description        : Main program body.
  *********************************************************************************
  * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
@@ -66,7 +66,7 @@ int main(void)
     Delay_Ms(1000);
 
     USART_Printf_Init(115200);
-    printf("SystemClk:%d\r\n", SystemCoreClock);
+    printf("SystemClk:%u\r\n", SystemCoreClock);
     printf( "ChipID:%08x\r\n", DBGMCU_GetCHIPID() );
     printf("Standby Mode Test\r\n");
 
@@ -94,7 +94,8 @@ int main(void)
     AutoWakeUpCmd(ENABLE);
 
     PWR_EnterSTANDBYMode();
-
+    USART_Printf_Init(115200);
+    Delay_Ms(20);
     while(1)
     {
         Delay_Ms(1000);
@@ -117,8 +118,6 @@ void AWU_IRQHandler()
     SystemInit();
     RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE);
     GPIO_PinRemapConfig(GPIO_Remap_SWJ_Disable, DISABLE);
-    USART_Printf_Init(115200);
-    printf("\r\n Auto wake up \r\n");
 }
 
 

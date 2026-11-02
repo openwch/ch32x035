@@ -1,8 +1,8 @@
 /********************************** (C) COPYRIGHT *******************************
  * File Name          : main.c
  * Author             : WCH
- * Version            : V1.0.0
- * Date               : 2024/06/05
+ * Version            : V1.0.2
+ * Date               : 2026/10/16
  * Description        : Main program body.
  *********************************************************************************
  * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
@@ -13,7 +13,7 @@
 /*
  *@Note
  *SPI interface operation flash peripheral routine:
- *Master:SPI1_SCK(PA5)、SPI1_MISO(PA6)、SPI1_MOSI(PA7).
+ *Master:SPI1_SCK(PA5)，SPI1_MISO(PA6)，SPI1_MOSI(PA7).
  *This example demonstrates SPI operation Winbond W25Qxx SPIFLASH.
  *
  *pins:
@@ -148,8 +148,8 @@ void SPI_Flash_Init(void)
  * @fn      SPI_Flash_ReadSR
  *
  * @brief   Read W25Qxx status register.
- *        ！！BIT7  6   5   4   3   2   1   0
- *        ！！SPR   RV  TB  BP2 BP1 BP0 WEL BUSY
+ *        ! ! BIT7  6   5   4   3   2   1   0
+ *        ! ! SPR   RV  TB  BP2 BP1 BP0 WEL BUSY
  *
  * @return  byte - status register value.
  */
@@ -249,7 +249,7 @@ u16 SPI_Flash_ReadID(void)
  *
  * @brief   Erase one sector(4Kbyte).
  *
- * @param   Dst_Addr - 0 ！！ 2047
+ * @param   Dst_Addr - 0 ! ! 2047
  *
  * @return  none
  */
@@ -309,6 +309,11 @@ void SPI_Flash_Read(u8 *pBuffer, u32 ReadAddr, u16 size)
 void SPI_Flash_Write_Page(u8 *pBuffer, u32 WriteAddr, u16 size)
 {
     u16 i;
+
+    if(size > 256)
+    {
+        return;
+    }
 
     SPI_FLASH_Write_Enable();
     GPIO_WriteBit(GPIOA, GPIO_Pin_2, 0);
@@ -499,7 +504,7 @@ void SPI_Flash_WAKEUP(void)
  */
 int main(void)
 {
-    u8  datap[SIZE];
+    u8  datap[SIZE + 1] = {0};
     u16 Flash_Model;
 
     SystemCoreClockUpdate();

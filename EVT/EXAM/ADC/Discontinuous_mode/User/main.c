@@ -1,8 +1,8 @@
 /********************************** (C) COPYRIGHT *******************************
  * File Name          : main.c
  * Author             : WCH
- * Version            : V1.0.3
- * Date               : 2025/10/29
+ * Version            : V1.0.4
+ * Date               : 2026/10/16
  * Description        : Main program body.
  *********************************************************************************
  * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
@@ -75,7 +75,7 @@ void ADC_Function_Init(void)
 }
 
 /*********************************************************************
- * @fn      TIM1_PWM_In
+ * @fn      TIM1_PWM_Init
  *
  * @brief   Initializes TIM1 PWM output.
  *
@@ -85,7 +85,7 @@ void ADC_Function_Init(void)
  *
  * @return  none
  */
-void TIM1_PWM_In(u16 arr, u16 psc, u16 ccp)
+void TIM1_PWM_Init( u16 arr, u16 psc, u16 ccp )
 {
     TIM_OCInitTypeDef       TIM_OCInitStructure = {0};
     TIM_TimeBaseInitTypeDef TIM_TimeBaseInitStructure = {0};
@@ -124,12 +124,11 @@ int main(void)
 
     ADC_Function_Init();
 
-    TIM1_PWM_In(1000, 48000 - 1, 500);
+    TIM1_PWM_Init( 1000-1, 48000 - 1, 500 );
 
     while(1)
     {
-        while(!ADC_GetFlagStatus(ADC1, ADC_FLAG_EOC));
-        ADC_ClearFlag(ADC1, ADC_FLAG_EOC);
+ 
         while(!ADC_GetFlagStatus(ADC1, ADC_FLAG_JEOC));
         ADC_ClearFlag(ADC1, ADC_FLAG_JEOC);
 
