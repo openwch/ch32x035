@@ -1,8 +1,8 @@
 /********************************** (C) COPYRIGHT *******************************
  * File Name          : main.c
  * Author             : WCH
- * Version            : V1.0.1
- * Date               : 2025/08/13
+ * Version            : V1.0.2
+ * Date               : 2026/10/14
  * Description        : Main program body.
  *********************************************************************************
  * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
@@ -90,7 +90,7 @@ int main(void)
     GPIO_Init(GPIOC, &GPIO_InitStructure);
 
     USART_Printf_Init(115200);
-    printf("SystemClk:%d\r\n", SystemCoreClock);
+    printf("SystemClk:%u\r\n", SystemCoreClock);
     printf( "ChipID:%08x\r\n", DBGMCU_GetCHIPID() );
     printf("Stop Mode Test\r\n");
     EXTI0_INT_INIT();
@@ -98,6 +98,7 @@ int main(void)
     RCC_APB1PeriphClockCmd(RCC_APB1Periph_PWR, ENABLE);
     printf("\r\n ********** \r\n");
     PWR_EnterSTOPMode(PWR_STOPEntry_WFI);
+    Delay_Ms(20);
     printf("\r\n ########## \r\n");
 
     while(1)
@@ -122,7 +123,6 @@ void EXTI7_0_IRQHandler(void)
   if(EXTI_GetITStatus(EXTI_Line0)!=RESET)
   {
     SystemInit();
-    printf("EXTI0 Wake_up\r\n");
     EXTI_ClearITPendingBit(EXTI_Line0);     /* Clear Flag */
   }
 }

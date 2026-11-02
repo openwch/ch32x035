@@ -322,7 +322,7 @@ int ch32_pin_read(rt_device_t dev, rt_base_t pin)
 void ch32_pin_mode(rt_device_t dev, rt_base_t pin, rt_base_t mode)
 {
     const struct pin_index *index;
-    GPIO_InitTypeDef GPIO_InitStruct;
+    GPIO_InitTypeDef GPIO_InitStruct = {0};
     index = get_pin(pin);
     if (index == RT_NULL)
     {
@@ -475,8 +475,8 @@ rt_err_t ch32_pin_irq_enable(struct rt_device *device, rt_base_t pin,
     const struct pin_irq_map *irqmap;
     rt_base_t level;
     rt_int32_t irqindex = -1;
-    GPIO_InitTypeDef GPIO_InitStruct;
-    EXTI_InitTypeDef EXTI_InitStructure;
+    GPIO_InitTypeDef GPIO_InitStruct = {0};
+    EXTI_InitTypeDef EXTI_InitStructure = {0};
 
     index = get_pin(pin);
     if (index == RT_NULL)

@@ -1,8 +1,8 @@
 /********************************** (C) COPYRIGHT *******************************
  * File Name          : main.c
  * Author             : WCH
- * Version            : V1.0.1
- * Date               : 2025/01/03
+ * Version            : V1.0.2
+ * Date               : 2026/10/14
  * Description        : Main program body.
 *********************************************************************************
 * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
@@ -23,9 +23,9 @@
  *
  * There is no integrated 5.1K pull-down inside the chip,
  * CC_PD is only for status differentiation,
- * bit write 1 means SNK mode, write 0 means SCR mode
+ * bit write 1 means SNK mode, write 0 means SRC mode
  *
- * Modify "PDO_Request( PDO_INDEX_1 )" in pd process.c, line 753, to modify the request voltage.
+ * Modify "PDO_Request( PDO_INDEX_1 )" in pd process.c, to modify the request voltage.
  *
  * According to the usage scenario of PD SNK, whether
  * it is removed or not should be determined by detecting

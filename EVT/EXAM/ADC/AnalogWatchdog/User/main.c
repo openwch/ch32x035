@@ -1,8 +1,8 @@
 /********************************** (C) COPYRIGHT *******************************
  * File Name          : main.c
  * Author             : WCH
- * Version            : V1.0.0
- * Date               : 2023/12/26
+ * Version            : V1.0.1
+ * Date               : 2026/10/16
  * Description        : Main program body.
  *********************************************************************************
  * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
@@ -37,7 +37,7 @@
 #define WDT_RST   WDT_RST_DISABLE
 //#define WDT_RST   WDT_RST_ENABLE
 
-
+vu8  IntResponse=0 ;
 /*********************************************************************
  * @fn      ADC_Function_Init
  *
@@ -210,8 +210,13 @@ int main(void)
 
     while(1)
     {
-        ADC_val = Get_ADC_Val(ADC_Channel_5);
+        ADC_val = Get_ADC_Val(ADC_Channel_1);
         Delay_Ms(500);
+	   if(IntResponse == 1)
+        {
+			IntResponse=0;
+           printf( "Enter AnalogWatchdog Interrupt\r\n" );
+        }
         printf("%04d\r\n", ADC_val);
         Delay_Ms(2);
     }
@@ -229,7 +234,7 @@ void ADC1_IRQHandler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
 void ADC1_IRQHandler()
 {
     if(ADC_GetITStatus( ADC1, ADC_IT_AWD)){
-        printf( "Enter AnalogWatchdog Interrupt\r\n" );
+        IntResponse=1;
     }
 
     ADC_ClearITPendingBit( ADC1, ADC_IT_AWD);

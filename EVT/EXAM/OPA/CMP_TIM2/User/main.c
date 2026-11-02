@@ -1,8 +1,8 @@
 /********************************** (C) COPYRIGHT *******************************
  * File Name          : main.c
  * Author             : WCH
- * Version            : V1.0.1
- * Date               : 2025/10/29
+ * Version            : V1.0.2
+ * Date               : 2026/10/16
  * Description        : Main program body.
  *********************************************************************************
  * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
@@ -21,6 +21,7 @@
 
 #include "debug.h"
 
+vu8  TIM2_CC1Response=0 ,TIM2_CC2Response=0;
 
 /*********************************************************************
  * @fn      CMP_Init
@@ -118,7 +119,20 @@ int main(void)
     OPA_CMP_Unlock();
     CMP_Init();
     Input_Capture_Init(0XFFFF,4800);
-    while(1);
+    while(1)
+    {
+        if(TIM2_CC1Response==1)
+        {
+            printf( "CH1_Val:%d\r\n", TIM_GetCapture1( TIM2 ) );
+            TIM2_CC1Response=0;
+        }
+        if(TIM2_CC2Response==1)
+        {
+            printf( "CH2_Val:%d\r\n", TIM_GetCapture2( TIM2 ) );
+            TIM2_CC2Response=0;
+        }
+
+    }
 }
 
 void TIM2_CC_IRQHandler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
@@ -134,13 +148,13 @@ void TIM2_CC_IRQHandler(void)
 {
     if( TIM_GetITStatus( TIM2, TIM_IT_CC1 ) != RESET )
     {
-        printf( "CH1_Val:%d\r\n", TIM_GetCapture1( TIM2 ) );
+       TIM2_CC1Response=1;
         TIM_SetCounter( TIM2, 0 );
     }
 
     if( TIM_GetITStatus( TIM2, TIM_IT_CC2 ) != RESET )
     {
-        printf( "CH2_Val:%d\r\n", TIM_GetCapture2( TIM2 ) );
+       TIM2_CC2Response=1;
     }
 
     TIM_ClearITPendingBit( TIM2, TIM_IT_CC1 | TIM_IT_CC2 );

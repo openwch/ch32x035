@@ -1,5 +1,5 @@
 /********************************** (C) COPYRIGHT *******************************
- * File Name          : composite_km_desc.h
+ * File Name          : usb_desc.c
  * Author             : WCH
  * Version            : V1.0.0
  * Date               : 2023/04/06
@@ -102,7 +102,7 @@ const uint8_t MyCfgDescr[ ] =
     0x82,                                                   // bEndpointAddress: IN Endpoint 2
     0x03,                                                   // bmAttributes
     0x08, 0x00,                                             // wMaxPacketSize
-    0x01                                                    // bInterval: 1mS
+    0x0A                                                    // bInterval: 10mS
 };
 
 /* Keyboard Report Descriptor */
@@ -183,7 +183,7 @@ const uint8_t  MyQuaDesc[ ] =
     0x00,                                                   // bDeviceSubClass
     0x00,                                                   // bDeviceProtocol
     0x40,                                                   // bMaxPacketSize0
-    0x00,                                                   // bNumConfigurations
+    0x01,                                                   // bNumConfigurations
     0x00                                                    // bReserved
 };
 

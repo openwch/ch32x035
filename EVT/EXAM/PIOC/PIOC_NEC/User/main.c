@@ -1,8 +1,8 @@
 /********************************** (C) COPYRIGHT *******************************
  * File Name          : main.c
  * Author             : WCH
- * Version            : V1.0.0
- * Date               : 2024/10/31
+ * Version            : V1.0.2
+ * Date               : 2026/10/14
  * Description        : Main program body.
 *********************************************************************************
 * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
@@ -24,6 +24,7 @@ __IO  uint8_t  stat = 0;                // Receive status
 __IO  uint8_t  rep_cnt = 0;             // Received duplicate code count
 __IO  uint8_t  rec_flag = 0;            // Received a frame of data flag
 __IO  uint32_t RecData = 0;             // Received data
+__IO  uint32_t errcode = 0;
 
 #define     VRIF_ADD_ERR    0x1FF       // error code for Verify address error
 #define     VRIF_VAL_ERR    0X2FF       // error code for Verify value error
@@ -86,7 +87,7 @@ void PIOC_IRQHandler( void )
                     break;
                 }
             default:                    // Error code
-                printf("error.\r\n");
+                errcode = 1;
                 break;
         }
         stat = 0;
@@ -106,7 +107,6 @@ void PIOC_INIT(void)
     GPIO_InitTypeDef GPIO_InitStructure = {0};
 
     RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOC|RCC_APB2Periph_AFIO, ENABLE);
-    RCC_AHBPeriphClockCmd(RCC_AHBPeriph_IO2W, ENABLE);
 
 #if 1 //PC18 PC19
     GPIO_PinRemapConfig(GPIO_Remap_SWJ_Disable, ENABLE);
@@ -202,9 +202,9 @@ int main(void)
     SystemCoreClockUpdate();
     Delay_Init();
     USART_Printf_Init(115200);
-    printf("SystemClk:%d\r\n", SystemCoreClock);
+    printf("SystemClk:%u\r\n", SystemCoreClock);
     printf( "ChipID:%08x\r\n", DBGMCU_GetCHIPID() );
-    printf( "PIOC Infrared remote control test.");
+    printf( "PIOC Infrared remote control test.\r\n");
     PIOC_INIT();
     PIOC_REMOTE_INIT(0);
 
@@ -222,6 +222,11 @@ int main(void)
             }
             else
                 printf("key value :%d\r\n",key_value);
+        }
+        if(errcode)
+        {
+            errcode = 0;
+            printf("error code\r\n");
         }
     }
 }

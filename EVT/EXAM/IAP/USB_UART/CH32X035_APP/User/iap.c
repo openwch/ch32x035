@@ -1,8 +1,8 @@
 /********************************** (C) COPYRIGHT  *******************************
  * File Name          : iap.c
  * Author             : WCH
- * Version            : V1.0.2
- * Date               : 2025/10/27
+ * Version            : V1.0.3
+ * Date               : 2026/10/15
  * Description        : IAP
 *********************************************************************************
 * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
@@ -15,15 +15,7 @@
 
 /******************************************************************************/
 
-iapfun jump2app;
-vu32 Program_addr = FLASH_Base;
-vu32 Verify_addr = FLASH_Base;
-u32 User_APP_Addr_offset = 0x5000;
-vu8 Verify_Star_flag = 0;
-u8 Fast_Program_Buf[390];
 u32 Program_Buf[64];
-vu32 CodeLen = 0;
-vu8 End_Flag = 0;
 u8 EP2_Rx_Buffer[USBD_DATA_SIZE+4];
 #define  isp_cmd_t   ((isp_cmd  *)EP2_Rx_Buffer)
 
@@ -37,13 +29,7 @@ u8 EP2_Rx_Buffer[USBD_DATA_SIZE+4];
  */
 void CH32_IAP_Program(u32 adr, u32* buf)
 {
-    u8 i;
-
-    FLASH_BufReset();
-    for(i=0; i<64; i++){
-        FLASH_BufLoad(adr+4*i, buf[i]);
-    }
-    FLASH_ProgramPage_Fast(adr);
+    FLASH_ROM_WRITE(adr, buf, 256);
 }
 
 /*********************************************************************
@@ -99,9 +85,8 @@ u8 RecData_Deal(void)
          break;
 
      case CMD_JUMP_IAP:
-         FLASH_Unlock_Fast();
          Program_Buf_Modify();
-         FLASH_ErasePage_Fast(CalAddr & 0xFFFFFF00);
+         FLASH_ROM_ERASE(CalAddr & 0xFFFFFF00,256);
          CH32_IAP_Program(CalAddr & 0xFFFFFF00,(u32*)Program_Buf);
          FLASH->CTLR |= ((uint32_t)0x00008000);
          FLASH->CTLR |= ((uint32_t)0x00000080);

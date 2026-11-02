@@ -82,7 +82,7 @@ typedef struct tagLOS_DLNK_NODE {
  * @param pool           [IN] Starting address of memory.
  * @param size           [IN] Memory size.
  *
- * @retval #OS_ERROR     ¨C1: The dynamic memory fails to be initialized.
+ * @retval #OS_ERROR    -1: The dynamic memory fails to be initialized.
  * @retval #LOS_OK       0: The dynamic memory is successfully initialized.
  * @par Dependency:
  * <ul>

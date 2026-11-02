@@ -1,7 +1,7 @@
 [
     {
         "Name"                  : "bounds_checking_function",
-        "License"               : "Mulan Permissive Software License，Version 2",
+        "License"               : "Mulan Permissive Software License,Version 2",
         "License File"          : "LICENSE",
         "Version Number"        : "v1.1.10",
         "Owner"                 : "jianghan2@huawei.com",

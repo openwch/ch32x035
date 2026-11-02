@@ -53,7 +53,7 @@ static UINT32 TestCase(VOID)
         ICUNIT_GOTO_EQUAL(1, 0, i, EXIT);
     }
 
-    ret = LOS_MemFree(g_memPool, p[i / 2]); // 2， release a memory node.
+    ret = LOS_MemFree(g_memPool, p[i / 2]); // 2, release a memory node.
     ICUNIT_GOTO_EQUAL(ret, LOS_OK, ret, EXIT);
 
     p0 = LOS_MemAlloc(g_memPool, size);

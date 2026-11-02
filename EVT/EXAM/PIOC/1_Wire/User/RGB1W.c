@@ -1,8 +1,8 @@
 /********************************** (C) COPYRIGHT *******************************
  * File Name          : RGB1W.c
  * Author             : WCH
- * Version            : V1.0.1
- * Date               : 2024/06/05
+ * Version            : V1.0.2
+ * Date               : 2025/11/10
  * Description        : 1-wire example 1W-RGB, 1W-DS1820
  *********************************************************************************
  * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
@@ -119,7 +119,6 @@ void RGB1W_Init ( void ) {
     GPIO_InitTypeDef GPIO_InitStructure = {0};
 
     RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO | RCC_APB2Periph_GPIOC, ENABLE);
-    RCC_AHBPeriphClockCmd(RCC_AHBPeriph_IO2W, ENABLE);
 
 #if 1  //PC18 PC19
     GPIO_PinRemapConfig(GPIO_Remap_SWJ_Disable, ENABLE);

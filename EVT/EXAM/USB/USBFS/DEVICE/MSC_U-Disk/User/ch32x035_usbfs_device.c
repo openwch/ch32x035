@@ -439,11 +439,14 @@ void USBFS_IRQHandler( void )
 
                     /* end-point 3 data out interrupt */
                     case USBFS_UIS_TOKEN_OUT | DEF_UEP3:
-                    len = USBFSD->RX_LEN;
-                    USBFSD->UEP3_CTRL_H ^= USBFS_UEP_R_TOG;
-                    USBFSD->UEP3_CTRL_H = (USBFSD->UEP3_CTRL_H & ~USBFS_UEP_R_RES_MASK) | USBFS_UEP_R_RES_NAK;
-                    UDISK_Out_EP_Deal(UDisk_Out_Buf,len);
-                    USBFSD->UEP3_CTRL_H = (USBFSD->UEP3_CTRL_H & ~USBFS_UEP_R_RES_MASK) | USBFS_UEP_R_RES_ACK;
+                        if ( intst & USBFS_UIS_TOG_OK )
+                        {
+                            len = USBFSD->RX_LEN;
+                            USBFSD->UEP3_CTRL_H ^= USBFS_UEP_R_TOG;
+                            USBFSD->UEP3_CTRL_H = (USBFSD->UEP3_CTRL_H & ~USBFS_UEP_R_RES_MASK) | USBFS_UEP_R_RES_NAK;
+                            UDISK_Out_EP_Deal(UDisk_Out_Buf,len);
+                            USBFSD->UEP3_CTRL_H = (USBFSD->UEP3_CTRL_H & ~USBFS_UEP_R_RES_MASK) | USBFS_UEP_R_RES_ACK;
+                        }
                         break;
 
                 }
@@ -590,6 +593,10 @@ void USBFS_IRQHandler( void )
                                 {
                                     /* clear usb sleep status, device not prepare to sleep */
                                     USBFS_DevSleepStatus &= ~0x01;
+                                }
+                                else
+                                {
+                                    errflag = 0xFF;
                                 }
                             }
                             else if( ( USBFS_SetupReqType & USB_REQ_RECIP_MASK ) == USB_REQ_RECIP_ENDP )

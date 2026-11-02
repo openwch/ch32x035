@@ -69,7 +69,6 @@ extern "C" {
 #define DEF_APP_CODE_START_ADDR           0x08006000                             /* IAP Flash Operation start address, user code start address */
 #define DEF_APP_CODE_END_ADDR             0x08010000                             /* IAP Flash Operation end address, user code end address */
                                                                                  /* Please refer to link.ld file for accuracy flash size, the size here is the smallest available size */
-#endif
 #define DEF_APP_CODE_MAXLEN               (DEF_APP_CODE_END_ADDR-DEF_APP_CODE_START_ADDR) /* IAP Flash Operation size, user code max size */
 
 /* Verify CODE ADDR Setting */
@@ -118,5 +117,4 @@ extern void IAP_Initialization( void );
 #ifdef __cplusplus
 }
 #endif
-
-
+#endif
